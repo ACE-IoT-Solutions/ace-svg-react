@@ -1,0 +1,32 @@
+{
+  "name": "ace-io-t-solutions-aceiot-svg-react",
+  "version": "1.0.0",
+  "description": "SVG Visualization Panel",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch"
+  },
+  "repository": "github:grafana/simple-react-panel",
+  "author": "Andrew Rodgers",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/grafana/simple-react-panel/issues",
+    "email": "plugins@grafana.com"
+  },
+  "devDependencies": {
+    "@grafana/data": "next",
+    "@grafana/toolkit": "next",
+    "@grafana/ui": "next",
+    "emotion": "10.0.27"
+  },
+  "engines": {
+    "node": ">=12 <13"
+  },
+  "dependencies": {
+    "@svgdotjs/svg.js": "^3.0.16",
+    "ace-builds": "^1.4.11",
+    "react-ace": "^8.1.0"
+  }
+}
