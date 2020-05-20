@@ -1,7 +1,7 @@
 import { PanelPlugin } from '@grafana/data';
-import { SimpleOptions } from './types';
-import { SimplePanel } from './SimplePanel';
+import { ACESVGOptions } from './types';
+import { ACESVGPanel } from './ACESVGjsPanel';
 import { optionsBuilder } from './options'
 
 
-export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions(optionsBuilder);
+export const plugin = new PanelPlugin<ACESVGOptions>(ACESVGPanel).setPanelOptions(optionsBuilder);

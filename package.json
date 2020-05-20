@@ -1,5 +1,5 @@
 {
-  "name": "ace-io-t-solutions-aceiot-svg-react",
+  "name": "ace-iot-solutions-aceiot-svg-react",
   "version": "1.0.0",
   "description": "SVG Visualization Panel",
   "scripts": {
@@ -10,7 +10,7 @@
   },
   "repository": "github:grafana/simple-react-panel",
   "author": "Andrew Rodgers",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/grafana/simple-react-panel/issues",
     "email": "plugins@grafana.com"

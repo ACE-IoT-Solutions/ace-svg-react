@@ -1,9 +1,14 @@
-export interface SimpleOptions {
-  text: string;
-  showSeriesCount: boolean;
-  seriesCountSize: SeriesSize;
+export interface SVGIDMapping {
+  svgId: string;
+  mappedName: string;
+}
+export interface ACESVGOptions {
+  captureMappings: boolean;
   svgSource: string;
+  svgAutocomplete: boolean;
   eventSource: string;
+  eventAutocomplete: boolean;
   initSource: string;
-  svgMappings: Array<object>;
+  initAutocomplete: boolean;
+  svgMappings: Array<SVGIDMapping>;
 }

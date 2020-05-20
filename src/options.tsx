@@ -1,95 +1,154 @@
 import React from 'react';
 import { PanelOptionsEditorBuilder, GrafanaTheme, dateTime } from '@grafana/data';
-import { TextArea, StringValueEditor } from '@grafana/ui'
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-java";
-import "ace-builds/src-noconflict/theme-github";
+import AceEditor from 'react-ace';
+import { config as aceConfig } from 'ace-builds';
+aceConfig.set('basePath', 'public/plugins/ace-iot-solutions-aceiot-svg-react/');
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-svg';
+import 'ace-builds/src-noconflict/theme-github';
 
-// import { css } from 'emotion';
-// import { config } from '@grafana/runtime';
-import { SimpleOptions } from './types';
-import Options from '@grafana/ui/slate-plugins/slate-prism/options';
+import { css } from 'emotion';
+import { config } from '@grafana/runtime';
+import { ACESVGOptions, SVGIDMapping } from './types';
+import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
+// import { config } from 'ace-builds';
 
-
-export const optionsBuilder = (builder: PanelOptionsEditorBuilder<SimpleOptions>) => {
+export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>) => {
   return builder
-    .addTextInput({
-      path: 'text',
-      name: 'Simple text option',
-      description: 'Description of panel option',
-      defaultValue: 'Default value of text input option',
+    .addBooleanSwitch({
+      category: ['SVG Document'],
+      path: 'svgAutoComplete',
+      name: 'Enable SVG AutoComplete',
+    })
+    .addCustomEditor({
+      category: ['SVG Document'],
+      path: 'svgSource',
+      name: 'SVG Document',
+      id: 'svgSource',
+      editor: props => {
+        return (
+          <AceEditor
+            mode="svg"
+            theme="github"
+            onChange={(newValue: any) => {
+              props.onChange(newValue);
+              props.value = newValue;
+            }}
+            value={props.value}
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+            }}
+            name="initSource"
+          />
+        );
+      },
     })
     .addBooleanSwitch({
-      path: 'showSeriesCount',
-      name: 'Show series counter',
-      defaultValue: false,
+      category: ['User JS Render'],
+      path: 'eventAutoComplete',
+      name: 'Enable Render JS AutoComplete',
+      defaultValue: true,
     })
-    .addRadio({
-      path: 'seriesCountSize',
-      defaultValue: 'sm',
-      name: 'Series counter size',
-      settings: {
-        options: [
-          {
-            value: 'sm',
-            label: 'Small',
-          },
-          {
-            value: 'md',
-            label: 'Medium',
-          },
-          {
-            value: 'lg',
-            label: 'Large',
-          },
-        ],
-      },
-      showIf: config => config.showSeriesCount,
-    })
-    .addTextInput({
-      path: 'svgSource',
-      name: 'SVG Source',
-      settings: {
-        useTextarea: true
-      },
-      defaultValue: '',
-    })
-    .addTextInput({
-      path: 'eventSource',
-      name: 'Event Source',
-      settings: {
-        useTextarea: true
-      },
-      defaultValue: ''
-    })
-    // .addTextInput({
-    //   path: 'initSource',
-    //   name: 'Init Source',
-    //   settings: {
-    //     useTextarea: true
-    //   },
-    //   defaultValue: ''
-    // })
     .addCustomEditor({
+      category: ['User JS Render'],
+      path: 'eventSource',
+      name: 'User JS Render Code',
+      id: 'eventSource',
+      editor: props => {
+        return (
+          <AceEditor
+            mode="javascript"
+            theme="github"
+            onChange={(newValue: any) => {
+              props.onChange(newValue);
+              props.value = newValue;
+            }}
+            value={props.value}
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+            }}
+            name="eventSource"
+          />
+        );
+      },
+    })
+    .addBooleanSwitch({
+      category: ['User JS Init'],
+      path: 'initAutoComplete',
+      name: 'Enable Init JS AutoComplete',
+      defaultValue: true,
+    })
+    .addCustomEditor({
+      category: ['User JS Init'],
       path: 'initSource',
       name: 'User JS Init Code',
       id: 'initSource',
       editor: props => {
-      return (
-        <AceEditor
-          mode="javascript"
-          theme="github"
-          onChange={(newValue: any) => {
-            console.log(props)
-            props.value = newValue;
-          }}
-          value={props.value}
-          name={props.id}
-          />      
-      )
-      } 
+        return (
+          <AceEditor
+            mode="javascript"
+            theme="github"
+            onChange={(newValue: any) => {
+              props.onChange(newValue);
+              props.value = newValue;
+            }}
+            value={props.value}
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+            }}
+            name="initSource"
+          />
+        );
+      },
+    })
+    .addBooleanSwitch({
+      category: ['SVG Mapping'],
+      path: 'captureMappings',
+      name: 'Enable SVG Mapping on Click',
+      defaultValue: false,
+    })
+    .addCustomEditor({
+      category: ['SVG Mapping'],
+      id: 'svgMappings',
+      path: 'svgMappings',
+      name: 'SVG Mappings',
+      defaultValue: '',
+      editor: props => {
+        const styles = getStyles(config.theme);
+        let prefix: React.ReactNode = null;
+        // let suffix: React.ReactNode = null;
+        // if (props.value) {
+        //   suffix = ;
+        // }
+
+        const svgMappings = props.value.map((svgMapping: SVGIDMapping) => {
+          return (
+            <HorizontalGroup key={svgMapping.svgId}>
+              <Label>SVG ID</Label>
+              <Input type="text" value={svgMapping.svgId} />
+              <Label>Mapped Name</Label>
+              <Input type="text" value={svgMapping.mappedName} />
+              <Icon
+                id={svgMapping.svgId}
+                className={styles.trashIcon}
+                name="trash-alt"
+                onClick={() => {
+                  props.onChange(
+                    props.value.filter((existingMapping: SVGIDMapping) => existingMapping.svgId !== svgMapping.svgId)
+                  );
+                }}
+              />
+            </HorizontalGroup>
+          );
+        });
+
+        return <VerticalGroup>{svgMappings}</VerticalGroup>;
+      },
     });
-  }
+};
 //   // Global options
 //   builder
 //     .addRadio({
@@ -360,22 +419,23 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<SimpleOptions>
 //     });
 // }
 
-// const getStyles = stylesFactory((theme: GrafanaTheme) => {
-//   return {
-//     colorPicker: css`
-//       padding: 0 ${theme.spacing.sm};
-//     `,
-//     inputPrefix: css`
-//       display: flex;
-//       align-items: center;
-//     `,
-//     trashIcon: css`
-//       color: ${theme.colors.textWeak};
-//       cursor: pointer;
-
-//       &:hover {
-//         color: ${theme.colors.text};
-//       }
-//     `,
-//   };
-// });
+const getStyles = stylesFactory((theme: GrafanaTheme) => {
+  return {
+    colorPicker: css`
+      padding: 0 ${theme.spacing.sm};
+    `,
+    inputPrefix: css`
+      display: flex;
+      align-items: center;
+    `,
+    trashIcon: css`
+      color: ${theme.colors.textWeak};
+      cursor: pointer;
+      //
+      &:hover {
+        color: ${theme.colors.text};
+      }
+    `,
+  };
+});
+//
