@@ -1,5 +1,5 @@
 import React from 'react';
-import { PanelOptionsEditorBuilder, GrafanaTheme, dateTime } from '@grafana/data';
+import { PanelOptionsEditorBuilder, GrafanaTheme, dateTime, FieldConfigEditorProps,  } from '@grafana/data';
 import AceEditor from 'react-ace';
 import { config as aceConfig } from 'ace-builds';
 aceConfig.set('basePath', 'public/plugins/ace-iot-solutions-aceiot-svg-react/');
@@ -12,53 +12,38 @@ import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
 // import { config } from 'ace-builds';
+interface SVGIDMappingProps {
+  value: SVGIDMapping;
+  index: number;
+  styles: any;
+  onChange: (a:SVGIDMapping, b:number) => void;
+}
 
-class SvgMapping extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = props.value;
-    this.handleChange.bind(this);
-  }
-  handleChange(event: React.MouseEvent) {
-    console.log(event);
-  }
-
+class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
   render() {
-    let addIcon: React.ReactNode =
-      this.state.svgId === '' ? (
-        <Icon
-          className={this.props.styles.addIcon}
-          name="plus-circle"
-          // onClick={() => {
-          //   props.value.push(svgMapping);
-          //   props.onChange(props.value)
-          // }}
-        />
-      ) : null;
+    const {value, index, onChange} = this.props;
     return (
-      <HorizontalGroup key={this.state.svgId}>
-        {addIcon}
+      <HorizontalGroup>
+        {!value.svgId && 
+          <Icon
+            className={this.props.styles.addIcon}
+            name="plus-circle"
+          />
+        }
         <Label>SVG ID</Label>
         <Input
           type="text"
           name="svgId"
-          value={this.state.svgId}
-          onChange={e => {
-            this.state.svgId = e.currentTarget.value;
-            this.setState(this.state)
-          }}
-          onBlur={e => {
-            this.state.svgId = e.currentTarget.value;
-            console.log(this.state);
-          }}
+          value={value.svgId}
+          onChange={(e) => onChange({...value, svgId: e.currentTarget.value}, index)}
         />
         <Label>Mapped Name</Label>
         <Input
           type="text"
           name="mappedName"
-          value={this.state.mappedName}
+          value={value.mappedName}
           onChange={e => {
-            console.log(e.currentTarget.value);
+            console.log(this.state);
           }}
         />
         <Icon
@@ -73,22 +58,23 @@ class SvgMapping extends React.Component {
   }
 }
 
-class SvgMappings extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = props.value;
-    this.handleChange.bind(this);
-  }
-  handleChange(event: React.MouseEvent) {
-    console.log(event);
-  }
-  styles = getStyles(config.theme);
+class SvgMappings extends React.PureComponent<FieldConfigEditorProps<Array<SVGIDMapping>, any>> {
+  onChange = (updatedMapping: SVGIDMapping, index: number) => {
+    console.log(updatedMapping)
+            let newMappings = [...this.props.value];
+            newMappings[index] = updatedMapping;
+            console.log(newMappings)
+            this.props.onChange(newMappings);
+  };
   render() {
+    const styles = getStyles(config.theme);
     return (
       <VerticalGroup>
-        {this.state.map(svgMapping => {
-          return <SvgMapping value={svgMapping} styles={this.styles}></SvgMapping>;
-        })}
+        {this.props.value.map(((svgMapping: SVGIDMapping, index: number) => {
+          return (
+            <SvgMapping key={svgMapping.svgId} value={svgMapping} index={index} onChange={this.onChange} styles={styles} />
+          );
+        }))}
       </VerticalGroup>
     );
   }
@@ -212,6 +198,12 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
         );
       },
     })
+    .addTextInput({
+      category: ['SVG Mapping'],
+      path: 'testPath',
+      name: "test Field",
+      defaultValue: "this is a test"
+    })
     .addBooleanSwitch({
       category: ['SVG Mapping'],
       path: 'captureMappings',
@@ -223,7 +215,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'svgMappings',
       path: 'svgMappings',
       name: 'SVG Mappings',
-      defaultValue: '',
+      defaultValue: [],
       editor: SvgMappings,
     });
 };
