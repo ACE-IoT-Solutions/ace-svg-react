@@ -13,6 +13,114 @@ import { ACESVGOptions, SVGIDMapping } from './types';
 import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
 // import { config } from 'ace-builds';
 
+class SvgMapping extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = props.value;
+    this.handleChange.bind(this);
+  }
+  handleChange(event: React.MouseEvent) {
+    console.log(event);
+  }
+
+  render() {
+    let addIcon: React.ReactNode =
+      this.state.svgId === '' ? (
+        <Icon
+          className={this.props.styles.addIcon}
+          name="plus-circle"
+          // onClick={() => {
+          //   props.value.push(svgMapping);
+          //   props.onChange(props.value)
+          // }}
+        />
+      ) : null;
+    return (
+      <HorizontalGroup key={this.state.svgId}>
+        {addIcon}
+        <Label>SVG ID</Label>
+        <Input
+          type="text"
+          name="svgId"
+          value={this.state.svgId}
+          onChange={e => {
+            this.state.svgId = e.currentTarget.value;
+            this.setState(this.state)
+          }}
+          onBlur={e => {
+            this.state.svgId = e.currentTarget.value;
+            console.log(this.state);
+          }}
+        />
+        <Label>Mapped Name</Label>
+        <Input
+          type="text"
+          name="mappedName"
+          value={this.state.mappedName}
+          onChange={e => {
+            console.log(e.currentTarget.value);
+          }}
+        />
+        <Icon
+          className={this.props.styles.trashIcon}
+          name="trash-alt"
+          onClick={() => {
+            console.log(this.props);
+          }}
+        />
+      </HorizontalGroup>
+    );
+  }
+}
+
+class SvgMappings extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = props.value;
+    this.handleChange.bind(this);
+  }
+  handleChange(event: React.MouseEvent) {
+    console.log(event);
+  }
+  styles = getStyles(config.theme);
+  render() {
+    return (
+      <VerticalGroup>
+        {this.state.map(svgMapping => {
+          return <SvgMapping value={svgMapping} styles={this.styles}></SvgMapping>;
+        })}
+      </VerticalGroup>
+    );
+  }
+}
+// editor: props => {
+//   const updateMapping = (svgMapping: SVGIDMapping, index: number) => {
+//     let updatedMappings = props.value;
+//     updatedMappings[index] = svgMapping;
+//     props.value = updatedMappings;
+//     props.onChange(props.value);
+//   }
+//   const svgMappingComponent = (svgMapping: SVGIDMapping, index: number) => {
+//     let addIcon: React.ReactNode = (svgMapping.svgId === '') ? (
+//         <Icon className={styles.addIcon}
+//         name="plus-circle"
+//         onClick={() => {
+//           props.value.push(svgMapping);
+//           props.onChange(props.value)
+//         }}
+//         />) : null;
+//   }
+
+//   const svgMappings = props.value.map((svgMapping: SVGIDMapping, index: number) => {
+//     return svgMappingComponent(svgMapping, index)
+//   });
+
+//   return (<VerticalGroup>
+//     {svgMappingComponent({svgId: "", mappedName: ""}, -1)}
+//     {svgMappings}
+//     </VerticalGroup>);
+// },
+
 export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>) => {
   return builder
     .addBooleanSwitch({
@@ -116,57 +224,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       path: 'svgMappings',
       name: 'SVG Mappings',
       defaultValue: '',
-      editor: props => {
-        const updateMapping = (svgMapping: SVGIDMapping, index: number) => {
-          let updatedMappings = props.value;
-          updatedMappings[index] = svgMapping;
-          props.onChange(updatedMappings);
-        }
-        const styles = getStyles(config.theme);
-        const svgMappingComponent = (svgMapping: SVGIDMapping, index: number) => {
-          let addIcon: React.ReactNode = (svgMapping.svgId === '') ? (
-              <Icon className={styles.addIcon}
-              name="plus-circle"
-              onClick={() => {
-                props.value.push(svgMapping);
-                props.onChange(props.value)
-              }}
-              />) : null;
-          return (
-            <HorizontalGroup key={svgMapping.svgId}>
-              {addIcon}
-              <Label>SVG ID</Label>
-              <Input type="text" value={svgMapping.svgId} onBlur={(e) => {
-                svgMapping.svgId = e.currentTarget.value;
-                console.log(svgMapping)
-                updateMapping(svgMapping, index)
-              }} />
-              <Label>Mapped Name</Label>
-              <Input type="text" value={svgMapping.mappedName} onChange={(e) => {
-                updateMapping(svgMapping, index)
-              }} />
-              <Icon
-                className={styles.trashIcon}
-                name="trash-alt"
-                onClick={() => {
-                  props.onChange(
-                    props.value.filter((existingMapping: SVGIDMapping) => existingMapping.svgId !== svgMapping.svgId)
-                  );
-                }}
-              />
-            </HorizontalGroup>
-          );
-        }
-
-        const svgMappings = props.value.map((svgMapping: SVGIDMapping, index: number) => {
-          return svgMappingComponent(svgMapping, index)
-        });
-
-        return (<VerticalGroup>
-          {svgMappingComponent({svgId: "", mappedName: ""}, -1)}
-          {svgMappings}
-          </VerticalGroup>);
-      },
+      editor: SvgMappings,
     });
 };
 
