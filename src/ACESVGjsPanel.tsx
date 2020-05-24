@@ -22,6 +22,7 @@ interface Props extends PanelProps<ACESVGOptions> {}
 interface PanelState {
   svgNode: SVGElement | SVGDom | null;
   mappedElements: MappedElements;
+  svgMappings: Array<SVGIDMapping>;
   initFunctionSource: string;
   initFunction: Function;
   eventFunctionSource: string;
@@ -40,6 +41,19 @@ SVGExtend(SVGElement, {
   stopAnimation: function(this: SVGRunner) {
     this.timeline().stop();
   },
+  getParentNode: function(this: SVGElement) {
+    return this.node.parentNode;
+  },
+  getTopNode: function(this: SVGElement) {
+    let currentNode: Node | ParentNode = this.node;
+    while (true) {
+      if (currentNode.parentNode && !currentNode.parentNode.className.baseVal.includes('svg-object')){
+        currentNode = currentNode.parentNode;
+      } else {
+        return this.node.parentNode;
+      }
+    }
+  }
 });
 SVGExtend(SVGDom, {
   updateXHTMLFontText: function(this: SVGDom, newText: string) {
@@ -57,17 +71,14 @@ SVGExtend(SVGDom, {
 
 // export class SimplePanel extends PureComponent<Props, State> = ({ options, data, width, height }) => {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
-  options = this.props.options;
-  data = this.props.data;
-  width = this.props.width;
-  height = this.props.height;
   state: PanelState = {
     svgNode: null,
+    svgMappings: this.props.options.svgMappings,
     mappedElements: {},
-    initFunctionSource: this.options.initSource,
-    initFunction: Function('data', 'options', 'svgnode', 'svgmap', this.options.initSource),
-    eventFunctionSource: this.options.eventSource,
-    eventFunction: Function('data', 'options', 'svgnode', 'svgmap', this.options.eventSource),
+    initFunctionSource: this.props.options.initSource || '',
+    initFunction: Function('data', 'options', 'svgnode', 'svgmap', this.props.options.initSource),
+    eventFunctionSource: this.props.options.eventSource || '',
+    eventFunction: Function('data', 'options', 'svgnode', 'svgmap', this.props.options.eventSource),
     initialized: false,
   };
 
@@ -76,8 +87,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     let currentElements: MappedElements = { ...this.state.mappedElements };
     for (let i = 0; i < svgMappings.length; i++) {
       if (svgMappings[i].mappedName !== '') {
-        currentElements[this.options.svgMappings[i].mappedName] = svgNode.findOne(
-          `#${this.options.svgMappings[i].svgId}`
+        currentElements[this.props.options.svgMappings[i].mappedName] = svgNode.findOne(
+          `#${this.props.options.svgMappings[i].svgId}`
         );
       }
     }
@@ -109,7 +120,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   }
   renderSVG(element: SVGSVGElement | SVGDom | null) {
     if (element) {
-      if (this.props.options.initSource !== this.state.initFunctionSource) {
+      if (this.props.options.initSource !== this.state.initFunctionSource || this.state.svgMappings !== this.props.options.svgMappings) {
         this.state.initFunctionSource = this.props.options.initSource
         console.log("changed")
         this.state.initialized = false;
@@ -117,8 +128,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       if (!this.state.initialized) {
         let svgNode = SVG(element);
         svgNode.clear();
-        svgNode.svg(this.options.svgSource);
-        svgNode.size(this.width);
+        svgNode.svg(this.props.options.svgSource);
+        svgNode.size(this.props.width);
         this.initializeMappings(svgNode);
         this.state.svgNode = svgNode;
 
