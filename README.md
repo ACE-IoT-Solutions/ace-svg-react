@@ -16,11 +16,11 @@ The existing SVG panel plugins all use the pre-7.0, angular panel API. I wanted 
 I have also taken a slightly different direction/philosophy from some of the other SVG plugins.
 
 ## How does it work?
-Users of this plugin are expected to have ready to animate SVG graphics created in an vector design package (See inkscape, Adobe Illustrator, or a web tool like draw.io).
-Users upload their existing SVG layouts into the plugin, then enable the "Click to Map" functionality, allowing you to easily map arbitrary group, path or text span IDs to named tokens.
-Users then perform additional setup tasks in an init function that gets called each time the SVG panel is loaded.
-Finally, users can access the elements of the SVG using the named tokens from within the render function, called whenever the panel receieves new data.
-User code in either the render or init functions have access to all of the mapped elements, the root SVG document, a ephemeral state store and the DataFrames for the panel.
+- Users of this plugin are expected to have ready to animate SVG graphics created in an vector design package (See inkscape, Adobe Illustrator, or a web tool like draw.io).
+- Users upload their existing SVG layouts into the plugin, then enable the "Click to Map" functionality, allowing you to easily map arbitrary group, path or text span IDs to named tokens.
+- Users then perform additional setup tasks in an init function that gets called each time the SVG panel is loaded.
+- Finally, users can access the elements of the SVG using the named tokens from within the render function, called whenever the panel receieves new data.
+- User code in either the render or init functions have access to all of the mapped elements, the root SVG document, a ephemeral state store and the DataFrames for the panel.
 
 ## What are the goals for this project?
 1. Be the most performant way to visualize arbitrary SVG graphics and animations within Grafana
