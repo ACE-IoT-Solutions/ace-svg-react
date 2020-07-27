@@ -1,5 +1,13 @@
 import React from 'react';
-import { PanelOptionsEditorBuilder, GrafanaTheme, FieldConfigEditorProps, StringFieldConfigSettings, PanelOptionsEditorProps, PanelOptionsEditorItem } from '@grafana/data';
+import {
+  PanelOptionsEditorBuilder,
+  GrafanaTheme,
+  PanelOptionsEditorProps,
+  // FieldConfigEditorProps,
+  // StringFieldConfigSettings,
+  // PanelOptionsEditorProps,
+  // PanelOptionsEditorItem,
+} from '@grafana/data';
 import Editor from '@monaco-editor/react';
 // import AceEditor from 'react-ace';
 // import { config as aceConfig } from 'ace-builds';
@@ -11,9 +19,8 @@ import Editor from '@monaco-editor/react';
 import { css } from 'emotion';
 import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
-import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
-
-
+// import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
+import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
 
 interface MonacoEditorProps {
   value: string;
@@ -21,36 +28,32 @@ interface MonacoEditorProps {
   language: string;
   onChange: (value?: string | undefined) => void;
 }
-
-
 class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
   getEditorValue: any | undefined;
   editorInstance: any | undefined;
-  
+
   onSourceChange = () => {
-    this.props.onChange(this.getEditorValue())
-  }
+    this.props.onChange(this.getEditorValue());
+  };
   onEditorDidMount = (getEditorValue: any, editorInstance: any) => {
     this.getEditorValue = getEditorValue;
     this.editorInstance = editorInstance;
-  }
+  };
   render() {
     const source = this.props.value;
     return (
       <div onBlur={this.onSourceChange}>
         <Editor
-            height={'33vh'}
-            language={this.props.language}
-            theme={this.props.theme}
-            value={source}
-            editorDidMount={this.onEditorDidMount}
-            />
+          height={'33vh'}
+          language={this.props.language}
+          theme={this.props.theme}
+          value={source}
+          editorDidMount={this.onEditorDidMount}
+        />
       </div>
-    )
+    );
   }
 }
-
-
 
 interface SVGIDMappingProps {
   value: SVGIDMapping;
@@ -115,7 +118,17 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
   }
 }
 
-class SvgMappings extends React.PureComponent<Array<SVGIDMapping>> {
+// interface SVGIDMappingsProps {
+//   value: SVGIDMapping[];
+//   index?: number;
+//   styles?: any;
+//   // onChange: (a: SVGIDMapping[]) => void | undefined;
+//   onChangeItem?: (a: SVGIDMapping, b: number) => void | undefined;
+//   onAdd?: (a: SVGIDMapping) => void;
+//   onDelete?: (a: number) => void;
+// }
+
+class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
   onChangeItem = (updatedMapping: SVGIDMapping, index: number) => {
     let newMappings = [...this.props.value];
     newMappings[index] = updatedMapping;
@@ -134,7 +147,7 @@ class SvgMappings extends React.PureComponent<Array<SVGIDMapping>> {
     const styles = getStyles(config.theme);
     return (
       <VerticalGroup>
-        <SvgMapping value={{ svgId: '', mappedName: ''}} styles={styles} onAdd={this.onAdd} />
+        <SvgMapping value={{ svgId: '', mappedName: '' }} styles={styles} onAdd={this.onAdd} />
         {this.props.value.map((currentMapping: SVGIDMapping, index: number) => {
           return (
             <SvgMapping
@@ -192,7 +205,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       name: 'SVG Document',
       id: 'svgSource',
       editor: props => {
-        const grafanaTheme = config.theme.name
+        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="xml"
@@ -215,7 +228,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       name: 'User JS Render Code',
       id: 'eventSource',
       editor: props => {
-        const grafanaTheme = config.theme.name
+        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="javascript"
@@ -238,7 +251,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       name: 'User JS Init Code',
       id: 'initSource',
       editor: props => {
-        const grafanaTheme = config.theme.name
+        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="javascript"

@@ -10,5 +10,5 @@ export interface ACESVGOptions {
   eventAutocomplete: boolean;
   initSource: string;
   initAutocomplete: boolean;
-  svgMappings: Array<SVGIDMapping>;
+  svgMappings: SVGIDMapping[];
 }
