@@ -142,13 +142,11 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         svgNode.svg(this.props.options.svgSource);
         // Test SVG proportions vs panel size proportions
         if (svgNode.width() / svgNode.height() > this.props.width / this.props.height) {
-          // SVG is relatively wider => size to panel width and center vertically
+          // SVG is relatively wider => size to panel width
           svgNode.size(this.props.width);
-          svgNode.cy(this.props.height / 2);
         } else {
-          // SVG is relatively taller => size to panel height and center horizontally
+          // SVG is relatively taller => size to panel height
           svgNode.size(null!, this.props.height);
-          svgNode.cx(this.props.width / 2);
         }
         this.initializeMappings(svgNode);
         this.state.svgNode = svgNode;
@@ -206,7 +204,20 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         )}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
-        <svg className={'svg-object'} ref={ref => this.renderSVG(ref)}></svg>
+        <svg
+          className={'svg-object'}
+          css={[
+            styles.svg,
+            css`
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              margin-top: -${this.props.height / 2}px;
+              margin-left: -${this.props.width / 2}px;
+            `,
+          ]}
+          ref={ref => this.renderSVG(ref)}
+        ></svg>
       </div>
     );
   }
