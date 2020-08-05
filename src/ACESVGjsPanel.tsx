@@ -205,8 +205,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
         <svg
-          className={'svg-object'}
-          css={[
+          className={cx(
+            'svg-object',
             styles.svg,
             css`
               position: absolute;
@@ -214,8 +214,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
               left: 50%;
               margin-top: -${this.props.height / 2}px;
               margin-left: -${this.props.width / 2}px;
-            `,
-          ]}
+            `
+          )}
           ref={ref => this.renderSVG(ref)}
         ></svg>
       </div>
