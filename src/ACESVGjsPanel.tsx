@@ -140,13 +140,16 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         let svgNode = SVG(element);
         svgNode.clear();
         svgNode.svg(this.props.options.svgSource);
-        svgNode.size(this.props.width);
-        // If we've overshot the height, size to height instead
-        if (svgNode.height() > this.props.height) {
+        // Test SVG proportions vs panel size proportions
+        if (svgNode.width() / svgNode.height() > this.props.width / this.props.height) {
+          // SVG is relatively wider => size to panel width and center vertically
+          svgNode.size(this.props.width);
+          svgNode.cy(this.props.height / 2);
+        } else {
+          // SVG is relatively taller => size to panel height and center horizontally
           svgNode.size(null!, this.props.height);
+          svgNode.cx(this.props.width / 2);
         }
-        // Center SVG position within panel
-        svgNode.center(this.props.width/2, this.props.height/2);
         this.initializeMappings(svgNode);
         this.state.svgNode = svgNode;
 
