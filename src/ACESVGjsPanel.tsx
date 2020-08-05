@@ -145,6 +145,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         if (svgNode.height() > this.props.height) {
           svgNode.size(null!, this.props.height);
         }
+        // Center SVG position within panel
+        svgNode.center(this.props.width/2, this.props.height/2);
         this.initializeMappings(svgNode);
         this.state.svgNode = svgNode;
 
