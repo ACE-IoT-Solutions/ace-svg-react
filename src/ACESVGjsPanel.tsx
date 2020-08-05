@@ -148,6 +148,13 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           // SVG is relatively taller => size to panel height
           svgNode.size(null!, this.props.height);
         }
+        svgNode.style({
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          margin: `-${svgNode.height() / 2}px 0 0 -${svgNode.width() / 2}px`,
+        });
+
         this.initializeMappings(svgNode);
         this.state.svgNode = svgNode;
 
@@ -204,20 +211,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         )}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
-        <svg
-          className={cx(
-            'svg-object',
-            styles.svg,
-            css`
-              position: absolute;
-              top: 50%;
-              left: 50%;
-              margin-top: -${this.props.height / 2}px;
-              margin-left: -${this.props.width / 2}px;
-            `
-          )}
-          ref={ref => this.renderSVG(ref)}
-        ></svg>
+        <svg className={'svg-object'} ref={ref => this.renderSVG(ref)}></svg>
       </div>
     );
   }
