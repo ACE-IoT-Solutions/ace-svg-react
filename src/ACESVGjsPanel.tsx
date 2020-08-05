@@ -141,6 +141,10 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         svgNode.clear();
         svgNode.svg(this.props.options.svgSource);
         svgNode.size(this.props.width);
+        // If we've overshot the height, size to height instead
+        if (svgNode.height() > this.props.height) {
+          svgNode.size(null, this.props.height);
+        }
         this.initializeMappings(svgNode);
         this.state.svgNode = svgNode;
 
