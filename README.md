@@ -8,6 +8,8 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/1dee2585eb412f913cbb/maintainability)](https://codeclimate.com/github/grafana/simple-react-panel/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1dee2585eb412f913cbb/test_coverage)](https://codeclimate.com/github/grafana/simple-react-panel/test_coverage) -->
 
+![Screenshot of plugin](img/ace-svg-react.png)
+
 This is an SVG panel plugin for Grafana 7.x+
 
 ## Why yet another SVG panel plugin?

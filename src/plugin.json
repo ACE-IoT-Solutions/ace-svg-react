@@ -27,7 +27,9 @@
         "url": "https://github.com/ACE-IoT-Solutions/ace-svg-react/blob/master/LICENSE"
       }
     ],
-    "screenshots": [],
+    "screenshots": [
+      { "name": "In Action", "path": "img/ace-svg-react.png" }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
