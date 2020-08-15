@@ -1,6 +1,6 @@
 {
   "type": "panel",
-  "name": "aceiot-svg-react",
+  "name": "ACE.SVG",
   "id": "ace-iot-solutions-aceiot-svg-react",
   "info": {
     "description": "SVG Visualization Panel",
