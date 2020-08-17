@@ -204,7 +204,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         )}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
-        <svg className={cx('svg-object', styles.svg)} ref={ref => this.renderSVG(ref)}></svg>
+        <svg className={'svg-object'} ref={ref => this.renderSVG(ref)}></svg>
       </div>
     );
   }
