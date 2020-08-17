@@ -128,8 +128,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     if (element) {
       if (
         this.props.options.initSource !== this.state.initFunctionSource ||
-        this.state.svgMappings !== this.props.options.svgMappings ||
-        this.props.options.svgSource !== this.state.svgSource
+        this.state.svgMappings !== this.props.options.svgMappings
       ) {
         this.state.initFunctionSource = this.props.options.initSource;
         // console.log("changed")
