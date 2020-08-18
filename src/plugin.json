@@ -1,7 +1,7 @@
 {
   "type": "panel",
   "name": "ACE.SVG",
-  "id": "ace-iot-solutions-ace-svg-panel",
+  "id": "aceiot-svg-panel",
   "info": {
     "description": "SVG Visualization Panel",
     "author": {
@@ -14,8 +14,8 @@
       "iiot"
     ],
     "logos": {
-      "small": "img/logo.svg",
-      "large": "img/logo.svg"
+      "small": "https://raw.githubusercontent.com/ACE-IoT-Solutions/ace-svg-react/release/img/logo-type.svg",
+      "large": "https://raw.githubusercontent.com/ACE-IoT-Solutions/ace-svg-react/release/img/logo-type.svg"
     },
     "links": [
       {
@@ -28,7 +28,7 @@
       }
     ],
     "screenshots": [
-      { "name": "In Action", "path": "img/ace-svg-react.png" }
+      { "name": "In Action", "path": "https://raw.githubusercontent.com/ACE-IoT-Solutions/ace-svg-react/release/img/ace-svg-react.png" }
     ],
     "version": "%VERSION%",
     "updated": "%TODAY%"

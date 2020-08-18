@@ -1,4 +1,4 @@
-![ACE.SVG LOGO](img/logo-type.svg)
+![ACE.SVG LOGO](https://raw.githubusercontent.com/ACE-IoT-Solutions/ace-svg-react/release/img/logo-type.svg)
 # React powered SVG Panel Plugin for Grafana
 
 <!-- 
