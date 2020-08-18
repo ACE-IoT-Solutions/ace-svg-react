@@ -171,6 +171,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           );
         }
         this.state.eventFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
+        console.log('User event code complete');
       } catch (e) {
         console.log(`User event code failed: ${e}`);
       }

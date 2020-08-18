@@ -30,24 +30,22 @@ I have also taken a slightly different direction/philosophy from some of the oth
 2. Stay out of the way - This plugin will focus on providing simple, obvious tools to reduce the friction of converting your static SVG graphics into data driven visualizations, without limiting your options.
 3. Stay focused - This plugin will not attempt to be an online graphics editor.
 
-
 ## Getting started
-1. Install dependencies
-```BASH
-yarn install
-```
-2. Build plugin in development mode or run in watch mode
-```BASH
-yarn dev
-```
-or
-```BASH
-yarn watch
-```
-3. Build plugin in production mode
-```BASH
-yarn build
-```
+1. Create a new panel and select ACE.SVG as the visualization
+2. Paste your SVG source file into the SVG Document tab editor.
+3. Use the 'Click to Map' functionality in the SVG Mapping tab to map SVG Elements to variables.
+4. Write code that you want to run once on dashboard load in the User JS Init tab editor.
+5. Write code that you want to run on when data is received in the User JS Render tab editor.
+6. Make generous use of the browser JS console and console.log() to explore the features of the plugin and SVG.js
+
+## Execution Environment Interfaces
+The plugin makes available several interfaces to the SVG document and Grafana in the execution context of the Init and Render functions.
+Below are details for each one, remember you can always use the browser JS console and console.log() for more detail.
+
+ - `svgmap` svgmap is a JS object where each mapped SVG.js Element is available as a property. Example: If you have an svgid 'rect4524' and you've provided the mapped name bigSquare, you would access the SVG.js methods on that element under svgmap.bigSquare
+ - `data` data is the raw object passed in to the panel for rendering by Grafana, it contains the DataFrames with all timeseries data selected by the active queries and time range. This interface is a bit complex and verbose, so we'll be adding helper methods to make common use cases simpler. [Grafana DataFrame Docs](https://grafana.com/docs/grafana/latest/packages_api/data/dataframe/)
+ - `options` options is the raw panel options object manaeged by the dashboard to store panel state. It includes the source code for the svg and functions as well as any mappings or other config data. While you can manually access everything about the panel with this interface, the most common use case is to add properties to it from the Init function for the render function to use later. For instance, if you have a common animation in a panel, you might create a function for setting it up in Init, and attach it to the options object as a property, so that you can use it in the Render function and keep the logic flow clear.
+
 
 ## Learn more
 - [SVG.js](https://svgjs.com) The Core SVG library made available for SVG DOM manipulations.

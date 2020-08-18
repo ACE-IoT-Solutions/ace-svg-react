@@ -1,6 +1,6 @@
 {
   "name": "ace-iot-solutions-ace-svg-panel",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "SVG Visualization Panel",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
