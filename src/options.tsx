@@ -149,6 +149,7 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
     const styles = getStyles(config.theme);
     return (
       <VerticalGroup>
+        
         <SvgMapping value={{ svgId: '', mappedName: '' }} styles={styles} onAdd={this.onAdd} />
         {this.props.value.map((currentMapping: SVGIDMapping, index: number) => {
           return (

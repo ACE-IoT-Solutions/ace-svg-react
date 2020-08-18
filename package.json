@@ -1,6 +1,6 @@
 {
-  "name": "ace-iot-solutions-aceiot-svg-react",
-  "version": "0.0.1",
+  "name": "ace-iot-solutions-ace-svg-panel",
+  "version": "0.0.3",
   "description": "SVG Visualization Panel",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
