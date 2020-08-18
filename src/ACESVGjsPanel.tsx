@@ -120,7 +120,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
             return;
           }
         }
-        this.props.options.svgMappings = [...svgMappings, { svgId: clicked.id, mappedName: '' }];
+        this.props.options.svgMappings = [...svgMappings, {svgId: clicked.id, mappedName: ''}];
       }
     }
   }

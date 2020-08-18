@@ -1,5 +1,5 @@
 ![ACE.SVG LOGO](img/logo-type.svg)
-# Grafana React SVG Panel Plugin
+# React powered SVG Panel Plugin for Grafana
 
 <!-- 
 [![CircleCI](https://circleci.com/gh/grafana/simple-react-panel.svg?style=svg)](https://circleci.com/gh/grafana/simple-react-panel)
