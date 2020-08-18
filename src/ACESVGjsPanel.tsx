@@ -120,7 +120,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
             return;
           }
         }
-        this.props.options.svgMappings = [...svgMappings, {svgId: clicked.id, mappedName: ''}];
+        this.props.options.svgMappings = [...svgMappings, { svgId: clicked.id, mappedName: '' }];
       }
     }
   }
@@ -182,8 +182,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   }
 
   render() {
-    // const theme = useTheme();
-
     const styles = this.getStyles();
     return (
       <div
@@ -193,11 +191,11 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         <svg
           style={{
             width: `${this.props.width}px`,
-            height: `${this.props.height}px`
+            height: `${this.props.height}px`,
           }}
-          className={'svg-object'} 
-          ref={ref => this.renderSVG(ref)}>
-        </svg>
+          className={'svg-object'}
+          ref={ref => this.renderSVG(ref)}
+        ></svg>
       </div>
     );
   }
