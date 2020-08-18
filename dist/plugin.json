@@ -14,8 +14,8 @@
       "iiot"
     ],
     "logos": {
-      "small": "https://raw.githubusercontent.com/ACE-IoT-Solutions/ace-svg-react/release/img/logo-type.svg",
-      "large": "https://raw.githubusercontent.com/ACE-IoT-Solutions/ace-svg-react/release/img/logo-type.svg"
+      "small": "/img/logo-type.svg",
+      "large": "/img/logo-type.svg"
     },
     "links": [
       {
@@ -28,12 +28,13 @@
       }
     ],
     "screenshots": [
-      { "name": "In Action", "path": "https://raw.githubusercontent.com/ACE-IoT-Solutions/ace-svg-react/release/img/ace-svg-react.png" }
+      { "name": "In Action", "path": "/img/ace-svg-react.png" }
     ],
     "version": "0.0.4",
     "updated": "2020-08-18"
   },
   "dependencies": {
+    "grafanaDependency": "7.x",
     "grafanaVersion": "7.x",
     "plugins": []
   }
