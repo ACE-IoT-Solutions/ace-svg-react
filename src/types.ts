@@ -12,3 +12,9 @@ export interface ACESVGOptions {
   initAutocomplete: boolean;
   svgMappings: SVGIDMapping[];
 }
+export interface ACESVGDefaults {
+  svgNode: string;
+  initSource: string;
+  eventSource: string;
+  svgMappings: SVGIDMapping[];
+}

@@ -19,6 +19,7 @@ import Editor from '@monaco-editor/react';
 import { css } from 'emotion';
 import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
+import { props_defaults } from 'examples';
 // import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
 import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
 
@@ -206,6 +207,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       path: 'svgSource',
       name: 'SVG Document',
       id: 'svgSource',
+      defaultValue: props_defaults.svgNode,
       editor: props => {
         const grafanaTheme = config.theme.name;
         return (
@@ -229,6 +231,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       path: 'eventSource',
       name: 'User JS Render Code',
       id: 'eventSource',
+      defaultValue: props_defaults.eventSource,
       editor: props => {
         const grafanaTheme = config.theme.name;
         return (
@@ -252,6 +255,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       path: 'initSource',
       name: 'User JS Init Code',
       id: 'initSource',
+      defaultValue: props_defaults.initSource,
       editor: props => {
         const grafanaTheme = config.theme.name;
         return (
@@ -275,7 +279,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'svgMappings',
       path: 'svgMappings',
       name: 'SVG Mappings',
-      defaultValue: [],
+      defaultValue: props_defaults.svgMappings,
       editor: SvgMappings,
     });
 };
