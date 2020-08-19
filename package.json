@@ -1,12 +1,13 @@
 {
-  "name": "ace-iot-solutions-ace-svg-panel",
-  "version": "0.0.4",
+  "name": "aceiot-acesvg-panel",
+  "version": "0.0.5",
   "description": "SVG Visualization Panel",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
-    "watch": "grafana-toolkit plugin:dev --watch"
+    "watch": "grafana-toolkit plugin:dev --watch",
+    "prettier-format": "prettier --config .prettierrc.js 'src/**/*.ts' 'src/**/*.tsx' --write"
   },
   "repository": "github:ACE-IoT-Solutions/ace-svg-react",
   "author": "Andrew Rodgers",
