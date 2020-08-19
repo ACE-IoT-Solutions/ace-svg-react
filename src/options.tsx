@@ -1,27 +1,13 @@
 import React from 'react';
-import {
-  PanelOptionsEditorBuilder,
-  GrafanaTheme,
-  PanelOptionsEditorProps,
-  // FieldConfigEditorProps,
-  // StringFieldConfigSettings,
-  // PanelOptionsEditorProps,
-  // PanelOptionsEditorItem,
-} from '@grafana/data';
+import { PanelOptionsEditorBuilder, GrafanaTheme, PanelOptionsEditorProps } from '@grafana/data';
 import Editor from '@monaco-editor/react';
-// import AceEditor from 'react-ace';
-// import { config as aceConfig } from 'ace-builds';
-// aceConfig.set('basePath', 'public/plugins/ace-iot-solutions-aceiot-svg-react/');
-// import 'ace-builds/src-noconflict/mode-javascript';
-// import 'ace-builds/src-noconflict/mode-svg';
-// import 'ace-builds/src-noconflict/theme-github';
 
 import { css } from 'emotion';
 import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from 'examples';
 // import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
-import { Button, Input, stylesFactory, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
+import { Button, Tooltip, Input, stylesFactory, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
 
 interface MonacoEditorProps {
   value: string;
@@ -40,8 +26,14 @@ class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
     this.getEditorValue = getEditorValue;
     this.editorInstance = editorInstance;
   };
+  updateDimensions() {
+    this.editorInstance.layout();
+  }
   render() {
     const source = this.props.value;
+    if (this.editorInstance) {
+      this.editorInstance.layout();
+    }
     return (
       <div onBlur={this.onSourceChange}>
         <Editor
@@ -97,28 +89,32 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           }}
         />
         {value.svgId && onDelete && index !== undefined && (
-          <Button
-            variant="destructive"
-            icon="trash-alt"
-            size="sm"
-            onClick={() => {
-              onDelete(index);
-            }}
-          >
-            Remove
-          </Button>
+          <Tooltip content="Delete this mapping" theme={'info'}>
+            <Button
+              variant="destructive"
+              icon="trash-alt"
+              size="sm"
+              onClick={() => {
+                onDelete(index);
+              }}
+            >
+              Remove
+            </Button>
+          </Tooltip>
         )}
         {!value.svgId && onAdd && (
-          <Button
-            variant="secondary"
-            size="sm"
-            icon="plus-circle"
-            onClick={() => {
-              onAdd(this.state as SVGIDMapping);
-            }}
-          >
-            Add
-          </Button>
+          <Tooltip content="Add a new SVG Element ID to svgmap property mapping manually" theme={'info'}>
+            <Button
+              variant="secondary"
+              size="sm"
+              icon="plus-circle"
+              onClick={() => {
+                onAdd(this.state as SVGIDMapping);
+              }}
+            >
+              Add
+            </Button>
+          </Tooltip>
         )}
       </HorizontalGroup>
     );
@@ -144,22 +140,25 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
   };
   render() {
     const styles = getStyles(config.theme);
+    const svgMappings = this.props.value;
     return (
       <VerticalGroup>
         <HorizontalGroup>
-          <Button
-            variant="destructive"
-            icon="trash-alt"
-            size="sm"
-            onClick={() => {
-              this.props.onChange([]);
-            }}
-          >
-            Clear All
-          </Button>
+          <Tooltip content="Clear all SVG Element ID to svgmap property mappings" theme="info">
+            <Button
+              variant="destructive"
+              icon="trash-alt"
+              size="sm"
+              onClick={() => {
+                this.props.onChange([]);
+              }}
+            >
+              Clear All
+            </Button>
+          </Tooltip>
           <SvgMapping value={{ svgId: '', mappedName: '' }} styles={styles} onAdd={this.onAdd} />
         </HorizontalGroup>
-        {this.props.value.map((currentMapping: SVGIDMapping, index: number) => {
+        {svgMappings.map((currentMapping: SVGIDMapping, index: number) => {
           return (
             <SvgMapping
               key={currentMapping.svgId}
@@ -175,33 +174,6 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
     );
   }
 }
-// editor: props => {
-//   const updateMapping = (svgMapping: SVGIDMapping, index: number) => {
-//     let updatedMappings = props.value;
-//     updatedMappings[index] = svgMapping;
-//     props.value = updatedMappings;
-//     props.onChange(props.value);
-//   }
-//   const svgMappingComponent = (svgMapping: SVGIDMapping, index: number) => {
-//     let addIcon: React.ReactNode = (svgMapping.svgId === '') ? (
-//         <Icon className={styles.addIcon}
-//         name="plus-circle"
-//         onClick={() => {
-//           props.value.push(svgMapping);
-//           props.onChange(props.value)
-//         }}
-//         />) : null;
-//   }
-
-//   const svgMappings = props.value.map((svgMapping: SVGIDMapping, index: number) => {
-//     return svgMappingComponent(svgMapping, index)
-//   });
-
-//   return (<VerticalGroup>
-//     {svgMappingComponent({svgId: "", mappedName: ""}, -1)}
-//     {svgMappings}
-//     </VerticalGroup>);
-// },
 
 export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>) => {
   return builder
@@ -209,11 +181,14 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       category: ['SVG Document'],
       path: 'svgAutoComplete',
       name: 'Enable SVG AutoComplete',
+      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
     })
     .addCustomEditor({
       category: ['SVG Document'],
       path: 'svgSource',
       name: 'SVG Document',
+      description: `Editor for SVG Document, while small tweaks can be made here, we recommend using a dedicated 
+        Graphical SVG Editor and simply pasting the resulting XML here`,
       id: 'svgSource',
       defaultValue: props_defaults.svgNode,
       editor: props => {
@@ -232,12 +207,17 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       category: ['User JS Render'],
       path: 'eventAutoComplete',
       name: 'Enable Render JS AutoComplete',
+      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
       defaultValue: true,
     })
     .addCustomEditor({
       category: ['User JS Render'],
       path: 'eventSource',
       name: 'User JS Render Code',
+      description: `The User JS Render code is executed whenever new data is available, the root svg document is available as 'svgnode',
+        and elements you've mapped using the SVG Mapping tools below are available as properties on the 'svgmap' object.
+        The Grafana DataFrame is provided as 'data' and the 'options' object can be used to pass values and references between
+        the Render context and the Init context`,
       id: 'eventSource',
       defaultValue: props_defaults.eventSource,
       editor: props => {
@@ -256,12 +236,16 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       category: ['User JS Init'],
       path: 'initAutoComplete',
       name: 'Enable Init JS AutoComplete',
+      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
       defaultValue: true,
     })
     .addCustomEditor({
       category: ['User JS Init'],
       path: 'initSource',
       name: 'User JS Init Code',
+      description: `The User JS Init code is executed once when the panel loads, you can use this to define helper functions that 
+        you later reference in the User JS Render code section. The sections have identical execution contexts, and any 
+        JS objects you want to reference between them will need to be attached to the options object as properties`,
       id: 'initSource',
       defaultValue: props_defaults.initSource,
       editor: props => {
@@ -280,12 +264,16 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       category: ['SVG Mapping'],
       path: 'addAllIDs',
       name: 'Add all SVG Element IDs',
+      description:
+        'Parse the SVG Document for Elements with IDs assigned and automatically add them to the mapping list',
       defaultValue: false,
     })
     .addBooleanSwitch({
       category: ['SVG Mapping'],
       path: 'captureMappings',
       name: 'Enable SVG Mapping on Click',
+      description:
+        'When activated, clicking an element in the panel will attempt to map the clicked element or its nearest parent element with an ID assigned',
       defaultValue: false,
     })
     .addCustomEditor({
@@ -293,6 +281,8 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'svgMappings',
       path: 'svgMappings',
       name: 'SVG Mappings',
+      description:
+        'The SVG ID should match an element in the SVG document with an existing ID tag, the element will be attached to the "svgmap" object in the user code execution contexts as a property using the Mapped Name provided below',
       defaultValue: props_defaults.svgMappings,
       editor: SvgMappings,
     });
