@@ -21,7 +21,7 @@ import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from 'examples';
 // import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
-import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
+import { Button, Input, stylesFactory, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
 
 interface MonacoEditorProps {
   value: string;
@@ -74,15 +74,6 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
     const { value, index, onChangeItem, onAdd, onDelete } = this.props;
     return (
       <HorizontalGroup>
-        {!value.svgId && onAdd && (
-          <Icon
-            className={this.props.styles.addIcon}
-            name="plus-circle"
-            onClick={() => {
-              onAdd(this.state as SVGIDMapping);
-            }}
-          />
-        )}
         <Label>SVG ID</Label>
         <Input
           type="text"
@@ -106,28 +97,33 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           }}
         />
         {value.svgId && onDelete && index !== undefined && (
-          <Icon
-            className={this.props.styles.trashIcon}
-            name="trash-alt"
+          <Button
+            variant="destructive"
+            icon="trash-alt"
+            size="sm"
             onClick={() => {
               onDelete(index);
             }}
-          />
+          >
+            Remove
+          </Button>
+        )}
+        {!value.svgId && onAdd && (
+          <Button
+            variant="secondary"
+            size="sm"
+            icon="plus-circle"
+            onClick={() => {
+              onAdd(this.state as SVGIDMapping);
+            }}
+          >
+            Add
+          </Button>
         )}
       </HorizontalGroup>
     );
   }
 }
-
-// interface SVGIDMappingsProps {
-//   value: SVGIDMapping[];
-//   index?: number;
-//   styles?: any;
-//   // onChange: (a: SVGIDMapping[]) => void | undefined;
-//   onChangeItem?: (a: SVGIDMapping, b: number) => void | undefined;
-//   onAdd?: (a: SVGIDMapping) => void;
-//   onDelete?: (a: number) => void;
-// }
 
 class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
   onChangeItem = (updatedMapping: SVGIDMapping, index: number) => {
@@ -150,7 +146,19 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
     const styles = getStyles(config.theme);
     return (
       <VerticalGroup>
-        <SvgMapping value={{ svgId: '', mappedName: '' }} styles={styles} onAdd={this.onAdd} />
+        <HorizontalGroup>
+          <Button
+            variant="destructive"
+            icon="trash-alt"
+            size="sm"
+            onClick={() => {
+              this.props.onChange([]);
+            }}
+          >
+            Clear All
+          </Button>
+          <SvgMapping value={{ svgId: '', mappedName: '' }} styles={styles} onAdd={this.onAdd} />
+        </HorizontalGroup>
         {this.props.value.map((currentMapping: SVGIDMapping, index: number) => {
           return (
             <SvgMapping
@@ -267,6 +275,12 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
           />
         );
       },
+    })
+    .addBooleanSwitch({
+      category: ['SVG Mapping'],
+      path: 'addAllIDs',
+      name: 'Add all SVG Element IDs',
+      defaultValue: false,
     })
     .addBooleanSwitch({
       category: ['SVG Mapping'],
