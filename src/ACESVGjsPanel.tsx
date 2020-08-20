@@ -44,10 +44,14 @@ SVGExtend(SVGElement, {
   },
   animateOn: function(this: SVGElement, speed: number, on: boolean, animation: Function) {
     if (on) {
-      animation(this.animate(speed));
+      //@ts-ignore
+      if (this.timeline()._runners.length === 0) {
+        animation(this.animate(speed));
+      } else {
+        this.timeline().play();
+      }
     } else {
       this.timeline().stop();
-      this.timeline().finish();
     }
   },
   stopAnimation: function(this: SVGRunner) {
