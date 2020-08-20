@@ -5,8 +5,7 @@ import Editor from '@monaco-editor/react';
 import { css } from 'emotion';
 import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
-import { props_defaults } from 'examples';
-// import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
+import { props_defaults } from './examples';
 import { Button, Tooltip, Input, stylesFactory, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
 
 interface MonacoEditorProps {
@@ -15,9 +14,10 @@ interface MonacoEditorProps {
   language: string;
   onChange: (value?: string | undefined) => void;
 }
+
 class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
-  getEditorValue: any | undefined;
-  editorInstance: any | undefined;
+  getEditorValue?: any;
+  editorInstance?: any;
 
   onSourceChange = () => {
     this.props.onChange(this.getEditorValue());
@@ -186,11 +186,10 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'svgSource',
       defaultValue: props_defaults.svgNode,
       editor: props => {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="xml"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
@@ -208,11 +207,10 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'eventSource',
       defaultValue: props_defaults.eventSource,
       editor: props => {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="javascript"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
@@ -229,11 +227,10 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'initSource',
       defaultValue: props_defaults.initSource,
       editor: props => {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="javascript"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
@@ -295,4 +292,3 @@ const getStyles = stylesFactory((theme: GrafanaTheme) => {
     `,
   };
 });
-//
