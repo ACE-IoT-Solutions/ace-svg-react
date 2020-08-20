@@ -23,9 +23,9 @@ interface PanelState {
   svgSource: string | null;
   mappedElements: MappedElements | null;
   initFunctionSource: string;
-  initFunction: Function;
+  initFunction: Function | null;
   eventFunctionSource: string;
-  eventFunction: Function;
+  eventFunction: Function | null;
   initialized: boolean;
 }
 
@@ -43,6 +43,25 @@ SVGExtend(SVGElement, {
         .rotate(360)
         .loop()
     );
+  },
+  showOn: function(this: SVGElement, on: boolean) {
+    if (on) {
+      this.show();
+    } else {
+      this.hide();
+    }
+  },
+  animateOn: function(this: SVGElement, speed: number, on: boolean, animation: Function) {
+    if (on) {
+      //@ts-ignore
+      if (this.timeline()._runners.length === 0) {
+        animation(this.animate(speed));
+      } else {
+        this.timeline().play();
+      }
+    } else {
+      this.timeline().stop();
+    }
   },
   stopAnimation: function(this: SVGRunner) {
     this.timeline().stop();
@@ -74,7 +93,6 @@ SVGExtend(SVGDom, {
         return;
       }
     }
-    // console.log(currentElement);
     currentElement.innerHTML = newText;
   },
 });
@@ -83,14 +101,14 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   constructor(props: any) {
     super(props);
     this.state = {
-      addAllIDs: this.props.options.addAllIDs || false,
+      addAllIDs: false,
       svgNode: null,
       svgSource: null,
       mappedElements: null,
-      initFunctionSource: this.props.options.initSource || '',
-      initFunction: Function('data', 'options', 'svgnode', 'svgmap', this.props.options.initSource),
-      eventFunctionSource: this.props.options.eventSource || '',
-      eventFunction: Function('data', 'options', 'svgnode', 'svgmap', this.props.options.eventSource),
+      initFunctionSource: '',
+      initFunction: null,
+      eventFunctionSource: '',
+      eventFunction: null,
       initialized: false,
     };
   }
@@ -106,7 +124,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         );
       }
     }
-    console.log(currentElements);
     this.setState({ mappedElements: currentElements });
   }
 
@@ -160,7 +177,10 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
 
         this.props.onOptionsChange({
           ...this.props.options,
-          svgMappings: [...this.props.options.svgMappings, { svgId: clicked.id, mappedName: '' }],
+          svgMappings: [
+            ...this.props.options.svgMappings,
+            { svgId: clicked.id, mappedName: '' }, // Append the new one
+          ],
         });
         this.setState({ initialized: false });
       }
@@ -174,7 +194,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         this.state.addAllIDs !== this.props.options.addAllIDs
       ) {
         this.setState({
-          ...this.state,
           initFunctionSource: this.props.options.initSource,
           addAllIDs: this.props.options.addAllIDs,
           initialized: false,
@@ -191,7 +210,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         }
         this.initializeMappings(svgNode);
         this.setState({ svgNode: svgNode });
-        console.log(this.state);
 
         try {
           this.setState({
@@ -203,8 +221,10 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
               this.props.replaceVariables(this.props.options.initSource)
             ),
           });
-          this.state.initFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
-          this.setState({ initialized: true });
+          if (this.state.mappedElements && this.state.initFunction) {
+            this.state.initFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
+            this.setState({ initialized: true });
+          }
         } catch (e) {
           this.setState({ initialized: true });
           console.log(`User init code failed: ${e}`);
@@ -212,20 +232,20 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       }
 
       try {
+        let eventFunction = this.state.eventFunction;
         if (this.props.options.eventSource !== this.state.eventFunctionSource) {
-          this.setState({
-            eventFunctionSource: this.props.options.eventSource,
-            eventFunction: Function(
-              'data',
-              'options',
-              'svgnode',
-              'svgmap',
-              this.props.replaceVariables(this.props.options.eventSource)
-            ),
-          });
+          let eventFunctionSource = this.props.options.eventSource;
+          eventFunction = Function(
+            'data',
+            'options',
+            'svgnode',
+            'svgmap',
+            this.props.replaceVariables(eventFunctionSource)
+          );
+          this.setState({ eventFunctionSource: eventFunctionSource, eventFunction: eventFunction, initialized: false });
         }
-        if (this.state.mappedElements) {
-          this.state.eventFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
+        if (this.state.mappedElements && eventFunction) {
+          eventFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
         }
       } catch (e) {
         console.log(`User event code failed: ${e}`);
