@@ -1,52 +1,12 @@
 import React from 'react';
 import { PanelOptionsEditorBuilder, GrafanaTheme, PanelOptionsEditorProps } from '@grafana/data';
-import Editor from '@monaco-editor/react';
 
 import { css } from 'emotion';
 import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from './examples';
+import { MonacoEditor } from './components/MonacoEditor';
 import { Button, Tooltip, Input, stylesFactory, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
-
-interface MonacoEditorProps {
-  value: string;
-  theme: string;
-  language: string;
-  onChange: (value?: string | undefined) => void;
-}
-
-class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
-  getEditorValue?: any;
-  editorInstance?: any;
-
-  onSourceChange = () => {
-    this.props.onChange(this.getEditorValue());
-  };
-  onEditorDidMount = (getEditorValue: any, editorInstance: any) => {
-    this.getEditorValue = getEditorValue;
-    this.editorInstance = editorInstance;
-  };
-  updateDimensions() {
-    this.editorInstance.layout();
-  }
-  render() {
-    const source = this.props.value;
-    if (this.editorInstance) {
-      this.editorInstance.layout();
-    }
-    return (
-      <div onBlur={this.onSourceChange}>
-        <Editor
-          height={'33vh'}
-          language={this.props.language}
-          theme={this.props.theme}
-          value={source}
-          editorDidMount={this.onEditorDidMount}
-        />
-      </div>
-    );
-  }
-}
 
 interface SVGIDMappingProps {
   value: SVGIDMapping;
