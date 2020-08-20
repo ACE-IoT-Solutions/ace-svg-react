@@ -177,12 +177,6 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
 
 export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>) => {
   return builder
-    .addBooleanSwitch({
-      category: ['SVG Document'],
-      path: 'svgAutoComplete',
-      name: 'Enable SVG AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-    })
     .addCustomEditor({
       category: ['SVG Document'],
       path: 'svgSource',
@@ -202,13 +196,6 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
           />
         );
       },
-    })
-    .addBooleanSwitch({
-      category: ['User JS Render'],
-      path: 'eventAutoComplete',
-      name: 'Enable Render JS AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-      defaultValue: true,
     })
     .addCustomEditor({
       category: ['User JS Render'],
@@ -231,13 +218,6 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
           />
         );
       },
-    })
-    .addBooleanSwitch({
-      category: ['User JS Init'],
-      path: 'initAutoComplete',
-      name: 'Enable Init JS AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-      defaultValue: true,
     })
     .addCustomEditor({
       category: ['User JS Init'],
