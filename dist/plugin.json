@@ -28,7 +28,7 @@
       }
     ],
     "screenshots": [
-      { "name": "In Action", "path": "/img/ace-svg-react.png" }
+      { "name": "In Action", "path": "img/ace-svg-react.png" }
     ],
     "version": "0.0.6",
     "updated": "2020-08-31"
