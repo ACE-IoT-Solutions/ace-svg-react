@@ -14,8 +14,8 @@
       "iiot"
     ],
     "logos": {
-      "small": "/img/logo-small-background.svg",
-      "large": "/img/logo-type.svg"
+      "small": "img/logo-small-background.svg",
+      "large": "img/logo-type.svg"
     },
     "links": [
       {
