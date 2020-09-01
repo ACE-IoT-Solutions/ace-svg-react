@@ -31,7 +31,7 @@
       { "name": "In Action", "path": "img/ace-svg-react.png" }
     ],
     "version": "0.0.6",
-    "updated": "2020-08-31"
+    "updated": "2020-09-01"
   },
   "dependencies": {
     "grafanaDependency": ">=7.0.0",
