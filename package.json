@@ -7,7 +7,8 @@
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
-    "prettier-format": "prettier --config .prettierrc.js 'src/**/*.ts' 'src/**/*.tsx' --write"
+    "prettier-format": "prettier --config .prettierrc.js 'src/**/*.ts' 'src/**/*.tsx' --write",
+    "sign": "grafana-toolkit plugin:sign"
   },
   "repository": "github:ACE-IoT-Solutions/ace-svg-react",
   "author": "Andrew Rodgers",
