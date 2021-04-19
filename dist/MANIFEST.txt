@@ -1,0 +1,40 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "community",
+  "signedByOrg": "aceiot",
+  "signedByOrgName": "Andrew Rodgers",
+  "plugin": "aceiot-svg-panel",
+  "version": "0.0.9",
+  "time": 1618862811048,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "CHANGELOG.md": "715a779a6e5471cd09c46c783125b007646c0a034dd9039a3ecce82863000f19",
+    "img/ace-svg-react.png": "6d2343f8f5471f27a17d811743aba3cd221fae2350a585cdccdae7689619dc15",
+    "img/ace_svg_icon.png": "585222feea75c122615b5b379a643ff0a5e85f58f77daf5e6c5da7bdc7170e06",
+    "img/ace_svg_icon@2x.png": "9a1d3d0e11f80cb3924e57b78dd8fdd624ec81e05a182be3038d9e4e9c059f00",
+    "img/ace_svg_icon@4x.png": "4e3127a17f27e95c28054498a3c2e3d5f023bf8db1c0c9cd5b6bfa506dac26d5",
+    "img/logo-small-background.svg": "eed57cceea2ed7f9b1aaadd3d02d13db67766062e71e1885d0fd83ba8325ec59",
+    "img/logo-type.svg": "4cca7b5a6c8bdd300d0ffad4a2fc4d0f044e2ac0df60144cb6f2cf540b2534a9",
+    "img/logo.svg": "cda1e6830638a820850a6f09331d3a4b19c6284530b9eb9d194acab7b5dd728a",
+    "LICENSE": "23fbaeb5e3c2c255b469c8deaa1e88727e5367521c4df4bcdd90358027be7058",
+    "module.js": "2f4ee2c96110190bd26916a20e4056c141f8356f8482343b4cc042b1abea8ff8",
+    "module.js.LICENSE.txt": "0d8f66cd4afb566cb5b7e1540c68f43b939d3eba12ace290f18abc4f4cb53ed0",
+    "module.js.map": "545248a39c51209e2f2f83bc482d5a69d1e8565c9931ffb7395a534f29a65cfb",
+    "plugin.json": "5b853ee52aa40572bf2dfa1b573866657638223cfdb9de4dfbdf266a805ac43b",
+    "README.md": "ca579e8ef64d5995d0ca2587ed86ef1496933507da1bfbf4fdc980bb104c6039"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPGP.js v4.10.1
+Comment: https://openpgpjs.org
+
+wqAEARMKAAYFAmB94tsACgkQfk0ManCIZuc+LwIGNE3alUgCx2L5UP+4I+S9
+QdnM8pCeAnXRWzfi2RYRWSwLf2Sn4dH/W/24sbjiugbJ64Bl6KAEk1BoJ+jL
+d+WNiNQCB1mLFsR9qTTV8pX126FfN7t1pMV34qCJGIRoP4RdHnBjw39stWn/
+V8A5Xm9O7n11fRS45o/AqsTSVBToH8+KH5DT
+=sfr5
+-----END PGP SIGNATURE-----
