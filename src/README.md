@@ -1,13 +1,9 @@
-![ACE.SVG LOGO](https://raw.githubusercontent.com/ACE-IoT-Solutions/ace-svg-react/release/img/logo-type.svg)
+![ACE.SVG LOGO](img/logo-type.svg)
 # React powered SVG Panel Plugin for Grafana
 
-<!-- 
-[![CircleCI](https://circleci.com/gh/grafana/simple-react-panel.svg?style=svg)](https://circleci.com/gh/grafana/simple-react-panel)
-[![David Dependency Status](https://david-dm.org/grafana/simple-react-panel.svg)](https://david-dm.org/grafana/simple-react-panel)
-[![David Dev Dependency Status](https://david-dm.org/grafana/simple-react-panel/dev-status.svg)](https://david-dm.org/grafana/simple-react-panel/?type=dev)
-[![Known Vulnerabilities](https://snyk.io/test/github/grafana/simple-react-panel/badge.svg)](https://snyk.io/test/github/grafana/simple-react-panel)
-[![Maint![ACE.SVGainability](https://api.codeclimate.com/v1/badges/1dee2585eb412f913cbb/maintainability)](https://codeclimate.com/github/grafana/simple-react-panel/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/1dee2585eb412f913cbb/test_coverage)](https://codeclimate.com/github/grafana/simple-react-panel/test_coverage) -->
+![Latest version](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22aceiot-svg-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)
+
+![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22aceiot-svg-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)
 
 ![Screenshot of plugin](https://media.giphy.com/media/YRE4DxPYqy3XCR6rL4/giphy.gif)
 
@@ -46,6 +42,25 @@ Below are details for each one, remember you can always use the browser JS conso
  - `data` data is the raw object passed in to the panel for rendering by Grafana, it contains the DataFrames with all timeseries data selected by the active queries and time range. This interface is a bit complex and verbose, so we'll be adding helper methods to make common use cases simpler. [Grafana DataFrame Docs](https://grafana.com/docs/grafana/latest/packages_api/data/dataframe/)
  - `options` options is the raw panel options object manaeged by the dashboard to store panel state. It includes the source code for the svg and functions as well as any mappings or other config data. While you can manually access everything about the panel with this interface, the most common use case is to add properties to it from the Init function for the render function to use later. For instance, if you have a common animation in a panel, you might create a function for setting it up in Init, and attach it to the options object as a property, so that you can use it in the Render function and keep the logic flow clear.
 
+
+
+## Getting started (development)
+1. Install dependencies
+```BASH
+yarn install
+```
+2. Build plugin in development mode or run in watch mode
+```BASH
+yarn dev
+```
+or
+```BASH
+yarn watch
+```
+3. Build plugin in production mode
+```BASH
+yarn build
+```
 
 ## Learn more
 - [SVG.js](https://svgjs.com) The Core SVG library made available for SVG DOM manipulations.
