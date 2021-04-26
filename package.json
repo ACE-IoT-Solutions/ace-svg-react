@@ -17,13 +17,13 @@
     "email": "andrew@aceiotsolutions.com"
   },
   "devDependencies": {
-    "@grafana/data": "latest",
-    "@grafana/toolkit": "latest",
-    "@grafana/ui": "latest",
+    "@grafana/data": "next",
+    "@grafana/toolkit": "next",
+    "@grafana/ui": "next",
     "emotion": "10.0.27"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=12 <13"
   },
   "dependencies": {
     "@grafana/runtime": "^7.1.1",
