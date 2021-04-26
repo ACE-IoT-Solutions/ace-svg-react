@@ -42,26 +42,6 @@ Below are details for each one, remember you can always use the browser JS conso
  - `data` data is the raw object passed in to the panel for rendering by Grafana, it contains the DataFrames with all timeseries data selected by the active queries and time range. This interface is a bit complex and verbose, so we'll be adding helper methods to make common use cases simpler. [Grafana DataFrame Docs](https://grafana.com/docs/grafana/latest/packages_api/data/dataframe/)
  - `options` options is the raw panel options object manaeged by the dashboard to store panel state. It includes the source code for the svg and functions as well as any mappings or other config data. While you can manually access everything about the panel with this interface, the most common use case is to add properties to it from the Init function for the render function to use later. For instance, if you have a common animation in a panel, you might create a function for setting it up in Init, and attach it to the options object as a property, so that you can use it in the Render function and keep the logic flow clear.
 
-
-
-## Getting started (development)
-1. Install dependencies
-```BASH
-yarn install
-```
-2. Build plugin in development mode or run in watch mode
-```BASH
-yarn dev
-```
-or
-```BASH
-yarn watch
-```
-3. Build plugin in production mode
-```BASH
-yarn build
-```
-
 ## Learn more
 - [SVG.js](https://svgjs.com) The Core SVG library made available for SVG DOM manipulations.
 - [Monaco Editor](https://microsoft.github.io/monaco-editor/) The editor used for user code.
