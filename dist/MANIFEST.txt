@@ -9,7 +9,7 @@ Hash: SHA512
   "signedByOrgName": "Andrew Rodgers",
   "plugin": "aceiot-svg-panel",
   "version": "0.0.10",
-  "time": 1619458102746,
+  "time": 1619460498255,
   "keyId": "7e4d0c6a708866e7",
   "files": {
     "CHANGELOG.md": "715a779a6e5471cd09c46c783125b007646c0a034dd9039a3ecce82863000f19",
@@ -25,16 +25,16 @@ Hash: SHA512
     "module.js.LICENSE.txt": "0d8f66cd4afb566cb5b7e1540c68f43b939d3eba12ace290f18abc4f4cb53ed0",
     "module.js.map": "25e53f66f009c45592c9b79370b374e24cb7477f0d3059bb212a4d525b71423f",
     "plugin.json": "468ecd4ee0e0fe06b35469c9e02dd145bf2b36b4548ac2857d6e46c95db0f598",
-    "README.md": "ca579e8ef64d5995d0ca2587ed86ef1496933507da1bfbf4fdc980bb104c6039"
+    "README.md": "11a750556da2ae6e354fa6ba74fc71686405f7309515b44ceeebd84b30fbc8b6"
   }
 }
 -----BEGIN PGP SIGNATURE-----
 Version: OpenPGP.js v4.10.1
 Comment: https://openpgpjs.org
 
-wqIEARMKAAYFAmCG+DYACgkQfk0ManCIZucdiAIJAa7r4zSqkjrGEbIrL/Id
-On8fEujSkvivvxtN6LaTMsgWQC0TdFXX1lRnJL9RyDISu9wQdbtBIS+V8Oa4
-MJNSf+/yAgkBZCqSkgxswyu3YHetKqB6GrtTQLWwZxIur2nOJ1gBO/nrKB0v
-3p1zXbGi5BxTurvY6lM7zddKgxg4e34o/Z8sso8=
-=VU03
+wqEEARMKAAYFAmCHAZIACgkQfk0ManCIZueazAIJAdFfyN4w5cDG/QmtpJ9L
+fag/hmq63Idqoci37RAE6EswvesqQNIbUkaFQjzuiH3JDO1gGBKA1BtffKEt
+mkAqbshLAgjJSnEKqifcwABBI41oBX6ygcFMnieEORJgeVD4V6XnunjLUkGu
+GL6BPnaEvftgqrHQaRPepzEwp/GQiznTAZFaHw==
+=ubTa
 -----END PGP SIGNATURE-----
