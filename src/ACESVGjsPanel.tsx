@@ -25,6 +25,9 @@ interface TextMappedElement extends SVGElement {
   textElement: Element;
 }
 SVGExtend(SVGElement, {
+  openOnClick: function(this: SVGElement, url: string) {
+    return window.open(url);
+  },
   animateContRotate: function(this: SVGElement, speed: number) {
     return (
       this.animate(speed)
