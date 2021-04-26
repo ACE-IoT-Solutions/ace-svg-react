@@ -25,12 +25,12 @@ interface TextMappedElement extends SVGElement {
   textElement: Element;
 }
 SVGExtend(SVGElement, {
-  openOnClick: function(this: SVGElement, url: string){
-    return(
-        window.open(url, "CNN_WindowName");
+  openOnClick: function(this: SVGElement, url: string) {
+    return (
+      window.open(url, "CNN_WindowName")
     );
   },
-animateContRotate: function(this: SVGElement, speed: number) {
+  animateContRotate: function(this: SVGElement, speed: number) {
     return (
       this.animate(speed)
         //@ts-ignore
