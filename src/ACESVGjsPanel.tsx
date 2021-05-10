@@ -1,29 +1,38 @@
 import React, { PureComponent } from 'react';
 import { PanelProps } from '@grafana/data';
-import { ACESVGOptions, SVGIDMapping } from 'types';
+import { ACESVGOptions, SVGIDMapping } from './types';
 import { css } from 'emotion';
 import { stylesFactory } from '@grafana/ui';
-import { SVG, Element as SVGElement, Dom as SVGDom, extend as SVGExtend, Runner as SVGRunner } from '@svgdotjs/svg.js';
+import {
+  SVG,
+  Element as SVGElement,
+  Dom as SVGDom,
+  extend as SVGExtend,
+  Runner as SVGRunner, // Use SVG prefix
+} from '@svgdotjs/svg.js';
 
 interface MappedElements {
   [key: string]: SVGElement | SVGDom;
 }
+
 interface Props extends PanelProps<ACESVGOptions> {}
+
 interface PanelState {
   addAllIDs: boolean;
   svgNode: SVGElement | SVGDom | null;
   svgSource: string | null;
   mappedElements: MappedElements | null;
-  svgMappings: SVGIDMapping[];
   initFunctionSource: string;
   initFunction: Function | null;
   eventFunctionSource: string;
   eventFunction: Function | null;
   initialized: boolean;
 }
+
 interface TextMappedElement extends SVGElement {
   textElement: Element;
 }
+
 SVGExtend(SVGElement, {
   openOnClick: function(this: SVGElement, url: string) {
     return window.open(url);
@@ -74,6 +83,7 @@ SVGExtend(SVGElement, {
     }
   },
 });
+
 SVGExtend(SVGDom, {
   updateXHTMLFontText: function(this: SVGDom, newText: string) {
     let currentElement: Element | TextMappedElement = this.node;
@@ -90,7 +100,6 @@ SVGExtend(SVGDom, {
   },
 });
 
-// export class SimplePanel extends PureComponent<Props, State> = ({ options, data, width, height }) => {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
   constructor(props: any) {
     super(props);
@@ -98,7 +107,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       addAllIDs: false,
       svgNode: null,
       svgSource: null,
-      svgMappings: [],
       mappedElements: null,
       initFunctionSource: '',
       initFunction: null,
@@ -121,8 +129,9 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     }
     this.setState({ mappedElements: currentElements });
   }
+
   mapAllIDs(svgNode: SVGDom) {
-    let svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
+    const svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
     let nodeFilterID: NodeFilter = {
       acceptNode: (node: Element) => {
         if (node.id) {
@@ -143,38 +152,44 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       }
       currentNode = svgWalker.nextNode() as Element;
     }
-    this.setState({ svgMappings: [...svgMappings], initialized: false });
-    this.props.options.svgMappings = [...svgMappings];
-    this.props.onOptionsChange(this.props.options);
-    this.forceUpdate();
+    this.props.onOptionsChange({
+      ...this.props.options,
+      svgMappings,
+    });
+    this.setState({ initialized: false });
   }
 
-  mappingClickHandler(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+  mappingClickHandler = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     if (event.target) {
       let clicked = event.target as Element;
-      let loopCount = 0;
-      let svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
       if (clicked.id) {
+        let loopCount = 0;
         while (clicked.id === '') {
           loopCount++;
           if (loopCount > 20) {
+            console.log('no element found with an id');
             return;
           }
           clicked = clicked.parentNode as Element;
         }
-        for (let i = 0; i < svgMappings.length; i++) {
-          if (svgMappings[i].svgId === clicked.id) {
-            return;
-          }
+
+        if (this.props.options.svgMappings.find(m => m.svgId === clicked.id)) {
+          console.log('mapping already exists', clicked);
+          return;
         }
-        svgMappings.push({ svgId: clicked.id, mappedName: '' });
-        this.setState({ svgMappings: [...svgMappings], initialized: false });
-        this.props.options.svgMappings = [...svgMappings];
-        this.props.onOptionsChange(this.props.options);
-        this.forceUpdate();
+
+        this.props.onOptionsChange({
+          ...this.props.options,
+          svgMappings: [
+            ...this.props.options.svgMappings,
+            { svgId: clicked.id, mappedName: '' }, // Append the new one
+          ],
+        });
+        this.setState({ initialized: false });
       }
     }
-  }
+  };
+
   renderSVG(element: SVGSVGElement | SVGDom | null) {
     if (element) {
       if (
@@ -244,17 +259,16 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       return null;
     }
   }
+
   render() {
+    const { options, width, height } = this.props;
     const styles = this.getStyles();
     return (
-      <div
-        className={styles.wrapper}
-        onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
-      >
+      <div className={styles.wrapper} onClick={options.captureMappings ? this.mappingClickHandler : undefined}>
         <svg
           style={{
-            width: `${this.props.width}px`,
-            height: `${this.props.height}px`,
+            width: `${width}px`,
+            height: `${height}px`,
           }}
           className={'svg-object'}
           ref={ref => this.renderSVG(ref)}

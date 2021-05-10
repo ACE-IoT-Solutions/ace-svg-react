@@ -1,52 +1,12 @@
 import React from 'react';
 import { PanelOptionsEditorBuilder, GrafanaTheme, PanelOptionsEditorProps } from '@grafana/data';
-import Editor from '@monaco-editor/react';
 
 import { css } from 'emotion';
 import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
-import { props_defaults } from 'examples';
-// import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
+import { props_defaults } from './examples';
+import { MonacoEditor } from './components/MonacoEditor';
 import { Button, Tooltip, Input, stylesFactory, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
-
-interface MonacoEditorProps {
-  value: string;
-  theme: string;
-  language: string;
-  onChange: (value?: string | undefined) => void;
-}
-class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
-  getEditorValue: any | undefined;
-  editorInstance: any | undefined;
-
-  onSourceChange = () => {
-    this.props.onChange(this.getEditorValue());
-  };
-  onEditorDidMount = (getEditorValue: any, editorInstance: any) => {
-    this.getEditorValue = getEditorValue;
-    this.editorInstance = editorInstance;
-  };
-  updateDimensions() {
-    this.editorInstance.layout();
-  }
-  render() {
-    const source = this.props.value;
-    if (this.editorInstance) {
-      this.editorInstance.layout();
-    }
-    return (
-      <div onBlur={this.onSourceChange}>
-        <Editor
-          height={'33vh'}
-          language={this.props.language}
-          theme={this.props.theme}
-          value={source}
-          editorDidMount={this.onEditorDidMount}
-        />
-      </div>
-    );
-  }
-}
 
 interface SVGIDMappingProps {
   value: SVGIDMapping;
@@ -177,12 +137,6 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
 
 export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>) => {
   return builder
-    .addBooleanSwitch({
-      category: ['SVG Document'],
-      path: 'svgAutoComplete',
-      name: 'Enable SVG AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-    })
     .addCustomEditor({
       category: ['SVG Document'],
       path: 'svgSource',
@@ -192,23 +146,15 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'svgSource',
       defaultValue: props_defaults.svgNode,
       editor: props => {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="xml"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
         );
       },
-    })
-    .addBooleanSwitch({
-      category: ['User JS Render'],
-      path: 'eventAutoComplete',
-      name: 'Enable Render JS AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-      defaultValue: true,
     })
     .addCustomEditor({
       category: ['User JS Render'],
@@ -221,23 +167,15 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'eventSource',
       defaultValue: props_defaults.eventSource,
       editor: props => {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="javascript"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
         );
       },
-    })
-    .addBooleanSwitch({
-      category: ['User JS Init'],
-      path: 'initAutoComplete',
-      name: 'Enable Init JS AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-      defaultValue: true,
     })
     .addCustomEditor({
       category: ['User JS Init'],
@@ -249,11 +187,10 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'initSource',
       defaultValue: props_defaults.initSource,
       editor: props => {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="javascript"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
@@ -315,4 +252,3 @@ const getStyles = stylesFactory((theme: GrafanaTheme) => {
     `,
   };
 });
-//
