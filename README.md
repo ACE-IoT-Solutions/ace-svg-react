@@ -45,22 +45,20 @@ Below are details for each one, remember you can always use the browser JS conso
 
 
 ## Getting started (development)
-1. Install dependencies
-```BASH
-yarn install
+1. Install Grafana (https://grafana.com/)
+2. Install nodejs v14.x (https://nodejs.org/en/)
+3. Fork this repo and clone it locally.
+4. Navigate to your local clone in your terminal.
+5. `npm install yarn -g`
+6. `yarn install`
+7. `yarn dev`
+8. In defaults.ini (https://grafana.com/docs/grafana/v7.5/administration/configuration/)
 ```
-2. Build plugin in development mode or run in watch mode
-```BASH
-yarn dev
+  - app_mode = development
+  - plugins = C:/path_to_my_cloned_fork
+  - allow_loading_unsigned_plugins = aceiot-svg-panel
 ```
-or
-```BASH
-yarn watch
-```
-3. Build plugin in production mode
-```BASH
-yarn build
-```
+9. Always have MANIFEST.txt deleted developing, but do not commit this deletion.
 
 ## Learn more
 - [SVG.js](https://svgjs.com) The Core SVG library made available for SVG DOM manipulations.
