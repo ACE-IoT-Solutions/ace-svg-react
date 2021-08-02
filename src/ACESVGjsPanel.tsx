@@ -4,11 +4,12 @@ import { ACESVGOptions, SVGIDMapping } from 'types';
 import { css } from 'emotion';
 import { stylesFactory } from '@grafana/ui';
 import { SVG, Element as SVGElement, Dom as SVGDom, extend as SVGExtend, Runner as SVGRunner } from '@svgdotjs/svg.js';
+import cloneArray from 'cloneArray';
 
 interface MappedElements {
   [key: string]: SVGElement | SVGDom;
 }
-interface Props extends PanelProps<ACESVGOptions> {}
+interface Props extends PanelProps<ACESVGOptions> { }
 interface PanelState {
   addAllIDs: boolean;
   svgNode: SVGElement | SVGDom | null;
@@ -25,10 +26,10 @@ interface TextMappedElement extends SVGElement {
   textElement: Element;
 }
 SVGExtend(SVGElement, {
-  openOnClick: function(this: SVGElement, url: string) {
+  openOnClick: function (this: SVGElement, url: string) {
     return window.open(url);
   },
-  animateContRotate: function(this: SVGElement, speed: number) {
+  animateContRotate: function (this: SVGElement, speed: number) {
     return (
       this.animate(speed)
         //@ts-ignore
@@ -38,14 +39,14 @@ SVGExtend(SVGElement, {
         .loop()
     );
   },
-  showOn: function(this: SVGElement, on: boolean) {
+  showOn: function (this: SVGElement, on: boolean) {
     if (on) {
       this.show();
     } else {
       this.hide();
     }
   },
-  animateOn: function(this: SVGElement, speed: number, on: boolean, animation: Function) {
+  animateOn: function (this: SVGElement, speed: number, on: boolean, animation: Function) {
     if (on) {
       //@ts-ignore
       if (this.timeline()._runners.length === 0) {
@@ -57,13 +58,13 @@ SVGExtend(SVGElement, {
       this.timeline().stop();
     }
   },
-  stopAnimation: function(this: SVGRunner) {
+  stopAnimation: function (this: SVGRunner) {
     this.timeline().stop();
   },
-  getParentNode: function(this: SVGElement) {
+  getParentNode: function (this: SVGElement) {
     return this.node.parentNode;
   },
-  getTopNode: function(this: SVGElement) {
+  getTopNode: function (this: SVGElement) {
     let currentNode: Element = this.node as Element;
     while (true) {
       if (currentNode.parentNode && !currentNode.className.includes('svg-object')) {
@@ -75,7 +76,7 @@ SVGExtend(SVGElement, {
   },
 });
 SVGExtend(SVGDom, {
-  updateXHTMLFontText: function(this: SVGDom, newText: string) {
+  updateXHTMLFontText: function (this: SVGDom, newText: string) {
     let currentElement: Element | TextMappedElement = this.node;
     let i = 0;
     while (currentElement.localName !== 'xhtml:font') {
@@ -122,7 +123,10 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     this.setState({ mappedElements: currentElements });
   }
   mapAllIDs(svgNode: SVGDom) {
-    let svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
+    let svgMappings: SVGIDMapping[] = [];
+    this.props.options.svgMappings.forEach((mapping) => {
+      svgMappings.push(mapping);
+    })
     let nodeFilterID: NodeFilter = {
       acceptNode: (node: Element) => {
         if (node.id) {
@@ -143,8 +147,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       }
       currentNode = svgWalker.nextNode() as Element;
     }
-    this.setState({ svgMappings: [...svgMappings], initialized: false });
-    this.props.options.svgMappings = [...svgMappings];
+    this.setState({ svgMappings: cloneArray(svgMappings) as SVGIDMapping[], initialized: false });
+    this.props.options.svgMappings = cloneArray(svgMappings) as SVGIDMapping[];
     this.props.onOptionsChange(this.props.options);
     this.forceUpdate();
   }
@@ -153,7 +157,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     if (event.target) {
       let clicked = event.target as Element;
       let loopCount = 0;
-      let svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
+      let svgMappings: SVGIDMapping[] = cloneArray(this.props.options.svgMappings) as SVGIDMapping[];
       if (clicked.id) {
         while (clicked.id === '') {
           loopCount++;
@@ -168,8 +172,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           }
         }
         svgMappings.push({ svgId: clicked.id, mappedName: '' });
-        this.setState({ svgMappings: [...svgMappings], initialized: false });
-        this.props.options.svgMappings = [...svgMappings];
+        this.setState({ svgMappings: cloneArray(svgMappings) as SVGIDMapping[], initialized: false });
+        this.props.options.svgMappings = cloneArray(svgMappings) as SVGIDMapping[];
         this.props.onOptionsChange(this.props.options);
         this.forceUpdate();
       }

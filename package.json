@@ -18,16 +18,16 @@
     "email": "andrew@aceiotsolutions.com"
   },
   "devDependencies": {
-    "@grafana/data": "next",
-    "@grafana/toolkit": "next",
-    "@grafana/ui": "next",
+    "@grafana/data": "^8.0.6",
+    "@grafana/toolkit": "^8.0.6",
+    "@grafana/ui": "^8.0.6",
     "emotion": "10.0.27"
   },
   "engines": {
-    "node": ">=12 <13"
+    "node": "14.x"
   },
   "dependencies": {
-    "@grafana/runtime": "^7.1.1",
+    "@grafana/runtime": "^8.0.6",
     "@monaco-editor/react": "^3.3.0",
     "@svgdotjs/svg.js": "^3.0.16",
     "css-loader": "^3.5.3",

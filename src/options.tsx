@@ -8,6 +8,7 @@ import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from 'examples';
 // import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
 import { Button, Tooltip, Input, stylesFactory, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
+import cloneArray from 'cloneArray';
 
 interface MonacoEditorProps {
   value: string;
@@ -76,6 +77,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
             this.setState({ svgId: svgId });
             onChangeItem && index && onChangeItem({ ...value, svgId: svgId }, index);
           }}
+          css
         />
         <Label>Mapped Name</Label>
         <Input
@@ -87,6 +89,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
             this.setState({ mappedName: mappedName });
             onChangeItem && index && onChangeItem({ ...value, mappedName: mappedName }, index);
           }}
+          css
         />
         {value.svgId && onDelete && index !== undefined && (
           <Tooltip content="Delete this mapping" theme={'info'}>
@@ -123,20 +126,21 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
 
 class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
   onChangeItem = (updatedMapping: SVGIDMapping, index: number) => {
-    let newMappings = [...this.props.value];
+    let newMappings = cloneArray(this.props.value);
     newMappings[index] = updatedMapping;
-    this.props.onChange(newMappings);
+    this.props.onChange(newMappings as SVGIDMapping[]);
   };
   onAdd = (newMapping: SVGIDMapping) => {
     if (newMapping.svgId !== '') {
-      let newMappings = [...this.props.value, newMapping];
-      this.props.onChange(newMappings);
+      let newMappings = cloneArray(this.props.value);
+      newMappings.push(newMapping);
+      this.props.onChange(newMappings as SVGIDMapping[]);
     }
   };
   onDelete = (index: number) => {
-    let newMappings = [...this.props.value];
+    let newMappings = cloneArray(this.props.value);
     newMappings.splice(index, 1);
-    this.props.onChange(newMappings);
+    this.props.onChange(newMappings as SVGIDMapping[]);
   };
   render() {
     const styles = getStyles(config.theme);
