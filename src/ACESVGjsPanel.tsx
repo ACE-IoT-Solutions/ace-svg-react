@@ -1,8 +1,8 @@
-import React, {PureComponent} from 'react';
-import {PanelProps} from '@grafana/data';
-import {ACESVGOptions, SVGIDMapping} from 'types';
-import {Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG} from '@svgdotjs/svg.js';
-import {css} from "emotion";
+import React, { PureComponent } from 'react';
+import { PanelProps } from '@grafana/data';
+import { ACESVGOptions, SVGIDMapping } from 'types';
+import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
+import { css } from 'emotion';
 
 // import { css } from '@emotion/react'
 
@@ -10,8 +10,7 @@ interface MappedElements {
   [key: string]: SVGElement | SVGDom;
 }
 
-interface Props extends PanelProps<ACESVGOptions> {
-}
+interface Props extends PanelProps<ACESVGOptions> {}
 
 interface PanelState {
   addAllIDs: boolean;
@@ -112,13 +111,13 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       eventFunctionSource: '',
       eventFunction: null,
       initialized: false,
-      context: {}
+      context: {},
     };
   }
 
   initializeMappings(svgNode: SVGElement | SVGDom) {
     const svgMappings = this.props.options.svgMappings;
-    let currentElements: MappedElements = {...this.state.mappedElements};
+    let currentElements: MappedElements = { ...this.state.mappedElements };
     currentElements = {};
     for (let i = 0; i < svgMappings.length; i++) {
       if (svgMappings[i].mappedName !== '') {
@@ -127,7 +126,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         );
       }
     }
-    this.setState({mappedElements: currentElements});
+    this.setState({ mappedElements: currentElements });
   }
 
   mapAllIDs(svgNode: SVGDom) {
@@ -146,13 +145,13 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     let currentNode: Element | null = svgWalker.currentNode as Element;
     while (currentNode) {
       if (currentNode && currentNode.id) {
-        if (svgMappings.filter(mapping => (currentNode ? mapping.svgId === currentNode.id : false)).length === 0) {
-          svgMappings.push({svgId: currentNode.id, mappedName: ''});
+        if (svgMappings.filter((mapping) => (currentNode ? mapping.svgId === currentNode.id : false)).length === 0) {
+          svgMappings.push({ svgId: currentNode.id, mappedName: '' });
         }
       }
       currentNode = svgWalker.nextNode() as Element;
     }
-    this.setState({svgMappings: [...svgMappings], initialized: false});
+    this.setState({ svgMappings: [...svgMappings], initialized: false });
     this.props.options.svgMappings = [...svgMappings];
     this.props.onOptionsChange(this.props.options);
     this.forceUpdate();
@@ -176,8 +175,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
             return;
           }
         }
-        svgMappings.push({svgId: clicked.id, mappedName: ''});
-        this.setState({svgMappings: [...svgMappings], initialized: false});
+        svgMappings.push({ svgId: clicked.id, mappedName: '' });
+        this.setState({ svgMappings: [...svgMappings], initialized: false });
         this.props.options.svgMappings = [...svgMappings];
         this.props.onOptionsChange(this.props.options);
         this.forceUpdate();
@@ -207,7 +206,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           this.mapAllIDs(svgNode);
         }
         this.initializeMappings(svgNode);
-        this.setState({svgNode: svgNode});
+        this.setState({ svgNode: svgNode });
 
         try {
           this.setState({
@@ -222,10 +221,10 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           });
           if (this.state.mappedElements && this.state.initFunction) {
             this.state.initFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
-            this.setState({initialized: true});
+            this.setState({ initialized: true });
           }
         } catch (e) {
-          this.setState({initialized: true});
+          this.setState({ initialized: true });
           console.log(`User init code failed: ${e}`);
         }
       }
@@ -242,10 +241,16 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
             'context',
             this.props.replaceVariables(eventFunctionSource)
           );
-          this.setState({eventFunctionSource: eventFunctionSource, eventFunction: eventFunction, initialized: false});
+          this.setState({ eventFunctionSource: eventFunctionSource, eventFunction: eventFunction, initialized: false });
         }
         if (this.state.mappedElements && eventFunction) {
-          eventFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements, this.context);
+          eventFunction(
+            this.props.data,
+            this.props.options,
+            this.state.svgNode,
+            this.state.mappedElements,
+            this.context
+          );
         }
       } catch (e) {
         console.log(`User event code failed: ${e}`);
@@ -270,7 +275,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
             height: `${this.props.height}px`,
           }}
           className={'svg-object'}
-          ref={ref => this.renderSVG(ref)}
+          ref={(ref) => this.renderSVG(ref)}
         ></svg>
       </div>
     );
