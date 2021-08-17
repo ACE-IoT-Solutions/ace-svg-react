@@ -193,7 +193,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
         Graphical SVG Editor and simply pasting the resulting XML here`,
       id: 'svgSource',
       defaultValue: props_defaults.svgNode,
-      editor: (props) => {
+      editor: function editor(props) {
         const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
@@ -222,7 +222,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
         the Render context and the Init context`,
       id: 'eventSource',
       defaultValue: props_defaults.eventSource,
-      editor: (props) => {
+      editor: function editor (props) {
         const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
@@ -250,7 +250,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
         JS objects you want to reference between them will need to be attached to the options object as properties`,
       id: 'initSource',
       defaultValue: props_defaults.initSource,
-      editor: (props) => {
+      editor: function editor(props) {
         const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
