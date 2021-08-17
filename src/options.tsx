@@ -222,7 +222,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
         the Render context and the Init context`,
       id: 'eventSource',
       defaultValue: props_defaults.eventSource,
-      editor: function editor (props) {
+      editor: function editor(props) {
         const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
