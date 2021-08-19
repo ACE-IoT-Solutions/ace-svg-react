@@ -20,7 +20,7 @@ class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
   editorInstance: monaco.editor.IStandaloneCodeEditor | undefined;
 
   onSourceChange = () => {
-    if (typeof this.editorInstance !== "undefined") {
+    if (typeof this.editorInstance !== 'undefined') {
       this.props.onChange(this.editorInstance.getValue());
     }
   };
@@ -28,7 +28,7 @@ class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
     this.editorInstance = editor;
   };
   updateDimensions() {
-    if (typeof this.editorInstance !== "undefined") {
+    if (typeof this.editorInstance !== 'undefined') {
       this.editorInstance.layout();
     }
   }

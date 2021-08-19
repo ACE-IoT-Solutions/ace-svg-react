@@ -10,7 +10,7 @@ interface MappedElements {
   [key: string]: SVGElement | SVGDom;
 }
 
-interface Props extends PanelProps<ACESVGOptions> { }
+interface Props extends PanelProps<ACESVGOptions> {}
 
 interface PanelState {
   addAllIDs: boolean;
