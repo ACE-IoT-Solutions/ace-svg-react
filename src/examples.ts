@@ -746,7 +746,7 @@ export const props_defaults: ACESVGDefaults = {
 </svg>
 >
     `,
-  initSource: `options.animateLogo = (svgmap, data) => {
+  initSource: `context.animateLogo = (svgmap, data) => {
     let buffer = data.series[0].fields[1].values.buffer;
     let valueCount = buffer.length
     let chartData = [];
@@ -763,12 +763,12 @@ export const props_defaults: ACESVGDefaults = {
     let iconHeight = svgmap.iconbg.height();
     let iconY = svgmap.iconbg.y();
     [svgmap.barOne, svgmap.barTwo, svgmap.barThree, svgmap.barFour].forEach((elem) => {
-        elem.animate(1000).ease('<>').move(elem.x(),  ((iconHeight * (chartData[0] / maxData)) - elem.height())).loop(0, true);    
+        elem.animate(1000).ease('<>').move(elem.x(),  ((iconHeight * (chartData[0] / maxData)) - elem.height())).loop(0, true);
     });
     }
     `,
   eventSource: `// example of calling a function defined in the init script
-options.animateLogo(svgmap, data);
+context.animateLogo(svgmap, data);
 // Here we're going to initialized some variables just to make things less verbose
 // This is the raw buffer from the values field of the DataFrame
 let buffer = data.series[0].fields[1].values.buffer;
@@ -783,7 +783,7 @@ const fanY = svgmap.fanBlades.cy();
 let leakCond = lastValue > 10 && lastValue < 45;
 
 // Here we're simply making the visibility of the alert icon on top of tbe bell dependent on the last value being greater than 50
-svgmap.alarmIcon.showOn(lastValue > 50); 
+svgmap.alarmIcon.showOn(lastValue > 50);
 // Now we use the same logic to apply an animation to the sound waves around the bell
 svgmap.alarmRings.animateOn(1500, (lastValue > 50), (elem) => {
     // this callback is passed the resulting SVG.js runner object which you then chain your animation actions on.

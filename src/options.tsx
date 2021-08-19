@@ -1,5 +1,5 @@
 import React from 'react';
-import { PanelOptionsEditorBuilder, GrafanaTheme, PanelOptionsEditorProps } from '@grafana/data';
+import { GrafanaTheme, PanelOptionsEditorBuilder, PanelOptionsEditorProps } from '@grafana/data';
 import Editor from '@monaco-editor/react';
 
 import { css } from 'emotion';
@@ -7,7 +7,7 @@ import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from 'examples';
 // import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
-import { Button, Tooltip, Input, stylesFactory, HorizontalGroup, Label, VerticalGroup } from '@grafana/ui';
+import { Button, HorizontalGroup, Input, Label, Tooltip, VerticalGroup } from '@grafana/ui';
 
 interface MonacoEditorProps {
   value: string;
@@ -41,7 +41,7 @@ class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
           language={this.props.language}
           theme={this.props.theme}
           value={source}
-          editorDidMount={this.onEditorDidMount}
+          // editorDidMount={this.onEditorDidMount}
         />
       </div>
     );
@@ -71,7 +71,8 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           type="text"
           name="svgId"
           defaultValue={value.svgId}
-          onBlur={e => {
+          css={config.theme}
+          onBlur={(e) => {
             const svgId = e.currentTarget.value;
             this.setState({ svgId: svgId });
             onChangeItem && index && onChangeItem({ ...value, svgId: svgId }, index);
@@ -82,7 +83,8 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           type="text"
           name="mappedName"
           defaultValue={value.mappedName}
-          onBlur={e => {
+          css={config.theme}
+          onBlur={(e) => {
             const mappedName = e.currentTarget.value;
             this.setState({ mappedName: mappedName });
             onChangeItem && index && onChangeItem({ ...value, mappedName: mappedName }, index);
@@ -139,7 +141,7 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
     this.props.onChange(newMappings);
   };
   render() {
-    const styles = getStyles(config.theme);
+    const styles = generateComponentStyles(config.theme);
     const svgMappings = this.props.value;
     return (
       <VerticalGroup>
@@ -187,11 +189,11 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       category: ['SVG Document'],
       path: 'svgSource',
       name: 'SVG Document',
-      description: `Editor for SVG Document, while small tweaks can be made here, we recommend using a dedicated 
+      description: `Editor for SVG Document, while small tweaks can be made here, we recommend using a dedicated
         Graphical SVG Editor and simply pasting the resulting XML here`,
       id: 'svgSource',
       defaultValue: props_defaults.svgNode,
-      editor: props => {
+      editor: function editor(props) {
         const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
@@ -220,7 +222,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
         the Render context and the Init context`,
       id: 'eventSource',
       defaultValue: props_defaults.eventSource,
-      editor: props => {
+      editor: function editor(props) {
         const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
@@ -243,12 +245,12 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       category: ['User JS Init'],
       path: 'initSource',
       name: 'User JS Init Code',
-      description: `The User JS Init code is executed once when the panel loads, you can use this to define helper functions that 
-        you later reference in the User JS Render code section. The sections have identical execution contexts, and any 
+      description: `The User JS Init code is executed once when the panel loads, you can use this to define helper functions that
+        you later reference in the User JS Render code section. The sections have identical execution contexts, and any
         JS objects you want to reference between them will need to be attached to the options object as properties`,
       id: 'initSource',
       defaultValue: props_defaults.initSource,
-      editor: props => {
+      editor: function editor(props) {
         const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
@@ -288,7 +290,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
     });
 };
 
-const getStyles = stylesFactory((theme: GrafanaTheme) => {
+const generateComponentStyles = (theme: GrafanaTheme) => {
   return {
     colorPicker: css`
       padding: 0 ${theme.spacing.sm};
@@ -314,5 +316,5 @@ const getStyles = stylesFactory((theme: GrafanaTheme) => {
       }
     `,
   };
-});
+};
 //
