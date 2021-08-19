@@ -10,7 +10,7 @@ interface MappedElements {
   [key: string]: SVGElement | SVGDom;
 }
 
-interface Props extends PanelProps<ACESVGOptions> {}
+interface Props extends PanelProps<ACESVGOptions> { }
 
 interface PanelState {
   addAllIDs: boolean;
@@ -209,18 +209,17 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         this.setState({ svgNode: svgNode });
 
         try {
-          this.setState({
-            initFunction: Function(
-              'data',
-              'options',
-              'svgnode',
-              'svgmap',
-              'context',
-              this.props.replaceVariables(this.props.options.initSource)
-            ),
-          });
-          if (this.state.mappedElements && this.state.initFunction) {
-            this.state.initFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
+          const initFunction = Function(
+            'data',
+            'options',
+            'svgnode',
+            'svgmap',
+            'context',
+            this.props.replaceVariables(this.props.options.initSource)
+          );
+          this.setState({ initFunction });
+          if (this.state.mappedElements && initFunction) {
+            initFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
             this.setState({ initialized: true });
           }
         } catch (e) {

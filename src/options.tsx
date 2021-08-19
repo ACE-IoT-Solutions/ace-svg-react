@@ -1,6 +1,7 @@
 import React from 'react';
 import { GrafanaTheme, PanelOptionsEditorBuilder, PanelOptionsEditorProps } from '@grafana/data';
 import Editor from '@monaco-editor/react';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 import { css } from 'emotion';
 import { config } from '@grafana/runtime';
@@ -16,18 +17,20 @@ interface MonacoEditorProps {
   onChange: (value?: string | undefined) => void;
 }
 class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
-  getEditorValue: any | undefined;
-  editorInstance: any | undefined;
+  editorInstance: monaco.editor.IStandaloneCodeEditor | undefined;
 
   onSourceChange = () => {
-    this.props.onChange(this.getEditorValue());
+    if (typeof this.editorInstance !== "undefined") {
+      this.props.onChange(this.editorInstance.getValue());
+    }
   };
-  onEditorDidMount = (getEditorValue: any, editorInstance: any) => {
-    this.getEditorValue = getEditorValue;
-    this.editorInstance = editorInstance;
+  onEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
+    this.editorInstance = editor;
   };
   updateDimensions() {
-    this.editorInstance.layout();
+    if (typeof this.editorInstance !== "undefined") {
+      this.editorInstance.layout();
+    }
   }
   render() {
     const source = this.props.value;
@@ -41,7 +44,7 @@ class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
           language={this.props.language}
           theme={this.props.theme}
           value={source}
-          // editorDidMount={this.onEditorDidMount}
+          onMount={this.onEditorDidMount}
         />
       </div>
     );
