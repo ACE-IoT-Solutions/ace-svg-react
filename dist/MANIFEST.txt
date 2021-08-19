@@ -8,11 +8,11 @@ Hash: SHA512
   "signedByOrg": "aceiot",
   "signedByOrgName": "Andrew Rodgers",
   "plugin": "aceiot-svg-panel",
-  "version": "0.0.10",
-  "time": 1619460498255,
+  "version": "0.0.11",
+  "time": 1629404560493,
   "keyId": "7e4d0c6a708866e7",
   "files": {
-    "CHANGELOG.md": "715a779a6e5471cd09c46c783125b007646c0a034dd9039a3ecce82863000f19",
+    "CHANGELOG.md": "34f2eed7e9fa2a166c09530069d7413a710d2abb3fc275838b5adfb9a7971133",
     "img/ace-svg-react.png": "6d2343f8f5471f27a17d811743aba3cd221fae2350a585cdccdae7689619dc15",
     "img/ace_svg_icon.png": "585222feea75c122615b5b379a643ff0a5e85f58f77daf5e6c5da7bdc7170e06",
     "img/ace_svg_icon@2x.png": "9a1d3d0e11f80cb3924e57b78dd8fdd624ec81e05a182be3038d9e4e9c059f00",
@@ -20,21 +20,21 @@ Hash: SHA512
     "img/logo-small-background.svg": "eed57cceea2ed7f9b1aaadd3d02d13db67766062e71e1885d0fd83ba8325ec59",
     "img/logo-type.svg": "4cca7b5a6c8bdd300d0ffad4a2fc4d0f044e2ac0df60144cb6f2cf540b2534a9",
     "img/logo.svg": "cda1e6830638a820850a6f09331d3a4b19c6284530b9eb9d194acab7b5dd728a",
-    "LICENSE": "23fbaeb5e3c2c255b469c8deaa1e88727e5367521c4df4bcdd90358027be7058",
-    "module.js": "92ea3c61276af991be8401b9532db11a2735e05a486fe8c3428e70efd195dee7",
+    "LICENSE": "36b5840417f9f6e52f5ce683209c10784163dd5bedac9bbf8490881ad68bfdaf",
+    "module.js": "0f6004511d730a428ccf4906fb49d6b1123fde2d26f60c8fe0b119f554bfe040",
     "module.js.LICENSE.txt": "0d8f66cd4afb566cb5b7e1540c68f43b939d3eba12ace290f18abc4f4cb53ed0",
-    "module.js.map": "25e53f66f009c45592c9b79370b374e24cb7477f0d3059bb212a4d525b71423f",
-    "plugin.json": "468ecd4ee0e0fe06b35469c9e02dd145bf2b36b4548ac2857d6e46c95db0f598",
-    "README.md": "11a750556da2ae6e354fa6ba74fc71686405f7309515b44ceeebd84b30fbc8b6"
+    "module.js.map": "c2205e72b0898a4d5db5e30f889844bf5b9a2db62db0fad9e67f4a72f3b90acd",
+    "plugin.json": "9df934d285b1fe513872ae52be7757c43853844d192e1c89aa29ae90225b9974",
+    "README.md": "fe73ef111862564b45e0d988494e3abe59cca747edb40733992db06bf707dc2d"
   }
 }
 -----BEGIN PGP SIGNATURE-----
 Version: OpenPGP.js v4.10.1
 Comment: https://openpgpjs.org
 
-wqEEARMKAAYFAmCHAZIACgkQfk0ManCIZueazAIJAdFfyN4w5cDG/QmtpJ9L
-fag/hmq63Idqoci37RAE6EswvesqQNIbUkaFQjzuiH3JDO1gGBKA1BtffKEt
-mkAqbshLAgjJSnEKqifcwABBI41oBX6ygcFMnieEORJgeVD4V6XnunjLUkGu
-GL6BPnaEvftgqrHQaRPepzEwp/GQiznTAZFaHw==
-=ubTa
+wqEEARMKAAYFAmEevZAACgkQfk0ManCIZuePJAII9lGYnEC2z4dZTKKFQJhU
+h+2JdGMJoMoRnyhyWm3xmUc/Q2nauKPCAWj6jneD5gDmY76NF/U5hwWKnQN7
+kFJrGZECCQE9FXIGkbZU/ybm7la659L2/mwPVSH2J32cOvOdOzWY0PudAnlk
+B2s5Kd7gt92qwvqD+0TCo2w5uWzPLMQcmTRviA==
+=gpuG
 -----END PGP SIGNATURE-----
