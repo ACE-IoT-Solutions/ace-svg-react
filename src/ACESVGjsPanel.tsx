@@ -1,8 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, RefObject, createRef } from 'react';
 import { PanelProps } from '@grafana/data';
 import { ACESVGOptions, SVGIDMapping } from 'types';
 import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
 import { css } from 'emotion';
+import { Map, View } from "ol";
+import TileLayer from 'ol/layer/Tile';
+import { OSM } from 'ol/source';
 
 // import { css } from '@emotion/react'
 
@@ -10,10 +13,11 @@ interface MappedElements {
   [key: string]: SVGElement | SVGDom;
 }
 
-interface Props extends PanelProps<ACESVGOptions> {}
+interface Props extends PanelProps<ACESVGOptions> { }
 
 interface PanelState {
   addAllIDs: boolean;
+  geomap: Map;
   svgNode: SVGElement | SVGDom | null;
   svgSource: string | null;
   mappedElements: MappedElements | null;
@@ -98,10 +102,26 @@ SVGExtend(SVGDom, {
 
 // export class SimplePanel extends PureComponent<Props, State> = ({ options, data, width, height }) => {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
+  mapRef: RefObject<HTMLDivElement>;
   constructor(props: any) {
     super(props);
     this.state = {
       addAllIDs: false,
+      geomap: new Map({
+        controls: [],
+        layers: [
+          new TileLayer({
+            source: new OSM({
+              url: 'https://{a-c}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
+            })
+          })
+        ],
+        view: new View({
+          center: [0, 0],
+          showFullExtent: true,
+          zoom: 1,
+        }),
+      }),
       svgNode: null,
       svgSource: null,
       svgMappings: [],
@@ -113,6 +133,13 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       initialized: false,
       context: {},
     };
+    this.mapRef = createRef();
+  }
+
+  componentDidUpdate(): void {
+    if (typeof this.state.geomap.getTarget() === "undefined" && this.mapRef.current !== null) {
+      this.state.geomap.setTarget(this.mapRef.current);
+    }
   }
 
   initializeMappings(svgNode: SVGElement | SVGDom) {
@@ -263,6 +290,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
 
   render() {
     const styles = this.generateComponentStyles();
+    console.log(this.props.options.enableGeomap);
     return (
       <div
         className={styles.wrapper}
@@ -272,10 +300,18 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           style={{
             width: `${this.props.width}px`,
             height: `${this.props.height}px`,
+            position: 'absolute',
+            zIndex: 1
           }}
           className={'svg-object'}
           ref={(ref) => this.renderSVG(ref)}
         ></svg>
+        <div style={{
+          visibility: this.props.options.enableGeomap ? 'visible' : 'hidden',
+          width: `${this.props.width}px`,
+          height: `${this.props.height}px`,
+          position:'absolute'
+        }} ref={this.mapRef} />
       </div>
     );
   }

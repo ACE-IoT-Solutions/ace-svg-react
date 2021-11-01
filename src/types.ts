@@ -4,6 +4,7 @@ export interface SVGIDMapping {
 }
 export interface ACESVGOptions {
   captureMappings: boolean;
+  enableGeomap: boolean;
   addAllIDs: boolean;
   svgSource: string;
   svgAutocomplete: boolean;

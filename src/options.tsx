@@ -290,6 +290,11 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
         'The SVG ID should match an element in the SVG document with an existing ID tag, the element will be attached to the "svgmap" object in the user code execution contexts as a property using the Mapped Name provided below',
       defaultValue: props_defaults.svgMappings,
       editor: SvgMappings,
+    })
+    .addBooleanSwitch({
+      category: ['Geomap'],
+      path: 'enableGeomap',
+      name: 'Enable Geomap'
     });
 };
 
