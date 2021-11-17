@@ -6,8 +6,14 @@ import { css } from 'emotion';
 import { Map, View } from "ol";
 import TileLayer from 'ol/layer/Tile';
 import { OSM } from 'ol/source';
+import Layer from 'ol/layer/Layer';
+import { composeCssTransform } from 'ol/transform';
 
 // import { css } from '@emotion/react'
+const coords = [
+  [-9484765.091794, 4168569.774560],
+  [-9483823.960884, 4168001.274163]
+];
 
 interface MappedElements {
   [key: string]: SVGElement | SVGDom;
@@ -103,6 +109,8 @@ SVGExtend(SVGDom, {
 // export class SimplePanel extends PureComponent<Props, State> = ({ options, data, width, height }) => {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
   mapRef: RefObject<HTMLDivElement>;
+  svgElement: SVGSVGElement | null;
+  svgContainerRefs: RefObject<HTMLDivElement>[] = [];
   constructor(props: any) {
     super(props);
     this.state = {
@@ -134,6 +142,44 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       context: {},
     };
     this.mapRef = createRef();
+    coords.forEach((coord, key) => {
+      this.svgContainerRefs[key] = createRef();
+    })
+    this.svgElement = null;
+  }
+
+  componentDidMount(): void {
+    if (this.svgElement !== null) {
+      const width = Number(this.svgElement.style.width.replace("px", ""));
+      const height = Number(this.svgElement.style.height.replace("px", ""));
+      const svgResolution = 360 / width;
+      this.svgContainerRefs.forEach((svgContainerRef, key) => {
+        if (svgContainerRef.current !== null) {
+          svgContainerRef.current.style.transformOrigin = 'top left';
+          this.state.geomap.addLayer(new Layer({
+            render: (frameState) => {
+              if (svgContainerRef.current !== null) {
+                const scale = svgResolution / frameState.viewState.resolution;
+                const center = [frameState.viewState.center[0] - coords[key][0], frameState.viewState.center[1] - coords[key][1]];
+                const size = frameState.size;
+                const cssTransform = composeCssTransform(
+                  size[0] / 2,
+                  size[1] / 2,
+                  scale,
+                  scale,
+                  frameState.viewState.rotation,
+                  -center[0] / svgResolution - width / 2,
+                  center[1] / svgResolution - height / 2
+                );
+                svgContainerRef.current.style.transform = cssTransform;
+                return svgContainerRef.current;
+              }
+              return document.createElement("div");
+            }
+          }));
+        }
+      });
+    }
   }
 
   componentDidUpdate(): void {
@@ -290,27 +336,47 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
 
   render() {
     const styles = this.generateComponentStyles();
-    console.log(this.props.options.enableGeomap);
     return (
       <div
         className={styles.wrapper}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
+        {this.svgContainerRefs.map((svgContainerRef) => {
+          return <div className="test-test-test" ref={svgContainerRef}>
+            <svg
+              style={{
+                width: `${this.props.width}px`,
+                height: `${this.props.height}px`,
+                position: 'absolute',
+                zIndex: 1,
+                pointerEvents: 'none',
+                visibility: this.props.options.enableGeomap ? 'visible' : 'hidden'
+              }}
+              className={'svg-object'}
+              ref={(ref) => this.renderSVG(ref)}
+            ></svg>
+          </div>
+        })}
         <svg
           style={{
             width: `${this.props.width}px`,
             height: `${this.props.height}px`,
             position: 'absolute',
-            zIndex: 1
+            zIndex: 1,
+            pointerEvents: 'none',
+            visibility: this.props.options.enableGeomap ? 'hidden' : 'visible'
           }}
           className={'svg-object'}
-          ref={(ref) => this.renderSVG(ref)}
+          ref={(ref) => {
+            this.svgElement = ref;
+            return this.renderSVG(ref);
+          }}
         ></svg>
         <div style={{
           visibility: this.props.options.enableGeomap ? 'visible' : 'hidden',
           width: `${this.props.width}px`,
           height: `${this.props.height}px`,
-          position:'absolute'
+          position: 'absolute'
         }} ref={this.mapRef} />
       </div>
     );
