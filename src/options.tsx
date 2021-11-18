@@ -297,8 +297,9 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       name: 'Enable Geomap'
     })
     .addFieldNamePicker({
+      category: ['Geomap'],
       path: 'geohashField',
-      name: 'Geohash field',
+      name: 'Geohash Field',
       showIf: (opts) => opts.enableGeomap
     })
 };

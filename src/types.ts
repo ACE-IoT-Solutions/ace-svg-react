@@ -13,6 +13,7 @@ export interface ACESVGOptions {
   initSource: string;
   initAutocomplete: boolean;
   svgMappings: SVGIDMapping[];
+  geohashField: string;
 }
 export interface ACESVGDefaults {
   svgNode: string;

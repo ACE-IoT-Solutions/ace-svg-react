@@ -83497,11 +83497,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var coords = ["dn5r6ez7s6ujf", "dn5r522xd862y", "dn5rhdse4j5en" // east ridge
-].map(function (geohash) {
-  var res = latlon_geohash__WEBPACK_IMPORTED_MODULE_9__["default"].decode(geohash);
-  return Object(ol_proj__WEBPACK_IMPORTED_MODULE_10__["fromLonLat"])([res.lon, res.lat]);
-});
 Object(_svgdotjs_svg_js__WEBPACK_IMPORTED_MODULE_2__["extend"])(_svgdotjs_svg_js__WEBPACK_IMPORTED_MODULE_2__["Element"], {
   openOnClick: function openOnClick(url) {
     return window.open(url);
@@ -83574,8 +83569,6 @@ function (_super) {
   function ACESVGPanel(props) {
     var _this = _super.call(this, props) || this;
 
-    _this.svgContainerRefs = [];
-
     _this.generateComponentStyles = function () {
       return {
         wrapper: Object(emotion__WEBPACK_IMPORTED_MODULE_3__["css"])(templateObject_1 || (templateObject_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n        position: relative;\n      "], ["\n        position: relative;\n      "]))),
@@ -83608,15 +83601,33 @@ function (_super) {
       eventFunctionSource: '',
       eventFunction: null,
       initialized: false,
-      context: {}
+      context: {},
+      coords: _this.getCoords(),
+      svgContainerRefs: _this.getCoords().map(function () {
+        return Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
+      })
     };
     _this.mapRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
-    coords.forEach(function (coord, key) {
-      _this.svgContainerRefs[key] = Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
-    });
     _this.svgElement = null;
     return _this;
   }
+
+  ACESVGPanel.prototype.getCoords = function () {
+    var _this = this;
+
+    var converted = [];
+    this.props.data.series.forEach(function (entry) {
+      entry.fields.forEach(function (field) {
+        if (field.name === _this.props.options.geohashField) {
+          for (var i = 0; i < field.values.length; i++) {
+            var res = latlon_geohash__WEBPACK_IMPORTED_MODULE_9__["default"].decode(field.values.get(i));
+            converted.push(Object(ol_proj__WEBPACK_IMPORTED_MODULE_10__["fromLonLat"])([res.lon, res.lat]));
+          }
+        }
+      });
+    });
+    return converted;
+  };
 
   ACESVGPanel.prototype.componentDidMount = function () {
     var _this = this;
@@ -83625,7 +83636,12 @@ function (_super) {
       var width_1 = Number(this.svgElement.style.width.replace("px", ""));
       var height_1 = Number(this.svgElement.style.height.replace("px", ""));
       var svgResolution_1 = 360 / width_1;
-      this.svgContainerRefs.forEach(function (svgContainerRef, key) {
+      this.state.geomap.getLayers().forEach(function (layer) {
+        if (layer instanceof ol_layer_Tile__WEBPACK_IMPORTED_MODULE_5__["default"] === false) {
+          _this.state.geomap.removeLayer(layer);
+        }
+      });
+      this.state.svgContainerRefs.forEach(function (svgContainerRef, key) {
         if (svgContainerRef.current !== null) {
           svgContainerRef.current.style.transformOrigin = 'top left';
 
@@ -83633,7 +83649,7 @@ function (_super) {
             render: function render(frameState) {
               if (svgContainerRef.current !== null) {
                 var scale = svgResolution_1 / frameState.viewState.resolution;
-                var center = [frameState.viewState.center[0] - coords[key][0], frameState.viewState.center[1] - coords[key][1]];
+                var center = [frameState.viewState.center[0] - _this.state.coords[key][0], frameState.viewState.center[1] - _this.state.coords[key][1]];
                 var size = frameState.size;
                 var cssTransform = Object(ol_transform__WEBPACK_IMPORTED_MODULE_8__["composeCssTransform"])(size[0] / 2, size[1] / 2, scale, scale, frameState.viewState.rotation, -center[0] / svgResolution_1 - width_1 / 2, center[1] / svgResolution_1 - height_1 / 2);
                 svgContainerRef.current.style.transform = cssTransform;
@@ -83644,6 +83660,15 @@ function (_super) {
             }
           }));
         }
+      });
+    }
+
+    if (JSON.stringify(this.getCoords()) !== JSON.stringify(this.state.coords)) {
+      this.setState({
+        coords: this.getCoords(),
+        svgContainerRefs: this.getCoords().map(function () {
+          return Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
+        })
       });
     }
   };
@@ -83828,12 +83853,12 @@ function (_super) {
     var _this = this;
 
     var styles = this.generateComponentStyles();
+    console.log(this.state.coords);
     return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: styles.wrapper,
       onClick: this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined
-    }, this.svgContainerRefs.map(function (svgContainerRef) {
+    }, this.state.svgContainerRefs.map(function (svgContainerRef) {
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-        className: "test-test-test",
         ref: svgContainerRef
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("svg", {
         style: {
@@ -84278,8 +84303,9 @@ var optionsBuilder = function optionsBuilder(builder) {
     path: 'enableGeomap',
     name: 'Enable Geomap'
   }).addFieldNamePicker({
+    category: ['Geomap'],
     path: 'geohashField',
-    name: 'Geohash field',
+    name: 'Geohash Field',
     showIf: function showIf(opts) {
       return opts.enableGeomap;
     }

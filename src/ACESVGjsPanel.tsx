@@ -9,16 +9,7 @@ import { OSM } from 'ol/source';
 import Layer from 'ol/layer/Layer';
 import { composeCssTransform } from 'ol/transform';
 import Geohash from 'latlon-geohash';
-import {fromLonLat} from "ol/proj";
-
-const coords = [
-  "dn5r6ez7s6ujf", // chattanooga
-  "dn5r522xd862y", // rossville
-  "dn5rhdse4j5en" // east ridge
-].map((geohash) => {
-  const res = Geohash.decode(geohash);
-  return fromLonLat([res.lon, res.lat]);
-});
+import { fromLonLat } from "ol/proj";
 
 interface MappedElements {
   [key: string]: SVGElement | SVGDom;
@@ -39,6 +30,8 @@ interface PanelState {
   eventFunction: Function | null;
   initialized: boolean;
   context: any;
+  coords: number[][];
+  svgContainerRefs: RefObject<HTMLDivElement>[]
 }
 
 interface TextMappedElement extends SVGElement {
@@ -115,7 +108,6 @@ SVGExtend(SVGDom, {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
   mapRef: RefObject<HTMLDivElement>;
   svgElement: SVGSVGElement | null;
-  svgContainerRefs: RefObject<HTMLDivElement>[] = [];
   constructor(props: any) {
     super(props);
     this.state = {
@@ -145,12 +137,26 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       eventFunction: null,
       initialized: false,
       context: {},
+      coords: this.getCoords(),
+      svgContainerRefs: this.getCoords().map(() => createRef())
     };
     this.mapRef = createRef();
-    coords.forEach((coord, key) => {
-      this.svgContainerRefs[key] = createRef();
-    })
     this.svgElement = null;
+  }
+
+  getCoords(): number[][] {
+    const converted: number[][] = [];
+    this.props.data.series.forEach((entry) => {
+      entry.fields.forEach((field) => {
+        if (field.name === this.props.options.geohashField) {
+          for (let i = 0; i < field.values.length; i++) {
+            const res = Geohash.decode(field.values.get(i));
+            converted.push(fromLonLat([res.lon, res.lat]));
+          }
+        }
+      });
+    });
+    return converted;
   }
 
   componentDidMount(): void {
@@ -158,14 +164,19 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       const width = Number(this.svgElement.style.width.replace("px", ""));
       const height = Number(this.svgElement.style.height.replace("px", ""));
       const svgResolution = 360 / width;
-      this.svgContainerRefs.forEach((svgContainerRef, key) => {
+      this.state.geomap.getLayers().forEach((layer) => {
+        if (layer instanceof TileLayer === false) {
+          this.state.geomap.removeLayer(layer);
+        }
+      });
+      this.state.svgContainerRefs.forEach((svgContainerRef, key) => {
         if (svgContainerRef.current !== null) {
           svgContainerRef.current.style.transformOrigin = 'top left';
           this.state.geomap.addLayer(new Layer({
             render: (frameState) => {
               if (svgContainerRef.current !== null) {
                 const scale = svgResolution / frameState.viewState.resolution;
-                const center = [frameState.viewState.center[0] - coords[key][0], frameState.viewState.center[1] - coords[key][1]];
+                const center = [frameState.viewState.center[0] - this.state.coords[key][0], frameState.viewState.center[1] - this.state.coords[key][1]];
                 const size = frameState.size;
                 const cssTransform = composeCssTransform(
                   size[0] / 2,
@@ -183,6 +194,12 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
             }
           }));
         }
+      });
+    }
+    if (JSON.stringify(this.getCoords()) !== JSON.stringify(this.state.coords)) {
+      this.setState({
+        coords: this.getCoords(),
+        svgContainerRefs: this.getCoords().map(() => createRef())
       });
     }
   }
@@ -341,13 +358,14 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
 
   render() {
     const styles = this.generateComponentStyles();
+    console.log(this.state.coords);
     return (
       <div
         className={styles.wrapper}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
-        {this.svgContainerRefs.map((svgContainerRef) => {
-          return <div className="test-test-test" ref={svgContainerRef}>
+        {this.state.svgContainerRefs.map((svgContainerRef) => {
+          return <div ref={svgContainerRef}>
             <svg
               style={{
                 width: `${this.props.width}px`,
