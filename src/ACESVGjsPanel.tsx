@@ -8,12 +8,17 @@ import TileLayer from 'ol/layer/Tile';
 import { OSM } from 'ol/source';
 import Layer from 'ol/layer/Layer';
 import { composeCssTransform } from 'ol/transform';
+import Geohash from 'latlon-geohash';
+import {fromLonLat} from "ol/proj";
 
-// import { css } from '@emotion/react'
 const coords = [
-  [-9484765.091794, 4168569.774560],
-  [-9483823.960884, 4168001.274163]
-];
+  "dn5r6ez7s6ujf", // chattanooga
+  "dn5r522xd862y", // rossville
+  "dn5rhdse4j5en" // east ridge
+].map((geohash) => {
+  const res = Geohash.decode(geohash);
+  return fromLonLat([res.lon, res.lat]);
+});
 
 interface MappedElements {
   [key: string]: SVGElement | SVGDom;

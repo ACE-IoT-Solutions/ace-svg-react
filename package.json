@@ -21,6 +21,7 @@
     "@grafana/data": "^8.1.1",
     "@grafana/toolkit": "^8.1.1",
     "@grafana/ui": "^8.1.1",
+    "@types/latlon-geohash": "^2.0.0",
     "emotion": "10.0.27"
   },
   "engines": {
@@ -31,6 +32,7 @@
     "@monaco-editor/react": "^4.2.2",
     "@svgdotjs/svg.js": "^3.1.1",
     "css-loader": "^6.2.0",
+    "latlon-geohash": "^2.0.0",
     "monaco-editor-webpack-plugin": "^4.1.1",
     "ol": "^6.9.0",
     "react-monaco-editor": "^0.44.0",

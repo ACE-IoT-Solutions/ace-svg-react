@@ -295,7 +295,12 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       category: ['Geomap'],
       path: 'enableGeomap',
       name: 'Enable Geomap'
-    });
+    })
+    .addFieldNamePicker({
+      path: 'geohashField',
+      name: 'Geohash field',
+      showIf: (opts) => opts.enableGeomap
+    })
 };
 
 const generateComponentStyles = (theme: GrafanaTheme) => {
