@@ -108,6 +108,7 @@ SVGExtend(SVGDom, {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
   mapRef: RefObject<HTMLDivElement>;
   svgElement: SVGSVGElement | null;
+  svgRef: RefObject<SVGSVGElement>;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -142,6 +143,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     };
     this.mapRef = createRef();
     this.svgElement = null;
+    this.svgRef = createRef();
   }
 
   getCoords(): number[][] {
@@ -358,7 +360,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
 
   render() {
     const styles = this.generateComponentStyles();
-    console.log(this.state.coords);
+    this.renderSVG(this.svgRef.current);
     return (
       <div
         className={styles.wrapper}
@@ -376,7 +378,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
                 visibility: this.props.options.enableGeomap ? 'visible' : 'hidden'
               }}
               className={'svg-object'}
-              ref={(ref) => this.renderSVG(ref)}
+              ref={this.svgRef}
             ></svg>
           </div>
         })}
