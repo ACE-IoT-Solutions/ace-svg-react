@@ -32,6 +32,7 @@ interface PanelState {
   context: any;
   coords: number[][];
   svgContainerRefs: RefObject<HTMLDivElement>[]
+  svgElement: SVGSVGElement | null;
 }
 
 interface TextMappedElement extends SVGElement {
@@ -108,7 +109,6 @@ SVGExtend(SVGDom, {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
   mapRef: RefObject<HTMLDivElement>;
   svgElement: SVGSVGElement | null;
-  svgRef: RefObject<SVGSVGElement>;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -139,11 +139,11 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       initialized: false,
       context: {},
       coords: this.getCoords(),
-      svgContainerRefs: this.getCoords().map(() => createRef())
+      svgContainerRefs: this.getCoords().map(() => createRef()),
+      svgElement: null
     };
     this.mapRef = createRef();
     this.svgElement = null;
-    this.svgRef = createRef();
   }
 
   getCoords(): number[][] {
@@ -360,7 +360,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
 
   render() {
     const styles = this.generateComponentStyles();
-    this.renderSVG(this.svgRef.current);
+    this.renderSVG(this.state.svgElement);
     return (
       <div
         className={styles.wrapper}
@@ -378,7 +378,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
                 visibility: this.props.options.enableGeomap ? 'visible' : 'hidden'
               }}
               className={'svg-object'}
-              ref={this.svgRef}
             ></svg>
           </div>
         })}
@@ -392,10 +391,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
             visibility: this.props.options.enableGeomap ? 'hidden' : 'visible'
           }}
           className={'svg-object'}
-          ref={(ref) => {
-            this.svgElement = ref;
-            return this.renderSVG(ref);
-          }}
+          ref={(ref) => { this.setState({ svgElement: ref }) }}
         ></svg>
         <div style={{
           visibility: this.props.options.enableGeomap ? 'visible' : 'hidden',
@@ -403,7 +399,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           height: `${this.props.height}px`,
           position: 'absolute'
         }} ref={this.mapRef} />
-      </div>
+      </div >
     );
   }
 

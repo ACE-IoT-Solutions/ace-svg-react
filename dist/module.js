@@ -83605,11 +83605,11 @@ function (_super) {
       coords: _this.getCoords(),
       svgContainerRefs: _this.getCoords().map(function () {
         return Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
-      })
+      }),
+      svgElement: null
     };
     _this.mapRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
     _this.svgElement = null;
-    _this.svgRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["createRef"])();
     return _this;
   }
 
@@ -83854,7 +83854,7 @@ function (_super) {
     var _this = this;
 
     var styles = this.generateComponentStyles();
-    this.renderSVG(this.svgRef.current);
+    this.renderSVG(this.state.svgElement);
     return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: styles.wrapper,
       onClick: this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined
@@ -83870,8 +83870,7 @@ function (_super) {
           pointerEvents: 'none',
           visibility: _this.props.options.enableGeomap ? 'visible' : 'hidden'
         },
-        className: 'svg-object',
-        ref: _this.svgRef
+        className: 'svg-object'
       }));
     }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("svg", {
       style: {
@@ -83884,8 +83883,9 @@ function (_super) {
       },
       className: 'svg-object',
       ref: function ref(_ref) {
-        _this.svgElement = _ref;
-        return _this.renderSVG(_ref);
+        _this.setState({
+          svgElement: _ref
+        });
       }
     }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       style: {
