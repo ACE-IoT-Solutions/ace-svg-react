@@ -76,6 +76,6 @@ yarn build
 ```
 
 ## Learn more
-- [SVG.js](https://svgjs.com) The Core SVG library made available for SVG DOM manipulations.
+- [SVG.js](https://svgjs.dev) The Core SVG library made available for SVG DOM manipulations.
 - [Monaco Editor](https://microsoft.github.io/monaco-editor/) The editor used for user code.
 - [Grafana documentation](https://grafana.com/docs/)
