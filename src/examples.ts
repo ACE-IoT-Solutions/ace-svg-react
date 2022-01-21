@@ -1,7 +1,7 @@
 import { ACESVGDefaults } from './types';
 
 export const props_defaults: ACESVGDefaults = {
-   svgNode: `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+  svgNode: `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -746,7 +746,7 @@ export const props_defaults: ACESVGDefaults = {
 </svg>
 >
     `,
-   initSource: `options.animateLogo = (svgmap, data) => {
+  initSource: `options.animateLogo = (svgmap, data) => {
     let buffer = data.series[0].fields[1].values.buffer;
     let valueCount = buffer.length
     let chartData = [];
@@ -767,7 +767,7 @@ export const props_defaults: ACESVGDefaults = {
     });
     }
     `,
-   eventSource: `// example of calling a function defined in the init script
+  eventSource: `// example of calling a function defined in the init script
 options.animateLogo(svgmap, data);
 // Here we're going to initialized some variables just to make things less verbose
 // This is the raw buffer from the values field of the DataFrame
@@ -806,54 +806,54 @@ svgmap.waterDrop.animateOn(2000 - lastValue *20, leakCond, (elem) => {
     elem.ease('<').transform({translateY: 1000, scale: 0.00001}).loop();
 })
 `,
-   svgMappings: [
-      {
-         mappedName: 'barTwo',
-         svgId: 'rect4526',
-      },
-      {
-         mappedName: 'barThree',
-         svgId: 'rect4528',
-      },
-      {
-         mappedName: 'barFour',
-         svgId: 'rect4530',
-      },
-      {
-         mappedName: 'iconbg',
-         svgId: 'rect4522',
-      },
-      {
-         mappedName: 'spline',
-         svgId: 'path4538',
-      },
-      {
-         mappedName: 'barOne',
-         svgId: 'rect4524',
-      },
-      {
-         mappedName: 'fanBlades',
-         svgId: 'g1550',
-      },
-      {
-         mappedName: 'alarmIcon',
-         svgId: 'g1721',
-      },
-      {
-         mappedName: 'lampLens',
-         svgId: 'g1942',
-      },
-      {
-         mappedName: 'lampRays',
-         svgId: 'g1917',
-      },
-      {
-         mappedName: 'waterDrop',
-         svgId: 'g1995',
-      },
-      {
-         mappedName: 'alarmRings',
-         svgId: 'g1891',
-      },
-   ],
+  svgMappings: [
+    {
+      mappedName: 'barTwo',
+      svgId: 'rect4526',
+    },
+    {
+      mappedName: 'barThree',
+      svgId: 'rect4528',
+    },
+    {
+      mappedName: 'barFour',
+      svgId: 'rect4530',
+    },
+    {
+      mappedName: 'iconbg',
+      svgId: 'rect4522',
+    },
+    {
+      mappedName: 'spline',
+      svgId: 'path4538',
+    },
+    {
+      mappedName: 'barOne',
+      svgId: 'rect4524',
+    },
+    {
+      mappedName: 'fanBlades',
+      svgId: 'g1550',
+    },
+    {
+      mappedName: 'alarmIcon',
+      svgId: 'g1721',
+    },
+    {
+      mappedName: 'lampLens',
+      svgId: 'g1942',
+    },
+    {
+      mappedName: 'lampRays',
+      svgId: 'g1917',
+    },
+    {
+      mappedName: 'waterDrop',
+      svgId: 'g1995',
+    },
+    {
+      mappedName: 'alarmRings',
+      svgId: 'g1891',
+    },
+  ],
 };
