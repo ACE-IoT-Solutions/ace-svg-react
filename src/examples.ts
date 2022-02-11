@@ -746,7 +746,7 @@ export const props_defaults: ACESVGDefaults = {
 </svg>
 >
     `,
-  initSource: `context.animateLogo = (svgmap, data) => {
+  initSource: `options.animateLogo = (svgmap, data) => {
     let buffer = data.series[0].fields[1].values.buffer;
     let valueCount = buffer.length
     let chartData = [];
@@ -768,7 +768,7 @@ export const props_defaults: ACESVGDefaults = {
     }
     `,
   eventSource: `// example of calling a function defined in the init script
-context.animateLogo(svgmap, data);
+options.animateLogo(svgmap, data);
 // Here we're going to initialized some variables just to make things less verbose
 // This is the raw buffer from the values field of the DataFrame
 let buffer = data.series[0].fields[1].values.buffer;
