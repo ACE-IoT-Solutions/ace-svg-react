@@ -9,9 +9,23 @@ Hash: SHA512
   "signedByOrgName": "Andrew Rodgers",
   "plugin": "aceiot-svg-panel",
   "version": "0.0.11",
-  "time": 1642733051226,
+  "time": 1644542738893,
   "keyId": "7e4d0c6a708866e7",
   "files": {
+    "0.js": "4e810e183fc39b25c86b3933f9853e4175a0942c15430a93358aaf638abeb747",
+    "0.js.map": "fc5d4d02203ec01a076f6071f19d90fd9399a2b8606da7aedc179ec820f6c835",
+    "1.js": "8beed562e5d7c5ddfe33a7f40ddd6595f44a56ea0386a5b3ffab17dc485c1320",
+    "1.js.map": "9897f3ee1ce4118e9b36716b2486db1e22454e9701dcbddd5ed7f6759fe70977",
+    "2.js": "95aad9fb22360d15125b805c14559cb44dddcca45bb84186493938d14cdc0d1b",
+    "2.js.map": "601834f6c29c2e8b391dee172038335cdfcdd39831a45aa2a4606c4611625e55",
+    "3.js": "d37034f01e671155f590ddd4e8cfd4446c2cb13b8046b0e3a2e41fee3c2f60ce",
+    "3.js.map": "65ad9382bdb57515476a12b023ac03dff980d5e8440e8001a9fe0b7264bacbb2",
+    "4.js": "5c1e209ead8926a9fccc93b3311433daa1c1f0c7a416a43e6e89af1405b901cb",
+    "4.js.map": "867b55ddb17770407ef3ef51f0f3585419ecd53db9647c11b5d4fbb5d54f16bd",
+    "5.js": "eae5e8b8b54f65dccf830b77f5f5171e6d14126b14b33aeffe1f6f9b127634ed",
+    "5.js.map": "793fd64d94ca7123b6dfc4909cdb14c695daf2be9128f1c5ecc89e6f3793094c",
+    "6.js": "787c633a3dc17b22a6b2b617a48ba576f6c1d3bab94ecf3ad7b0f8bad047ff6d",
+    "6.js.map": "fcbdaf769ac11846438c704d7b6b2a1fefa2fa8bc62ad4cbc9a7e4fe60bd9ba1",
     "CHANGELOG.md": "34f2eed7e9fa2a166c09530069d7413a710d2abb3fc275838b5adfb9a7971133",
     "img/ace-svg-react.png": "6d2343f8f5471f27a17d811743aba3cd221fae2350a585cdccdae7689619dc15",
     "img/ace_svg_icon.png": "585222feea75c122615b5b379a643ff0a5e85f58f77daf5e6c5da7bdc7170e06",
@@ -20,11 +34,12 @@ Hash: SHA512
     "img/logo-small-background.svg": "eed57cceea2ed7f9b1aaadd3d02d13db67766062e71e1885d0fd83ba8325ec59",
     "img/logo-type.svg": "4cca7b5a6c8bdd300d0ffad4a2fc4d0f044e2ac0df60144cb6f2cf540b2534a9",
     "img/logo.svg": "cda1e6830638a820850a6f09331d3a4b19c6284530b9eb9d194acab7b5dd728a",
+    "index.html": "2fa2c4168c5bb7b8502989f437e4a1a71e663702b0ec9c01530215c8c026dcaf",
     "LICENSE": "36b5840417f9f6e52f5ce683209c10784163dd5bedac9bbf8490881ad68bfdaf",
-    "module.js": "146c60e82bb3b5584844ec9237a947d6effcdb4ce687dec6a297476f5ee46139",
+    "module.js": "e939560b750849812a613d39b63d17ef26d075503c6191beefe0717d08831d4c",
     "module.js.LICENSE.txt": "0d8f66cd4afb566cb5b7e1540c68f43b939d3eba12ace290f18abc4f4cb53ed0",
-    "module.js.map": "ea3c0a0ce4c0c43b5eb147f4d05d08b7e74dec9164245639c83498d28603feab",
-    "plugin.json": "9d7391696f5d8658edf6cbe222c39f70dd849b0f78c4627d2eb9cd242eabd464",
+    "module.js.map": "f6356174a91ed4a2e6b3c2c66308a9a21dd91ad81701bf3a777fa0b750c6b438",
+    "plugin.json": "5894ca192637793a58da411f0f17a0a046fe0d79ec1f81fb13e18e5c159a04c1",
     "README.md": "fe73ef111862564b45e0d988494e3abe59cca747edb40733992db06bf707dc2d"
   }
 }
@@ -32,9 +47,9 @@ Hash: SHA512
 Version: OpenPGP.js v4.10.1
 Comment: https://openpgpjs.org
 
-wqAEARMKAAYFAmHqHfsACgkQfk0ManCIZuf+bAII10T5rjNLEkMnKzgbIQvB
-5mZWfGlw7WldQCuu1i/PocsdD7slETXJtJOj2IP2T++BNDu5POtxXeyUEQ1J
-xPlAnXwCAQHFTd7aX+E301V1xxyh6fDxuPTGeWi7zdH3oIw68yEkBOcSz9aS
-/hFHsrycpPbb/d5WSb/+mjGk3TtLQXtB4/hH
-=KpL+
+wqEEARMKAAYFAmIFuxMACgkQfk0ManCIZudJ4wIIp40niU1f55iSvN84s9vE
+4++4dG+G7SaoLCx1pfGAIyFo+LODU4iXjAWv6w3yZxWcb9+bm5sgIwFOT+iz
+G+z736sCCQEzPYkFDph/es3d4TVwKMXgyfFxX08vRE2skOOBz+i7lp8ZQy7T
+NNNkC5ViA1zsMhbCpEi3XyBnFaiYBWHN3dEXew==
+=edZv
 -----END PGP SIGNATURE-----

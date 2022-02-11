@@ -4,6 +4,7 @@ export interface SVGIDMapping {
 }
 export interface ACESVGOptions {
   captureMappings: boolean;
+  enableGeomap: boolean;
   addAllIDs: boolean;
   svgSource: string;
   svgAutocomplete: boolean;
@@ -12,6 +13,7 @@ export interface ACESVGOptions {
   initSource: string;
   initAutocomplete: boolean;
   svgMappings: SVGIDMapping[];
+  geohashField: string;
 }
 export interface ACESVGDefaults {
   svgNode: string;
