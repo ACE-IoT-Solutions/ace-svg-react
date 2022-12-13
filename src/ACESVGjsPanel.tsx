@@ -1,34 +1,8 @@
 import React, { PureComponent } from 'react';
-import { PanelProps } from '@grafana/data';
-import { ACESVGOptions, SVGIDMapping } from 'types';
+import { SVGIDMapping, Props, PanelState, TextMappedElement, MappedElements } from './types';
 import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
 import { css } from 'emotion';
-
-// import { css } from '@emotion/react'
-
-interface MappedElements {
-  [key: string]: SVGElement | SVGDom;
-}
-
-interface Props extends PanelProps<ACESVGOptions> {}
-
-interface PanelState {
-  addAllIDs: boolean;
-  svgNode: SVGElement | SVGDom | null;
-  svgSource: string | null;
-  mappedElements: MappedElements | null;
-  svgMappings: SVGIDMapping[];
-  initFunctionSource: string;
-  initFunction: Function | null;
-  eventFunctionSource: string;
-  eventFunction: Function | null;
-  initialized: boolean;
-  context: any;
-}
-
-interface TextMappedElement extends SVGElement {
-  textElement: Element;
-}
+import { ACESVGElement } from './ACESVGElement';
 
 SVGExtend(SVGElement, {
   openOnClick: function (this: SVGElement, url: string) {
@@ -261,6 +235,23 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     }
   }
 
+  // shouldComponentUpdate(nextProps: Props, nextState: ACESVGElementState) {
+  //   let eventFunction = this.state.eventFunction;
+  //   if (nextState.eventFunction !== this.state.eventFunction) {
+  //     let eventFunctionSource = this.props.options.eventSource;
+  //     eventFunction = Function(
+  //       'data',
+  //       'options',
+  //       'svgnode',
+  //       'svgmap',
+  //       'context',
+  //       nextProps.replaceVariables(eventFunctionSource)
+  //     );
+  //     this.setState({ eventFunction: eventFunction, initialized: false });
+  //   }
+  //   return true;
+  // }
+
   render() {
     const styles = this.generateComponentStyles();
     return (
@@ -268,14 +259,17 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         className={styles.wrapper}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
-        <svg
-          style={{
-            width: `${this.props.width}px`,
-            height: `${this.props.height}px`,
-          }}
-          className={'svg-object'}
-          ref={(ref) => this.renderSVG(ref)}
-        ></svg>
+        <ACESVGElement
+          data={this.props.data}
+          options={this.props.options}
+          replaceVariables={this.props.replaceVariables}
+          width={this.props.width}
+          height={this.props.height}
+          svgSource={this.props.options.svgSource}
+          initSource={this.props.options.initSource}
+          eventSource={this.props.options.eventSource}
+          svgMappings={this.props.options.svgMappings}
+        />
       </div>
     );
   }
