@@ -69,6 +69,7 @@ SVGExtend(SVGDom, {
 });
 
 export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGElementState> {
+  svgRef: SVGSVGElement | null;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -78,8 +79,8 @@ export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGEleme
       initialized: false,
       initFunction: null,
       eventFunction: null,
-      svgRef: null,
     };
+    this.svgRef = null;
   }
 
   initializeMappings(svgNode: SVGElement | SVGDom) {
@@ -92,7 +93,6 @@ export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGEleme
       }
     }
     this.setState({ mappedElements: currentElements });
-    return currentElements;
   }
 
   mapAllIDs(svgNode: SVGDom) {
@@ -125,27 +125,25 @@ export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGEleme
 
   renderSVG(element: SVGSVGElement | SVGDom | null) {
     console.log(element);
-    this.initializeInitFunction();
     if (element) {
       return this.state.svgNode ? this.state.svgNode.svg() : null;
     }
     return null;
   }
 
-  initializeInitFunction() {
-    if (this.state.svgRef && !this.state.initialized) {
-      console.log('initializing svgNode');
-      let svgNode = SVG(this.state.svgRef);
+  updateInitFunction() {
+    if (this.svgRef && !this.state.initialized) {
+      console.log('update initFunction');
+      let svgNode = SVG(this.svgRef);
       svgNode.clear();
       svgNode.svg(this.props.options.svgSource);
       svgNode.size(this.props.width, this.props.height);
       if (this.props.options.addAllIDs) {
         this.mapAllIDs(svgNode);
       }
+      this.initializeMappings(svgNode);
       this.setState({ svgNode: svgNode });
-      const currentElements = this.initializeMappings(svgNode);
 
-      console.log('initializing initFunction');
       try {
         const initFunction = Function(
           'data',
@@ -156,9 +154,10 @@ export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGEleme
           this.props.replaceVariables(this.props.options.initSource)
         );
         this.setState({ initFunction });
-        if (currentElements && initFunction) {
-          initFunction(this.props.data, this.props.options, this.state.svgNode, currentElements);
-          this.setState({ initialized: true, mappedElements: currentElements });
+        if (this.state.mappedElements && initFunction) {
+          console.log('call initFunction');
+          initFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
+          this.setState({ initialized: true });
         }
       } catch (e) {
         this.setState({ initialized: true });
@@ -167,9 +166,10 @@ export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGEleme
     }
   }
 
-  initializeEventFunction() {
+  updateEventFunction() {
     try {
       let eventFunction = this.state.eventFunction;
+      console.log('update eventFunction');
       if (!eventFunction) {
         let eventFunctionSource = this.props.options.eventSource;
         eventFunction = Function(
@@ -184,6 +184,7 @@ export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGEleme
       }
 
       if (this.state.mappedElements && eventFunction) {
+        console.log('call eventFunction');
         eventFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements, this.context);
       }
     } catch (e) {
@@ -193,28 +194,24 @@ export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGEleme
 
   componentDidMount(): void {
     console.log('componentDidMount');
-    console.log(this.state.svgRef);
-    this.initializeInitFunction();
-    this.initializeEventFunction();
+    this.updateInitFunction();
+    this.updateEventFunction();
   }
 
-  componentDidUpdate(
-    prevProps: Readonly<ACESVGElementProps>,
-    prevState: Readonly<ACESVGElementState>,
-    snapshot?: any
-  ): void {
+  componentDidUpdate(prevProps: Readonly<ACESVGElementProps>): void {
     console.log('componentDidUpdate');
     if (prevProps.options.addAllIDs !== this.props.options.addAllIDs) {
-      prevProps.options.addAllIDs = this.props.options.addAllIDs;
-      // console.log('element update', this.props.options.addAllIDs);
+      console.log('update addAllIDs to ', this.props.options.addAllIDs);
     }
 
     if (prevProps.options.initSource !== this.props.options.initSource) {
-      this.initializeInitFunction();
+      console.log('update options.initSource');
+      this.updateInitFunction();
     }
 
     if (prevProps.options.eventSource !== this.props.options.eventSource) {
-      this.initializeEventFunction();
+      console.log('update options.eventSource');
+      this.updateEventFunction();
     }
   }
 
@@ -227,13 +224,12 @@ export class ACESVGElement extends PureComponent<ACESVGElementProps, ACESVGEleme
         }}
         className={'svg-object'}
         ref={(ref) => {
-          if (!this.state.svgRef) {
-            console.log('initialize svgRef');
-            this.setState({ svgRef: ref });
+          if (!this.svgRef) {
+            this.svgRef = ref;
           }
         }}
       >
-        {this.renderSVG(this.state.svgRef)}
+        {this.renderSVG(this.svgRef)}
       </svg>
     );
   }

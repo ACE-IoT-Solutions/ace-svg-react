@@ -158,6 +158,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     }
   }
 
+  // not calling
   renderSVG(element: SVGSVGElement | SVGDom | null) {
     if (element) {
       if (
@@ -234,23 +235,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       return null;
     }
   }
-
-  // shouldComponentUpdate(nextProps: Props, nextState: ACESVGElementState) {
-  //   let eventFunction = this.state.eventFunction;
-  //   if (nextState.eventFunction !== this.state.eventFunction) {
-  //     let eventFunctionSource = this.props.options.eventSource;
-  //     eventFunction = Function(
-  //       'data',
-  //       'options',
-  //       'svgnode',
-  //       'svgmap',
-  //       'context',
-  //       nextProps.replaceVariables(eventFunctionSource)
-  //     );
-  //     this.setState({ eventFunction: eventFunction, initialized: false });
-  //   }
-  //   return true;
-  // }
 
   render() {
     const styles = this.generateComponentStyles();

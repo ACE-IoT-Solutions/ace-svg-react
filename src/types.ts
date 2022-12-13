@@ -35,7 +35,6 @@ export interface ACESVGElementProps {
   initSource: string;
   eventSource: string;
   svgMappings: SVGIDMapping[];
-  // svgSourceRef: SVGSVGElement | null;
 }
 
 export interface ACESVGElementState {
@@ -45,7 +44,6 @@ export interface ACESVGElementState {
   initialized: boolean;
   initFunction: Function | null;
   eventFunction: Function | null;
-  svgRef: SVGSVGElement | null;
 }
 
 export interface MappedElements {
@@ -66,7 +64,6 @@ export interface PanelState {
   eventFunction: Function | null; //
   initialized: boolean;
   context: any;
-  // svgSourceRef: SVGSVGElement | null;
 }
 
 export interface TextMappedElement extends SVGElement {

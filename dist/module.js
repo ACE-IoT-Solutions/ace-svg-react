@@ -10254,9 +10254,9 @@ var ACESVGElement = function (_super) {
       mappedElements: {},
       initialized: false,
       initFunction: null,
-      eventFunction: null,
-      svgRef: null
+      eventFunction: null
     };
+    _this.svgRef = null;
     return _this;
   }
 
@@ -10276,7 +10276,6 @@ var ACESVGElement = function (_super) {
     this.setState({
       mappedElements: currentElements
     });
-    return currentElements;
   };
 
   ACESVGElement.prototype.mapAllIDs = function (svgNode) {
@@ -10322,7 +10321,6 @@ var ACESVGElement = function (_super) {
 
   ACESVGElement.prototype.renderSVG = function (element) {
     console.log(element);
-    this.initializeInitFunction();
 
     if (element) {
       return this.state.svgNode ? this.state.svgNode.svg() : null;
@@ -10331,10 +10329,10 @@ var ACESVGElement = function (_super) {
     return null;
   };
 
-  ACESVGElement.prototype.initializeInitFunction = function () {
-    if (this.state.svgRef && !this.state.initialized) {
-      console.log('initializing svgNode');
-      var svgNode = Object(_svgdotjs_svg_js__WEBPACK_IMPORTED_MODULE_2__["SVG"])(this.state.svgRef);
+  ACESVGElement.prototype.updateInitFunction = function () {
+    if (this.svgRef && !this.state.initialized) {
+      console.log('update initFunction');
+      var svgNode = Object(_svgdotjs_svg_js__WEBPACK_IMPORTED_MODULE_2__["SVG"])(this.svgRef);
       svgNode.clear();
       svgNode.svg(this.props.options.svgSource);
       svgNode.size(this.props.width, this.props.height);
@@ -10343,11 +10341,10 @@ var ACESVGElement = function (_super) {
         this.mapAllIDs(svgNode);
       }
 
+      this.initializeMappings(svgNode);
       this.setState({
         svgNode: svgNode
       });
-      var currentElements = this.initializeMappings(svgNode);
-      console.log('initializing initFunction');
 
       try {
         var initFunction = Function('data', 'options', 'svgnode', 'svgmap', 'context', this.props.replaceVariables(this.props.options.initSource));
@@ -10355,11 +10352,11 @@ var ACESVGElement = function (_super) {
           initFunction: initFunction
         });
 
-        if (currentElements && initFunction) {
-          initFunction(this.props.data, this.props.options, this.state.svgNode, currentElements);
+        if (this.state.mappedElements && initFunction) {
+          console.log('call initFunction');
+          initFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
           this.setState({
-            initialized: true,
-            mappedElements: currentElements
+            initialized: true
           });
         }
       } catch (e) {
@@ -10371,9 +10368,10 @@ var ACESVGElement = function (_super) {
     }
   };
 
-  ACESVGElement.prototype.initializeEventFunction = function () {
+  ACESVGElement.prototype.updateEventFunction = function () {
     try {
       var eventFunction = this.state.eventFunction;
+      console.log('update eventFunction');
 
       if (!eventFunction) {
         var eventFunctionSource = this.props.options.eventSource;
@@ -10385,6 +10383,7 @@ var ACESVGElement = function (_super) {
       }
 
       if (this.state.mappedElements && eventFunction) {
+        console.log('call eventFunction');
         eventFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements, this.context);
       }
     } catch (e) {
@@ -10394,24 +10393,25 @@ var ACESVGElement = function (_super) {
 
   ACESVGElement.prototype.componentDidMount = function () {
     console.log('componentDidMount');
-    console.log(this.state.svgRef);
-    this.initializeInitFunction();
-    this.initializeEventFunction();
+    this.updateInitFunction();
+    this.updateEventFunction();
   };
 
-  ACESVGElement.prototype.componentDidUpdate = function (prevProps, prevState, snapshot) {
+  ACESVGElement.prototype.componentDidUpdate = function (prevProps) {
     console.log('componentDidUpdate');
 
     if (prevProps.options.addAllIDs !== this.props.options.addAllIDs) {
-      prevProps.options.addAllIDs = this.props.options.addAllIDs; // console.log('element update', this.props.options.addAllIDs);
+      console.log('update addAllIDs to ', this.props.options.addAllIDs);
     }
 
     if (prevProps.options.initSource !== this.props.options.initSource) {
-      this.initializeInitFunction();
+      console.log('update options.initSource');
+      this.updateInitFunction();
     }
 
     if (prevProps.options.eventSource !== this.props.options.eventSource) {
-      this.initializeEventFunction();
+      console.log('update options.eventSource');
+      this.updateEventFunction();
     }
   };
 
@@ -10425,15 +10425,11 @@ var ACESVGElement = function (_super) {
       },
       className: 'svg-object',
       ref: function ref(_ref) {
-        if (!_this.state.svgRef) {
-          console.log('initialize svgRef');
-
-          _this.setState({
-            svgRef: _ref
-          });
+        if (!_this.svgRef) {
+          _this.svgRef = _ref;
         }
       }
-    }, this.renderSVG(this.state.svgRef));
+    }, this.renderSVG(this.svgRef));
   };
 
   return ACESVGElement;
@@ -10655,7 +10651,8 @@ var ACESVGPanel = function (_super) {
         this.forceUpdate();
       }
     }
-  };
+  }; // not calling
+
 
   ACESVGPanel.prototype.renderSVG = function (element) {
     if (element) {
@@ -10727,23 +10724,7 @@ var ACESVGPanel = function (_super) {
     } else {
       return null;
     }
-  }; // shouldComponentUpdate(nextProps: Props, nextState: ACESVGElementState) {
-  //   let eventFunction = this.state.eventFunction;
-  //   if (nextState.eventFunction !== this.state.eventFunction) {
-  //     let eventFunctionSource = this.props.options.eventSource;
-  //     eventFunction = Function(
-  //       'data',
-  //       'options',
-  //       'svgnode',
-  //       'svgmap',
-  //       'context',
-  //       nextProps.replaceVariables(eventFunctionSource)
-  //     );
-  //     this.setState({ eventFunction: eventFunction, initialized: false });
-  //   }
-  //   return true;
-  // }
-
+  };
 
   ACESVGPanel.prototype.render = function () {
     var styles = this.generateComponentStyles();
