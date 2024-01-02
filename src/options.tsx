@@ -4,6 +4,7 @@ import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 import { css } from 'emotion';
+// import { css } from '@emotion/react'
 import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from 'examples';
@@ -54,7 +55,7 @@ class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
 interface SVGIDMappingProps {
   value: SVGIDMapping;
   index?: number;
-  styles?: any;
+  styles?: unknown;
   onChangeItem?: (a: SVGIDMapping, b: number) => void | undefined;
   onAdd?: (a: SVGIDMapping) => void;
   onDelete?: (a: number) => void;
@@ -74,7 +75,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           type="text"
           name="svgId"
           defaultValue={value.svgId}
-          css={config.theme}
+          // css={config.theme}
           onBlur={(e) => {
             const svgId = e.currentTarget.value;
             this.setState({ svgId: svgId });
@@ -86,7 +87,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           type="text"
           name="mappedName"
           defaultValue={value.mappedName}
-          css={config.theme}
+          // css={config.theme}
           onBlur={(e) => {
             const mappedName = e.currentTarget.value;
             this.setState({ mappedName: mappedName });
@@ -128,18 +129,18 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
 
 class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
   onChangeItem = (updatedMapping: SVGIDMapping, index: number) => {
-    let newMappings = [...this.props.value];
+    const newMappings = [...this.props.value];
     newMappings[index] = updatedMapping;
     this.props.onChange(newMappings);
   };
   onAdd = (newMapping: SVGIDMapping) => {
     if (newMapping.svgId !== '') {
-      let newMappings = [...this.props.value, newMapping];
+      const newMappings = [...this.props.value, newMapping];
       this.props.onChange(newMappings);
     }
   };
   onDelete = (index: number) => {
-    let newMappings = [...this.props.value];
+    const newMappings = [...this.props.value];
     newMappings.splice(index, 1);
     this.props.onChange(newMappings);
   };
