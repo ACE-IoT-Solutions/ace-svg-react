@@ -10,7 +10,7 @@ interface MappedElements {
   [key: string]: SVGElement | SVGDom;
 }
 
-interface Props extends PanelProps<ACESVGOptions> {}
+interface Props extends PanelProps<ACESVGOptions> { }
 
 interface PanelState {
   addAllIDs: boolean;
@@ -123,7 +123,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       if (svgMappings[i].mappedName !== '') {
         currentElements[this.props.options.svgMappings[i].mappedName] = svgNode.findOne(
           `#${this.props.options.svgMappings[i].svgId}`
-        );
+        )!;
       }
     }
     this.setState({ mappedElements: currentElements });
