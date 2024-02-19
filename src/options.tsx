@@ -74,7 +74,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           type="text"
           name="svgId"
           defaultValue={value.svgId}
-          css={config.theme}
+          // css={config.theme}
           onBlur={(e) => {
             const svgId = e.currentTarget.value;
             this.setState({ svgId: svgId });
@@ -86,7 +86,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           type="text"
           name="mappedName"
           defaultValue={value.mappedName}
-          css={config.theme}
+          // css={config.theme}
           onBlur={(e) => {
             const mappedName = e.currentTarget.value;
             this.setState({ mappedName: mappedName });
