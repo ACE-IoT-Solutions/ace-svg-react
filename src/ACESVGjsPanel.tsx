@@ -98,7 +98,7 @@ SVGExtend(SVGDom, {
 
 // export class SimplePanel extends PureComponent<Props, State> = ({ options, data, width, height }) => {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       addAllIDs: false,
