@@ -1,5 +1,5 @@
 import React from 'react';
-import { GrafanaTheme, PanelOptionsEditorBuilder, PanelOptionsEditorProps } from '@grafana/data';
+import { GrafanaTheme2, PanelOptionsEditorBuilder, PanelOptionsEditorProps } from '@grafana/data';
 import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
@@ -74,7 +74,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           type="text"
           name="svgId"
           defaultValue={value.svgId}
-          css={config.theme}
+          // css={config.theme}
           onBlur={(e) => {
             const svgId = e.currentTarget.value;
             this.setState({ svgId: svgId });
@@ -86,7 +86,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
           type="text"
           name="mappedName"
           defaultValue={value.mappedName}
-          css={config.theme}
+          // css={config.theme}
           onBlur={(e) => {
             const mappedName = e.currentTarget.value;
             this.setState({ mappedName: mappedName });
@@ -128,23 +128,23 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
 
 class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
   onChangeItem = (updatedMapping: SVGIDMapping, index: number) => {
-    let newMappings = [...this.props.value];
+    const newMappings = [...this.props.value];
     newMappings[index] = updatedMapping;
     this.props.onChange(newMappings);
   };
   onAdd = (newMapping: SVGIDMapping) => {
     if (newMapping.svgId !== '') {
-      let newMappings = [...this.props.value, newMapping];
+      const newMappings = [...this.props.value, newMapping];
       this.props.onChange(newMappings);
     }
   };
   onDelete = (index: number) => {
-    let newMappings = [...this.props.value];
+    const newMappings = [...this.props.value];
     newMappings.splice(index, 1);
     this.props.onChange(newMappings);
   };
   render() {
-    const styles = generateComponentStyles(config.theme);
+    const styles = generateComponentStyles(config.theme2);
     const svgMappings = this.props.value;
     return (
       <VerticalGroup>
@@ -197,11 +197,10 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'svgSource',
       defaultValue: props_defaults.svgNode,
       editor: function editor(props) {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="xml"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme2.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
@@ -226,11 +225,10 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'eventSource',
       defaultValue: props_defaults.eventSource,
       editor: function editor(props) {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="javascript"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme2.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
@@ -254,11 +252,10 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       id: 'initSource',
       defaultValue: props_defaults.initSource,
       editor: function editor(props) {
-        const grafanaTheme = config.theme.name;
         return (
           <MonacoEditor
             language="javascript"
-            theme={grafanaTheme === 'Grafana Light' ? 'vs-light' : 'vs-dark'}
+            theme={config.theme2.isLight ? 'vs-light' : 'vs-dark'}
             value={props.value}
             onChange={props.onChange}
           />
@@ -293,29 +290,29 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
     });
 };
 
-const generateComponentStyles = (theme: GrafanaTheme) => {
+const generateComponentStyles = (theme: GrafanaTheme2) => {
   return {
     colorPicker: css`
-      padding: 0 ${theme.spacing.sm};
+      padding: 0 ${theme.spacing.gridSize}px;
     `,
     inputPrefix: css`
       display: flex;
       align-items: center;
     `,
     trashIcon: css`
-      color: ${theme.colors.textWeak};
+      color: ${theme.colors.text.secondary};
       cursor: pointer;
       //
       &:hover {
-        color: ${theme.colors.text};
+        color: ${theme.colors.text.primary};
       }
     `,
     addIcon: css`
-      color: ${theme.colors.textWeak};
+      color: ${theme.colors.text.secondary};
       cursor: pointer;
       //
       &:hover {
-        color: ${theme.colors.text};
+        color: ${theme.colors.text.primary};
       }
     `,
   };

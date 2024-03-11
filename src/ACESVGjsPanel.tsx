@@ -10,7 +10,7 @@ interface MappedElements {
   [key: string]: SVGElement | SVGDom;
 }
 
-interface Props extends PanelProps<ACESVGOptions> {}
+interface Props extends PanelProps<ACESVGOptions> { }
 
 interface PanelState {
   addAllIDs: boolean;
@@ -98,7 +98,7 @@ SVGExtend(SVGDom, {
 
 // export class SimplePanel extends PureComponent<Props, State> = ({ options, data, width, height }) => {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       addAllIDs: false,
@@ -118,20 +118,20 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   initializeMappings(svgNode: SVGElement | SVGDom) {
     const svgMappings = this.props.options.svgMappings;
     let currentElements: MappedElements = { ...this.state.mappedElements };
-    currentElements = {};
+    currentElements = {}; // why does it immediately get set to {}?
     for (let i = 0; i < svgMappings.length; i++) {
       if (svgMappings[i].mappedName !== '') {
         currentElements[this.props.options.svgMappings[i].mappedName] = svgNode.findOne(
           `#${this.props.options.svgMappings[i].svgId}`
-        );
+        )!;
       }
     }
     this.setState({ mappedElements: currentElements });
   }
 
   mapAllIDs(svgNode: SVGDom) {
-    let svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
-    let nodeFilterID: NodeFilter = {
+    const svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
+    const nodeFilterID: NodeFilter = {
       acceptNode: (node: Element) => {
         if (node.id) {
           if (node.id !== '') {
@@ -141,7 +141,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         return NodeFilter.FILTER_REJECT;
       },
     };
-    let svgWalker = document.createTreeWalker(svgNode.node, NodeFilter.SHOW_ALL, nodeFilterID);
+    const svgWalker = document.createTreeWalker(svgNode.node, NodeFilter.SHOW_ALL, nodeFilterID);
     let currentNode: Element | null = svgWalker.currentNode as Element;
     while (currentNode) {
       if (currentNode && currentNode.id) {
@@ -161,7 +161,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     if (event.target) {
       let clicked = event.target as Element;
       let loopCount = 0;
-      let svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
+      const svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
       if (clicked.id) {
         while (clicked.id === '') {
           loopCount++;
@@ -198,7 +198,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       }
       if (!this.state.initialized) {
         console.log('initializing');
-        let svgNode = SVG(element);
+        const svgNode = SVG(element);
         svgNode.clear();
         svgNode.svg(this.props.options.svgSource);
         svgNode.size(this.props.width, this.props.height);
@@ -231,7 +231,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       try {
         let eventFunction = this.state.eventFunction;
         if (this.props.options.eventSource !== this.state.eventFunctionSource) {
-          let eventFunctionSource = this.props.options.eventSource;
+          const eventFunctionSource = this.props.options.eventSource;
           eventFunction = Function(
             'data',
             'options',

@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
   "name": "ACE.SVG",
   "id": "aceiot-svg-panel",
@@ -34,8 +35,7 @@
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaDependency": ">=7.0.0",
-    "grafanaVersion": "7.x",
+    "grafanaDependency": ">=10.0.3",
     "plugins": []
   }
 }
