@@ -29,13 +29,16 @@
       }
     ],
     "screenshots": [
-      { "name": "In Action", "path": "img/ace-svg-react.png" }
+      {
+        "name": "In Action",
+        "path": "img/ace-svg-react.png"
+      }
     ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaDependency": ">=10.0.3",
+    "grafanaDependency": ">=10.3.3",
     "plugins": []
   }
 }

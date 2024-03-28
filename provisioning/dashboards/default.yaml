@@ -1,7 +1,7 @@
 apiVersion: 1
 
 providers:
-  - name: 'svg-reat'
+  - name: 'aceiot-svg'
     type: file
     options:
       path: /etc/grafana/provisioning/dashboards
