@@ -1,21 +1,21 @@
 export interface SVGIDMapping {
-  svgId: string;
-  mappedName: string;
+  readonly svgId: string;
+  readonly mappedName: string;
 }
 export interface ACESVGOptions {
-  captureMappings: boolean;
-  addAllIDs: boolean;
-  svgSource: string;
-  svgAutocomplete: boolean;
-  eventSource: string;
-  eventAutocomplete: boolean;
-  initSource: string;
-  initAutocomplete: boolean;
+  readonly captureMappings: boolean;
+  readonly addAllIDs: boolean;
+  readonly svgSource: string;
+  readonly svgAutocomplete: boolean;
+  readonly eventSource: string;
+  readonly eventAutocomplete: boolean;
+  readonly initSource: string;
+  readonly initAutocomplete: boolean;
   svgMappings: SVGIDMapping[];
 }
 export interface ACESVGDefaults {
-  svgNode: string;
-  initSource: string;
-  eventSource: string;
-  svgMappings: SVGIDMapping[];
+  readonly svgNode: string;
+  readonly initSource: string;
+  readonly eventSource: string;
+  readonly svgMappings: SVGIDMapping[];
 }
