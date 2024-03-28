@@ -15,7 +15,7 @@
     "server": "docker-compose up --build",
     "sign": "npx --yes @grafana/sign-plugin@latest",
     "update": "npx -y @grafana/create-plugin@latest update",
-    "clean": "rm -rf node_modules package-lock.json dist"
+    "clean": "rm -rf node_modules package-lock.json .eslintcache dist"
   },
   "repository": "github:ACE-IoT-Solutions/ace-svg-react",
   "author": "Andrew Rodgers",
