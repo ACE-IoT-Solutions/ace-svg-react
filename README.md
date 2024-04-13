@@ -7,7 +7,7 @@
 
 ![Screenshot of plugin](https://media.giphy.com/media/YRE4DxPYqy3XCR6rL4/giphy.gif)
 
-This is an SVG panel plugin for Grafana 7.x+
+This is an SVG panel plugin for Grafana 10.x+
 
 ## Why yet another SVG panel plugin?
 Yes, I definitely considered naming it YASPP...
@@ -54,25 +54,18 @@ be present.  This _may_ be useful for some initial rendering purposes, but cauti
 query may be updated (for example while the user is updating the query) so anything done here should
 likely be done in the update function as well.
 
-
-
-
 ## Getting started (development)
 1. Install dependencies
 ```BASH
-yarn install
+npm i
 ```
 2. Build plugin in development mode or run in watch mode
 ```BASH
-yarn dev
-```
-or
-```BASH
-yarn watch
+npm run dev
 ```
 3. Build plugin in production mode
 ```BASH
-yarn build
+npm run build
 ```
 
 ## Learn more
