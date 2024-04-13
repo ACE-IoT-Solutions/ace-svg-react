@@ -3,6 +3,10 @@ ARG grafana_image=grafana-enterprise
 
 FROM grafana/${grafana_image}:${grafana_version}
 
+ARG development=true
+
+
+ENV DEV "${development}"
 
 # Make it as simple as possible to access the grafana instance for development purposes
 # Do NOT enable these settings in a public facing / production grafana instance
@@ -20,10 +24,10 @@ WORKDIR $GF_PATHS_HOME
 
 USER root
 
-
 # Installing supervisor and inotify-tools
-RUN if grep -i -q alpine /etc/issue; then \
-      apk add supervisor inotify-tools git; \
+RUN if [ "${development}" = "true" ]; then \
+    if grep -i -q alpine /etc/issue; then \
+        apk add supervisor inotify-tools git; \
     elif grep -i -q ubuntu /etc/issue; then \
       DEBIAN_FRONTEND=noninteractive && \
       apt-get update && \
@@ -31,6 +35,7 @@ RUN if grep -i -q alpine /etc/issue; then \
       rm -rf /var/lib/apt/lists/*; \
     else \
       echo 'ERROR: Unsupported base image' && /bin/false; \
+    fi \
     fi
 
 COPY supervisord/supervisord.conf /etc/supervisor.d/supervisord.ini

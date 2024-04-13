@@ -4,16 +4,16 @@
   "name": "ACE.SVG",
   "id": "aceiot-svg-panel",
   "info": {
-    "description": "SVG Visualization Panel",
-    "author": {
-      "name": "Andrew Rodgers",
-      "url": "https://aceiotsolutions.com/"
-    },
     "keywords": [
       "svg",
       "hmi",
       "iiot"
     ],
+    "description": "SVG Visualization Panel",
+    "author": {
+      "name": "Andrew Rodgers",
+      "url": "https://aceiotsolutions.com/"
+    },
     "logos": {
       "small": "img/logo-small-background.svg",
       "large": "img/logo-type.svg"
