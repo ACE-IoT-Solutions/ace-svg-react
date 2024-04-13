@@ -1,6 +1,6 @@
 {
   "name": "aceiot-acesvg-panel",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "SVG Visualization Panel",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
