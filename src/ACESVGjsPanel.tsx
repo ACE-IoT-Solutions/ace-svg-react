@@ -2,9 +2,6 @@ import React, { PureComponent } from 'react';
 import { PanelProps } from '@grafana/data';
 import { ACESVGOptions, SVGIDMapping } from 'types';
 import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
-import { css } from 'emotion';
-
-// import { css } from '@emotion/react'
 
 interface MappedElements {
   [key: string]: SVGElement | SVGDom;
@@ -282,15 +279,15 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
 
   private generateComponentStyles = () => {
     return {
-      wrapper: css`
+      wrapper: `
         position: relative;
       `,
-      svg: css`
+      svg: `
         position: absolute;
         top: 0;
         left: 0;
       `,
-      textBox: css`
+      textBox: `
         position: absolute;
         bottom: 0;
         left: 0;
