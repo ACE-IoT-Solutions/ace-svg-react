@@ -2,9 +2,6 @@ import React, { PureComponent } from 'react';
 import { PanelProps } from '@grafana/data';
 import { ACESVGOptions, SVGIDMapping } from 'types';
 import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
-import { css } from 'emotion';
-
-// import { css } from '@emotion/react'
 
 interface MappedElements {
   [key: string]: SVGElement | SVGDom;
@@ -262,10 +259,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   }
 
   render() {
-    const styles = this.generateComponentStyles();
     return (
       <div
-        className={styles.wrapper}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
         <svg
@@ -279,23 +274,4 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       </div>
     );
   }
-
-  private generateComponentStyles = () => {
-    return {
-      wrapper: css`
-        position: relative;
-      `,
-      svg: css`
-        position: absolute;
-        top: 0;
-        left: 0;
-      `,
-      textBox: css`
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        padding: 10px;
-      `,
-    };
-  };
 }

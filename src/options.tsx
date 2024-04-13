@@ -1,13 +1,11 @@
 import React from 'react';
-import { GrafanaTheme2, PanelOptionsEditorBuilder, PanelOptionsEditorProps } from '@grafana/data';
+import { PanelOptionsEditorBuilder, PanelOptionsEditorProps } from '@grafana/data';
 import Editor from '@monaco-editor/react';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-import { css } from 'emotion';
 import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from 'examples';
-// import { Input, stylesFactory, Icon, HorizontalGroup, Label, VerticalGroup, useTheme } from '@grafana/ui';
 import { Button, HorizontalGroup, Input, Label, Tooltip, VerticalGroup } from '@grafana/ui';
 
 interface MonacoEditorProps {
@@ -54,7 +52,6 @@ class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
 interface SVGIDMappingProps {
   value: SVGIDMapping;
   index?: number;
-  styles?: any;
   onChangeItem?: (a: SVGIDMapping, b: number) => void | undefined;
   onAdd?: (a: SVGIDMapping) => void;
   onDelete?: (a: number) => void;
@@ -144,7 +141,6 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
     this.props.onChange(newMappings);
   };
   render() {
-    const styles = generateComponentStyles(config.theme2);
     const svgMappings = this.props.value;
     return (
       <VerticalGroup>
@@ -161,7 +157,7 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
               Clear All
             </Button>
           </Tooltip>
-          <SvgMapping value={{ svgId: '', mappedName: '' }} styles={styles} onAdd={this.onAdd} />
+          <SvgMapping value={{ svgId: '', mappedName: '' }} onAdd={this.onAdd} />
         </HorizontalGroup>
         {svgMappings.map((currentMapping: SVGIDMapping, index: number) => {
           return (
@@ -171,7 +167,6 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
               index={index}
               onChangeItem={this.onChangeItem}
               onDelete={this.onDelete}
-              styles={styles}
             />
           );
         })}
@@ -289,32 +284,3 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       editor: SvgMappings,
     });
 };
-
-const generateComponentStyles = (theme: GrafanaTheme2) => {
-  return {
-    colorPicker: css`
-      padding: 0 ${theme.spacing.gridSize}px;
-    `,
-    inputPrefix: css`
-      display: flex;
-      align-items: center;
-    `,
-    trashIcon: css`
-      color: ${theme.colors.text.secondary};
-      cursor: pointer;
-      //
-      &:hover {
-        color: ${theme.colors.text.primary};
-      }
-    `,
-    addIcon: css`
-      color: ${theme.colors.text.secondary};
-      cursor: pointer;
-      //
-      &:hover {
-        color: ${theme.colors.text.primary};
-      }
-    `,
-  };
-};
-//
