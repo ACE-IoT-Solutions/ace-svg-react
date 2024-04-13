@@ -259,10 +259,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   }
 
   render() {
-    const styles = this.generateComponentStyles();
     return (
       <div
-        className={styles.wrapper}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
         <svg
@@ -276,23 +274,4 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       </div>
     );
   }
-
-  private generateComponentStyles = () => {
-    return {
-      wrapper: `
-        position: relative;
-      `,
-      svg: `
-        position: absolute;
-        top: 0;
-        left: 0;
-      `,
-      textBox: `
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        padding: 10px;
-      `,
-    };
-  };
 }
