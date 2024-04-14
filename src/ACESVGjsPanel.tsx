@@ -113,8 +113,8 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   }
 
   initializeMappings(svgNode: SVGElement | SVGDom) {
-    const svgMappings = this.props.options.svgMappings;
-    let currentElements: MappedElements = {};
+    const svgMappings = this.props.options.svgMappings,
+      currentElements: MappedElements = {};
     for (let i = 0; i < svgMappings.length; i++) {
       if (svgMappings[i].mappedName !== '') {
         currentElements[this.props.options.svgMappings[i].mappedName] = svgNode.findOne(
