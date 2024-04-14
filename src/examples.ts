@@ -747,11 +747,11 @@ export const props_defaults: ACESVGDefaults = {
 >
     `,
   initSource: `options.animateLogo = (svgmap, data) => {
-    let buffer = data.series[0].fields[1].values.buffer;
-    let valueCount = buffer.length
+    let values = data.series[0].fields[1].values;
+    let valueCount = values.length
     let chartData = [];
     for (let i=0; i<valueCount; i+=(Math.floor(valueCount / 4)-1)) {
-        chartData.push(buffer[i])
+          chartData.push(values[i])
     }
     let minData = chartData.reduce((acc, val) => {
         return Math.min(acc, val);
@@ -765,15 +765,14 @@ export const props_defaults: ACESVGDefaults = {
     [svgmap.barOne, svgmap.barTwo, svgmap.barThree, svgmap.barFour].forEach((elem) => {
         elem.animate(1000).ease('<>').move(elem.x(),  ((iconHeight * (chartData[0] / maxData)) - elem.height())).loop(0, true);
     });
-    }
-    `,
+}`,
   eventSource: `// example of calling a function defined in the init script
 options.animateLogo(svgmap, data);
 // Here we're going to initialized some variables just to make things less verbose
-// This is the raw buffer from the values field of the DataFrame
-let buffer = data.series[0].fields[1].values.buffer;
+// This is the raw data buffer from the values field of the DataFrame
+let values = data.series[0].fields[1].values;
 // here we collect the most recent value from the Data Frame
-let lastValue = buffer[buffer.length -1]
+let lastValue = values[values.length - 1];
 // We need to collect the center of the fan as a static value here, otherwise it will cause a feedback loop in the animation.
 // The rotate animation will use the center of the bounding box by default, but of irregular shaped items, like these fan blades
 // the center is not the center axis of rotation
@@ -799,13 +798,12 @@ svgmap.fanBlades.animateOn(1000, (lastValue > 40), (elem) => {
 svgmap.lampLens.showOn(lastValue>10);
 svgmap.lampRays.showOn(lastValue>10);
 // Here we hide the water drop when leakCond is false
-svgmap.waterDrop.showOn(leakCond)
+svgmap.waterDrop.showOn(leakCond);
 // and here we animate the water drop when leakCond is true
 svgmap.waterDrop.animateOn(2000 - lastValue *20, leakCond, (elem) => {
     // we're using single direction easing to give a gravity affect, and scaling the drop down as it falls off the screen
     elem.ease('<').transform({translateY: 1000, scale: 0.00001}).loop();
-})
-`,
+});`,
   svgMappings: [
     {
       mappedName: 'barTwo',
