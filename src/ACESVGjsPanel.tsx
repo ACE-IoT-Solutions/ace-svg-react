@@ -114,8 +114,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
 
   initializeMappings(svgNode: SVGElement | SVGDom) {
     const svgMappings = this.props.options.svgMappings;
-    let currentElements: MappedElements = { ...this.state.mappedElements };
-    currentElements = {}; // why does it immediately get set to {}?
+    let currentElements: MappedElements = {};
     for (let i = 0; i < svgMappings.length; i++) {
       if (svgMappings[i].mappedName !== '') {
         currentElements[this.props.options.svgMappings[i].mappedName] = svgNode.findOne(
@@ -221,7 +220,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           }
         } catch (e) {
           this.setState({ initialized: true });
-          console.log(`User init code failed: ${e}`);
+          console.error('User init code failed:', e);
         }
       }
 
@@ -249,7 +248,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
           );
         }
       } catch (e) {
-        console.log(`User event code failed: ${e}`);
+        console.error('User event code failed:', e);
       }
 
       return this.state.svgNode ? this.state.svgNode.svg() : null;
