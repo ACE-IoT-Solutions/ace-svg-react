@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.1.2
 
+- Fix the builtin example
 - Update dependency versions
 - Update commands in reamde from `yarn` to `npm`
 - Remove provisioning folder
