@@ -9,10 +9,10 @@ import { props_defaults } from 'examples';
 import { Button, HorizontalGroup, Input, Label, Tooltip, VerticalGroup } from '@grafana/ui';
 
 interface MonacoEditorProps {
-  value: string;
-  theme: string;
-  language: string;
-  onChange: (value?: string | undefined) => void;
+  readonly value: string;
+  readonly theme: string;
+  readonly language: string;
+  readonly onChange: (value?: string | undefined) => void;
 }
 class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
   editorInstance: monaco.editor.IStandaloneCodeEditor | undefined;
@@ -50,11 +50,11 @@ class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
 }
 
 interface SVGIDMappingProps {
-  value: SVGIDMapping;
-  index?: number;
-  onChangeItem?: (a: SVGIDMapping, b: number) => void | undefined;
-  onAdd?: (a: SVGIDMapping) => void;
-  onDelete?: (a: number) => void;
+  readonly value: SVGIDMapping;
+  readonly index?: number;
+  readonly onChangeItem?: (a: SVGIDMapping, b: number) => void | undefined;
+  readonly onAdd?: (a: SVGIDMapping) => void;
+  readonly onDelete?: (a: number) => void;
 }
 
 class SvgMapping extends React.PureComponent<SVGIDMappingProps> {

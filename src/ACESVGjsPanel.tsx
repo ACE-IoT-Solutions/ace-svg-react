@@ -10,21 +10,21 @@ interface MappedElements {
 interface Props extends PanelProps<ACESVGOptions> { }
 
 interface PanelState {
-  addAllIDs: boolean;
-  svgNode: SVGElement | SVGDom | null;
-  svgSource: string | null;
-  mappedElements: MappedElements | null;
-  svgMappings: SVGIDMapping[];
-  initFunctionSource: string;
-  initFunction: Function | null;
-  eventFunctionSource: string;
-  eventFunction: Function | null;
-  initialized: boolean;
-  context: any;
+  readonly addAllIDs: boolean;
+  readonly svgNode: SVGElement | SVGDom | null;
+  readonly svgSource: string | null;
+  readonly mappedElements: MappedElements | null;
+  readonly svgMappings: SVGIDMapping[];
+  readonly initFunctionSource: string;
+  readonly initFunction: Function | null;
+  readonly eventFunctionSource: string;
+  readonly eventFunction: Function | null;
+  readonly initialized: boolean;
+  readonly context: any;
 }
 
 interface TextMappedElement extends SVGElement {
-  textElement: Element;
+  readonly textElement: Element;
 }
 
 SVGExtend(SVGElement, {
