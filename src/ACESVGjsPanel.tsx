@@ -93,7 +93,6 @@ SVGExtend(SVGDom, {
   },
 });
 
-// export class SimplePanel extends PureComponent<Props, State> = ({ options, data, width, height }) => {
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
   constructor(props: Props) {
     super(props);
@@ -112,7 +111,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     };
   }
 
-  initializeMappings(svgNode: SVGElement | SVGDom) {
+  private initializeMappings(svgNode: SVGElement | SVGDom): void {
     const svgMappings = this.props.options.svgMappings,
       currentElements: MappedElements = {};
     for (let i = 0; i < svgMappings.length; i++) {
@@ -125,10 +124,10 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     this.setState({ mappedElements: currentElements });
   }
 
-  mapAllIDs(svgNode: SVGDom) {
+  private mapAllIDs(svgNode: SVGDom): void {
     const svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
     const nodeFilterID: NodeFilter = {
-      acceptNode: (node: Element) => {
+      acceptNode(node: Element) {
         if (node.id) {
           if (node.id !== '') {
             return NodeFilter.FILTER_ACCEPT;
@@ -153,7 +152,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     this.forceUpdate();
   }
 
-  mappingClickHandler(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+  private mappingClickHandler(event: React.MouseEvent<HTMLElement, MouseEvent>): void {
     if (event.target) {
       let clicked = event.target as Element;
       let loopCount = 0;
@@ -180,7 +179,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     }
   }
 
-  renderSVG(element: SVGSVGElement | SVGDom | null) {
+  private renderSVG(element: SVGSVGElement | SVGDom | null): string | null {
     if (element) {
       if (
         this.props.options.initSource !== this.state.initFunctionSource ||
@@ -257,7 +256,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     }
   }
 
-  render() {
+  public render(): React.JSX.Element {
     return (
       <div
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}

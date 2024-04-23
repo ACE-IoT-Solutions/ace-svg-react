@@ -14,23 +14,21 @@ interface MonacoEditorProps {
   readonly language: string;
   readonly onChange: (value?: string | undefined) => void;
 }
-class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
-  editorInstance: monaco.editor.IStandaloneCodeEditor | undefined;
 
-  onSourceChange = () => {
+class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
+  private editorInstance?: monaco.editor.IStandaloneCodeEditor;
+
+  private onSourceChange(): void {
     if (typeof this.editorInstance !== 'undefined') {
       this.props.onChange(this.editorInstance.getValue());
     }
-  };
-  onEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
-    this.editorInstance = editor;
-  };
-  updateDimensions() {
-    if (typeof this.editorInstance !== 'undefined') {
-      this.editorInstance.layout();
-    }
   }
-  render() {
+
+  private onEditorDidMount(editor: monaco.editor.IStandaloneCodeEditor): void {
+    this.editorInstance = editor;
+  }
+
+  public render(): React.JSX.Element {
     const source = this.props.value;
     if (this.editorInstance) {
       this.editorInstance.layout();
@@ -62,7 +60,8 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
     super(props);
     this.state = { ...props.value };
   }
-  render() {
+
+  public render(): React.JSX.Element {
     const { value, index, onChangeItem, onAdd, onDelete } = this.props;
     return (
       <HorizontalGroup>
@@ -124,23 +123,26 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
 }
 
 class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
-  onChangeItem = (updatedMapping: SVGIDMapping, index: number) => {
+  private onChangeItem(updatedMapping: SVGIDMapping, index: number): void {
     const newMappings = [...this.props.value];
     newMappings[index] = updatedMapping;
     this.props.onChange(newMappings);
-  };
-  onAdd = (newMapping: SVGIDMapping) => {
+  }
+
+  private onAdd(newMapping: SVGIDMapping): void {
     if (newMapping.svgId !== '') {
       const newMappings = [...this.props.value, newMapping];
       this.props.onChange(newMappings);
     }
-  };
-  onDelete = (index: number) => {
+  }
+
+  private onDelete(index: number): void {
     const newMappings = [...this.props.value];
     newMappings.splice(index, 1);
     this.props.onChange(newMappings);
-  };
-  render() {
+  }
+
+  public render(): React.JSX.Element {
     const svgMappings = this.props.value;
     return (
       <VerticalGroup>
@@ -175,7 +177,7 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
   }
 }
 
-export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>) => {
+export function optionsBuilder(builder: PanelOptionsEditorBuilder<ACESVGOptions>): PanelOptionsEditorBuilder<ACESVGOptions> {
   return builder
     .addBooleanSwitch({
       category: ['SVG Document'],
@@ -283,4 +285,4 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       defaultValue: props_defaults.svgMappings,
       editor: SvgMappings,
     });
-};
+}
