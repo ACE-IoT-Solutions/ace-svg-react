@@ -34,7 +34,6 @@ SVGExtend(SVGElement, {
   animateContRotate: function (this: SVGElement, speed: number) {
     return (
       this.animate(speed)
-        //@ts-ignore
         .ease('-')
         //@ts-ignore
         .rotate(360)
