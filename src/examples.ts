@@ -751,7 +751,7 @@ export const props_defaults: ACESVGDefaults = {
     let valueCount = values.length
     let chartData = [];
     for (let i=0; i<valueCount; i+=(Math.floor(valueCount / 4)-1)) {
-          chartData.push(values[i])
+        chartData.push(values[i])
     }
     let minData = chartData.reduce((acc, val) => {
         return Math.min(acc, val);
