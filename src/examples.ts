@@ -746,24 +746,21 @@ export const props_defaults: ACESVGDefaults = {
 </svg>
 >
     `,
-  initSource: `options.animateLogo = (svgmap, data) => {
-    let values = data.series[0].fields[1].values;
-    let valueCount = values.length
-    let chartData = [];
-    for (let i=0; i<valueCount; i+=(Math.floor(valueCount / 4)-1)) {
-        chartData.push(values[i])
-    }
-    let minData = chartData.reduce((acc, val) => {
-        return Math.min(acc, val);
-    });
-    let maxData = 1.05 * chartData.reduce((acc, val) => {
-        return Math.max(acc, val);
-    });
-    let spread = maxData - minData;
-    let iconHeight = svgmap.iconbg.height();
-    let iconY = svgmap.iconbg.y();
-    [svgmap.barOne, svgmap.barTwo, svgmap.barThree, svgmap.barFour].forEach((elem) => {
-        elem.animate(1000).ease('<>').move(elem.x(),  ((iconHeight * (chartData[0] / maxData)) - elem.height())).loop(0, true);
+  initSource: `// example of creating a function in the init script
+options.animateLogo = (svgmap, data) => {
+    // extract the data series values and store the min/max
+    let values = data.series[0].fields[1].values,
+        min = Math.min(...values),
+        max = Math.max(...values),
+        iconHeight = svgmap.iconbg.height();
+    // use SVG.js for animation: https://svgjs.dev/docs/3.0/
+    [svgmap.barOne, svgmap.barTwo, svgmap.barThree, svgmap.barFour].forEach(elem => {
+        let x = elem.x(),
+            y = iconHeight * (values[0] - min) / (max - min) - elem.height() / 2;
+        elem.animate(1000)
+            .ease('<>')
+            .move(x, y)
+            .loop(0, true);
     });
 }`,
   eventSource: `// example of calling a function defined in the init script
