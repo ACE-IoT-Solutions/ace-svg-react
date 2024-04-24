@@ -1,60 +1,15 @@
 import React from 'react';
 import { PanelOptionsEditorBuilder, PanelOptionsEditorProps } from '@grafana/data';
-import Editor from '@monaco-editor/react';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-
-import { config } from '@grafana/runtime';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from 'examples';
-import { Button, HorizontalGroup, Input, Label, Tooltip, VerticalGroup } from '@grafana/ui';
-
-interface MonacoEditorProps {
-  value: string;
-  theme: string;
-  language: string;
-  onChange: (value?: string | undefined) => void;
-}
-class MonacoEditor extends React.PureComponent<MonacoEditorProps> {
-  editorInstance: monaco.editor.IStandaloneCodeEditor | undefined;
-
-  onSourceChange = () => {
-    if (typeof this.editorInstance !== 'undefined') {
-      this.props.onChange(this.editorInstance.getValue());
-    }
-  };
-  onEditorDidMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
-    this.editorInstance = editor;
-  };
-  updateDimensions() {
-    if (typeof this.editorInstance !== 'undefined') {
-      this.editorInstance.layout();
-    }
-  }
-  render() {
-    const source = this.props.value;
-    if (this.editorInstance) {
-      this.editorInstance.layout();
-    }
-    return (
-      <div onBlur={this.onSourceChange}>
-        <Editor
-          height={'33vh'}
-          language={this.props.language}
-          theme={this.props.theme}
-          value={source}
-          onMount={this.onEditorDidMount}
-        />
-      </div>
-    );
-  }
-}
+import { Button, HorizontalGroup, Input, Label, Tooltip, VerticalGroup, CodeEditor } from '@grafana/ui';
 
 interface SVGIDMappingProps {
-  value: SVGIDMapping;
-  index?: number;
-  onChangeItem?: (a: SVGIDMapping, b: number) => void | undefined;
-  onAdd?: (a: SVGIDMapping) => void;
-  onDelete?: (a: number) => void;
+  readonly value: SVGIDMapping;
+  readonly index?: number;
+  readonly onChangeItem?: (a: SVGIDMapping, b: number) => void | undefined;
+  readonly onAdd?: (a: SVGIDMapping) => void;
+  readonly onDelete?: (a: number) => void;
 }
 
 class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
@@ -62,7 +17,8 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
     super(props);
     this.state = { ...props.value };
   }
-  render() {
+
+  public render(): React.JSX.Element {
     const { value, index, onChangeItem, onAdd, onDelete } = this.props;
     return (
       <HorizontalGroup>
@@ -124,23 +80,26 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
 }
 
 class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
-  onChangeItem = (updatedMapping: SVGIDMapping, index: number) => {
+  private onChangeItem(updatedMapping: SVGIDMapping, index: number): void {
     const newMappings = [...this.props.value];
     newMappings[index] = updatedMapping;
     this.props.onChange(newMappings);
-  };
-  onAdd = (newMapping: SVGIDMapping) => {
+  }
+
+  private onAdd(newMapping: SVGIDMapping): void {
     if (newMapping.svgId !== '') {
       const newMappings = [...this.props.value, newMapping];
       this.props.onChange(newMappings);
     }
-  };
-  onDelete = (index: number) => {
+  }
+
+  private onDelete(index: number): void {
     const newMappings = [...this.props.value];
     newMappings.splice(index, 1);
     this.props.onChange(newMappings);
-  };
-  render() {
+  }
+
+  public render(): React.JSX.Element {
     const svgMappings = this.props.value;
     return (
       <VerticalGroup>
@@ -175,39 +134,19 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
   }
 }
 
-export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>) => {
+export function optionsBuilder(builder: PanelOptionsEditorBuilder<ACESVGOptions>): PanelOptionsEditorBuilder<ACESVGOptions> {
   return builder
-    .addBooleanSwitch({
-      category: ['SVG Document'],
-      path: 'svgAutoComplete',
-      name: 'Enable SVG AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-    })
     .addCustomEditor({
       category: ['SVG Document'],
       path: 'svgSource',
-      name: 'SVG Document',
+      name: 'SVG Source',
       description: `Editor for SVG Document, while small tweaks can be made here, we recommend using a dedicated
         Graphical SVG Editor and simply pasting the resulting XML here`,
       id: 'svgSource',
       defaultValue: props_defaults.svgNode,
-      editor: function editor(props) {
-        return (
-          <MonacoEditor
-            language="xml"
-            theme={config.theme2.isLight ? 'vs-light' : 'vs-dark'}
-            value={props.value}
-            onChange={props.onChange}
-          />
-        );
+      editor(props) {
+        return <CodeEditor value={props.value} language='xml' onBlur={props.onChange} height={200} />;
       },
-    })
-    .addBooleanSwitch({
-      category: ['User JS Render'],
-      path: 'eventAutoComplete',
-      name: 'Enable Render JS AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-      defaultValue: true,
     })
     .addCustomEditor({
       category: ['User JS Render'],
@@ -216,26 +155,12 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       description: `The User JS Render code is executed whenever new data is available, the root svg document is available as 'svgnode',
         and elements you've mapped using the SVG Mapping tools below are available as properties on the 'svgmap' object.
         The Grafana DataFrame is provided as 'data' and the 'options' object can be used to pass values and references between
-        the Render context and the Init context`,
+        the Render context and the Init context.`,
       id: 'eventSource',
       defaultValue: props_defaults.eventSource,
-      editor: function editor(props) {
-        return (
-          <MonacoEditor
-            language="javascript"
-            theme={config.theme2.isLight ? 'vs-light' : 'vs-dark'}
-            value={props.value}
-            onChange={props.onChange}
-          />
-        );
+      editor(props) {
+        return <CodeEditor value={props.value} language='javascript' onBlur={props.onChange} height={200} />;
       },
-    })
-    .addBooleanSwitch({
-      category: ['User JS Init'],
-      path: 'initAutoComplete',
-      name: 'Enable Init JS AutoComplete',
-      description: 'Enable editor autocompletion, optional as it can be buggy on large documents',
-      defaultValue: true,
     })
     .addCustomEditor({
       category: ['User JS Init'],
@@ -243,18 +168,11 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       name: 'User JS Init Code',
       description: `The User JS Init code is executed once when the panel loads, you can use this to define helper functions that
         you later reference in the User JS Render code section. The sections have identical execution contexts, and any
-        JS objects you want to reference between them will need to be attached to the options object as properties`,
+        JS objects you want to reference between them will need to be attached to the options object as properties.`,
       id: 'initSource',
       defaultValue: props_defaults.initSource,
-      editor: function editor(props) {
-        return (
-          <MonacoEditor
-            language="javascript"
-            theme={config.theme2.isLight ? 'vs-light' : 'vs-dark'}
-            value={props.value}
-            onChange={props.onChange}
-          />
-        );
+      editor(props) {
+        return <CodeEditor value={props.value} language='javascript' onBlur={props.onChange} height={200} />;
       },
     })
     .addBooleanSwitch({
@@ -283,4 +201,4 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<ACESVGOptions>
       defaultValue: props_defaults.svgMappings,
       editor: SvgMappings,
     });
-};
+}

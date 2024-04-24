@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.3
+
+- Add some additional useful links to the readme
+- Improve code quality by adding `readonly`/`const` modifiers, access modifiers, and function return types
+- Replace Monaco code editor with builtin Grafana `CodeEditor`
+- Simplify and add comments in the init source in the example
+
 ## 0.1.2
 
 - Fix the builtin example

@@ -11,11 +11,11 @@ This is an SVG panel plugin for Grafana 10.x+
 
 ## Why yet another SVG panel plugin?
 Yes, I definitely considered naming it YASPP...
-The existing SVG panel plugins all use the pre-7.0, angular panel API. I wanted to be able to use all of the features included in the new data API, as well as potential performance improvements from migrating to React.
+The existing SVG panel plugins all use the pre-7.0, Angular panel API. I wanted to be able to use all of the features included in the new data API, as well as potential performance improvements from migrating to React.
 I have also taken a slightly different direction/philosophy from some of the other SVG plugins.
 
 ## How does it work?
-- Users of this plugin are expected to have ready to animate SVG graphics created in an vector design package (See inkscape, Adobe Illustrator, or a web tool like draw.io).
+- Users of this plugin are expected to have ready to animate SVG graphics created in an vector design package (See [Inkscape](https://inkscape.org/), [Adobe Illustrator](https://www.adobe.com/products/illustrator.html), or a web tool like [draw.io](https://app.diagrams.net/)).
 - Users upload their existing SVG layouts into the plugin, then enable the "Click to Map" functionality, allowing you to easily map arbitrary group, path or text span IDs to named tokens.
 - Users then perform additional setup tasks in an init function that gets called each time the SVG panel is loaded.
 - Finally, users can access the elements of the SVG using the named tokens from within the render function, called whenever the panel receieves new data.
@@ -38,15 +38,14 @@ I have also taken a slightly different direction/philosophy from some of the oth
 The plugin makes available several interfaces to the SVG document and Grafana in the execution context of the Init and Render functions.
 Below are details for each one, remember you can always use the browser JS console and console.log() for more detail.
 
- - `svgmap` svgmap is a JS object where each mapped SVG.js Element is available as a property. Example: If you have an svgid 'rect4524' and you've provided the mapped name bigSquare, you would access the SVG.js methods on that element under svgmap.bigSquare
-   The svgmap is also included as `options.svgMappings`
- - `data` data is the raw object passed in to the panel for rendering by Grafana, it contains the DataFrames with all timeseries data selected by the active queries and time range. This interface is a bit complex and verbose, so we'll be adding helper methods to make common use cases simpler. [Grafana DataFrame Docs](https://grafana.com/developers/plugin-tools/introduction/data-frames)
- - `options` options is the raw panel options object manaeged by the dashboard to store panel state. It includes the source code for the svg and functions as well as any mappings or other config data. While you can manually access everything about the panel with this interface, the most common use case is to add properties to it from the Init function for the render function to use later. For instance, if you have a common animation in a panel, you might create a function for setting it up in Init, and attach it to the options object as a property, so that you can use it in the Render function and keep the logic flow clear.
- - `svgnode` is a reference to the SVG.js object
- - `context` is an initially empty object passed into the init function.  The init function may store
+- `svgmap` svgmap is a JS object where each mapped SVG.js Element is available as a property. Example: If you have an svgid 'rect4524' and you've provided the mapped name bigSquare, you would access the SVG.js methods on that element under `svgmap.bigSquare`. The svgmap is also included as `options.svgMappings`
+- `data` data is the raw object passed in to the panel for rendering by Grafana, it contains the DataFrames with all timeseries data selected by the active queries and time range. This interface is a bit complex and verbose, so we'll be adding helper methods to make common use cases simpler. [Grafana DataFrame Docs](https://grafana.com/developers/plugin-tools/introduction/data-frames)
+- `options` options is the raw panel options object manaeged by the dashboard to store panel state. It includes the source code for the svg and functions as well as any mappings or other config data. While you can manually access everything about the panel with this interface, the most common use case is to add properties to it from the Init function for the render function to use later. For instance, if you have a common animation in a panel, you might create a function for setting it up in Init, and attach it to the options object as a property, so that you can use it in the Render function and keep the logic flow clear.
+- `svgnode` is a reference to the SVG.js object
+- `context` is an initially empty object passed into the init function.  The init function may store
     any context or state that you to preserve between init and renderings.  This is not required, but
     for some advanced use cases - for example, svg generators in the init function - being able
-    to pass data from init to render (and between render invocations) can be useful. 
+    to pass data from init to render (and between render invocations) can be useful.
 
 The 'data' object contains both the query definition and the results of the query.  In the case of the
 user initialization function there likely won't be any results (yet), but the query definition should
@@ -59,7 +58,7 @@ likely be done in the update function as well.
 ```BASH
 npm i
 ```
-2. Build plugin in development mode or run in watch mode
+2. Build plugin in development (watch) mode
 ```BASH
 npm run dev
 ```
@@ -71,4 +70,5 @@ npm run build
 ## Learn more
 - [SVG.js](https://svgjs.dev) The Core SVG library made available for SVG DOM manipulations.
 - [Monaco Editor](https://microsoft.github.io/monaco-editor/) The editor used for user code.
-- [Grafana documentation](https://grafana.com/docs/)
+- [Grafana Docs](https://grafana.com/docs/) Documentation for users and developers.
+- [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Web/SVG) Documentation on the SVG standard itself.
