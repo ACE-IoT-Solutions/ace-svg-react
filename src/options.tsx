@@ -80,20 +80,20 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
 }
 
 class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
-  onChangeItem = (updatedMapping: SVGIDMapping, index: number): void => {
+  private readonly onChangeItem = (updatedMapping: SVGIDMapping, index: number): void => {
     const newMappings = [...this.props.value];
     newMappings[index] = updatedMapping;
     this.props.onChange(newMappings);
   };
-  
-  onAdd = (newMapping: SVGIDMapping): void => {
+
+  private readonly onAdd = (newMapping: SVGIDMapping): void => {
     if (newMapping.svgId !== '') {
       const newMappings = [...this.props.value, newMapping];
       this.props.onChange(newMappings);
     }
   };
-  
-  onDelete = (index: number): void => {
+
+  private readonly onDelete = (index: number): void => {
     const newMappings = [...this.props.value];
     newMappings.splice(index, 1);
     this.props.onChange(newMappings);
