@@ -4,7 +4,7 @@
   "description": "SVG Visualization Panel",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
-    "dev": "webpack -c ./.config/webpack/webpack.config.ts --env development",
+    "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
     "test": "jest --watch --onlyChanged",
     "test:ci": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
@@ -39,7 +39,6 @@
     "@types/node": "^20.8.7",
     "@types/react-router-dom": "^5.2.0",
     "@types/testing-library__jest-dom": "5.14.8",
-    "ajv": "^7.2.4",
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.3",
     "eslint-plugin-deprecation": "^2.0.0",
