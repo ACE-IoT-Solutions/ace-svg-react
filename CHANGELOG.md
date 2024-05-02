@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 0.1.4
 
 - Resolve `SvgMappings` event error (thanks, [@hyunki85](https://github.com/hyunki85)!)
 - Update dependencies and workflows
