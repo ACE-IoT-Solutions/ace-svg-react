@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.1.5
+
+- Fix dependabot issues with `ws` and `braces` dependencies
+
 ## 0.1.4
 
 - Resolve `SvgMappings` event error (thanks, [@hyunki85](https://github.com/hyunki85)!)
