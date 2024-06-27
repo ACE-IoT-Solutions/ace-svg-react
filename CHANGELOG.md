@@ -4,8 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## 0.1.5
 
-- Update dependencies
-- Fix dependabot issue with `ws` dependency
+- Fix dependabot issues with `ws` and `braces` dependencies
 
 ## 0.1.4
 
