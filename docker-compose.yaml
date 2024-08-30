@@ -1,17 +1,14 @@
-version: '3.0'
-
 services:
   grafana:
     user: root
     container_name: 'aceiot-svg-panel'
 
-    platform: 'linux/amd64'
     build:
       context: ./.config
       args:
         grafana_image: ${GRAFANA_IMAGE:-grafana-enterprise}
-        grafana_version: ${GRAFANA_VERSION:-10.3.3}
-        development: ${DEVELOPMENT:-true}
+        grafana_version: ${GRAFANA_VERSION:-11.2.0}
+        development: ${DEVELOPMENT:-false}
     ports:
       - 3000:3000/tcp
     volumes:
