@@ -28,7 +28,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
@@ -41,7 +41,12 @@ jobs:
       - name: Unit tests
         run: npm run test:ci
       - name: Build frontend
-        run: npm run build
+        run: |
+          if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            npm run build -- --profile --json stats.json
+          else
+            npm run build
+          fi
 
       - name: Check for backend
         id: check-for-backend
@@ -102,12 +107,26 @@ jobs:
           mv dist ${{ steps.metadata.outputs.plugin-id }}
           zip ${{ steps.metadata.outputs.archive }} ${{ steps.metadata.outputs.plugin-id }} -r
 
+      - name: Check plugin.json
+        run: |
+          docker run --pull=always \
+            -v $PWD/${{ steps.metadata.outputs.archive }}:/archive.zip \
+            grafana/plugin-validator-cli -analyzer=metadatavalid /archive.zip
+
       - name: Archive Build
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.metadata.outputs.plugin-id }}-${{ steps.metadata.outputs.plugin-version }}
           path: ${{ steps.metadata.outputs.plugin-id }}
           retention-days: 5
+
+      - name: Upload stats.json artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: main-branch-stats
+          path: stats.json
+          overwrite: true
 
   resolve-versions:
     name: Resolve e2e images
@@ -150,7 +169,7 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dev dependencies
