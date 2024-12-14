@@ -1,9 +1,9 @@
 ![ACE.SVG LOGO](https://github.com/ACE-IoT-Solutions/ace-svg-react/raw/main/src/img/logo-type.svg)
 # React powered SVG Panel Plugin for Grafana
 
-[![Latest version](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22aceiot-svg-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/aceiot-svg-panel/)
-[![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22aceiot-svg-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/aceiot-svg-panel/)
-[![CI](https://github.com/ACE-IoT-Solutions/ace-svg-react/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ACE-IoT-Solutions/ace-svg-react/actions/workflows/ci.yml)
+![Dynamic JSON Badge (Version)](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Faceiot-svg-panel&query=version&prefix=v&logo=grafana&label=Version&color=orange)
+![Dynamic JSON Badge (Downloads)](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Faceiot-svg-panel&query=downloads&logo=grafana&label=Downloads&color=orange)
+[![CI](https://github.com/ACE-IoT-Solutions/ace-svg-react/actions/workflows/ci.yml/badge.svg)](https://github.com/ACE-IoT-Solutions/ace-svg-react/actions/workflows/ci.yml)
 
 ![Screenshot of plugin](https://media.giphy.com/media/YRE4DxPYqy3XCR6rL4/giphy.gif)
 
