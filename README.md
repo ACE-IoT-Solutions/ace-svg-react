@@ -1,9 +1,9 @@
 ![ACE.SVG LOGO](https://github.com/ACE-IoT-Solutions/ace-svg-react/raw/main/src/img/logo-type.svg)
 # React powered SVG Panel Plugin for Grafana
 
-[![Latest version](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22aceiot-svg-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/aceiot-svg-panel/)
-[![Downloads](https://img.shields.io/badge/dynamic/json?logo=grafana&color=F47A20&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22aceiot-svg-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/aceiot-svg-panel/)
-[![CI](https://github.com/ACE-IoT-Solutions/ace-svg-react/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/ACE-IoT-Solutions/ace-svg-react/actions/workflows/ci.yml)
+![Dynamic JSON Badge (Version)](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Faceiot-svg-panel&query=version&prefix=v&logo=grafana&label=Version&color=orange)
+![Dynamic JSON Badge (Downloads)](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins%2Faceiot-svg-panel&query=downloads&logo=grafana&label=Downloads&color=orange)
+[![CI](https://github.com/ACE-IoT-Solutions/ace-svg-react/actions/workflows/ci.yml/badge.svg)](https://github.com/ACE-IoT-Solutions/ace-svg-react/actions/workflows/ci.yml)
 
 ![Screenshot of plugin](https://media.giphy.com/media/YRE4DxPYqy3XCR6rL4/giphy.gif)
 
@@ -53,6 +53,9 @@ be present.  This _may_ be useful for some initial rendering purposes, but cauti
 query may be updated (for example while the user is updating the query) so anything done here should
 likely be done in the update function as well.
 
+### Important Notes
+- An object's `style` property takes precedence over [`fill()`](https://svgjs.dev/docs/3.2/manipulating/#fill). This could be an issue when creating graphics in Inkscape, which uses the `style` property to assign the fill color. To fix this, you must remove the `fill:#FFFFFF;` part under that element's `style`.
+
 ## Getting started (development)
 1. Install dependencies
 ```BASH
@@ -66,9 +69,12 @@ npm run dev
 ```BASH
 npm run build
 ```
+4. Spin up a Grafana image in Docker
+```BASH
+npm run server
+```
 
 ## Learn more
 - [SVG.js](https://svgjs.dev) The Core SVG library made available for SVG DOM manipulations.
-- [Monaco Editor](https://microsoft.github.io/monaco-editor/) The editor used for user code.
 - [Grafana Docs](https://grafana.com/docs/) Documentation for users and developers.
 - [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Web/SVG) Documentation on the SVG standard itself.

@@ -2,10 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## 0.1.5
 
 - Fix dependabot issues with dependencies
     - `ws`, `braces`, `fast-loops`, `webpack`, `path-to-regexp`
+- Update node version to 22
+- Update dependency versions and workflows
+    - Adds new workflows to bundle stats and update plugin creation
+- Update broken badges on main README page
+- Add important note about CSS precedence
+- Add additional developer instructions
+- Remove deprecated `<HorizontalGroup>` and `<VerticalGroup>` classes, use `<Stack>` instead
+- Remove unused media files
 
 ## 0.1.4
 
