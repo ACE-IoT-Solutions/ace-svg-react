@@ -2,7 +2,7 @@ import React from 'react';
 import { PanelOptionsEditorBuilder, PanelOptionsEditorProps } from '@grafana/data';
 import { ACESVGOptions, SVGIDMapping } from './types';
 import { props_defaults } from 'examples';
-import { Button, HorizontalGroup, Input, Label, Tooltip, VerticalGroup, CodeEditor } from '@grafana/ui';
+import { Button, Stack, Input, Label, Tooltip, CodeEditor } from '@grafana/ui';
 
 interface SVGIDMappingProps {
   readonly value: SVGIDMapping;
@@ -21,7 +21,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
   public render(): React.JSX.Element {
     const { value, index, onChangeItem, onAdd, onDelete } = this.props;
     return (
-      <HorizontalGroup>
+      <Stack>
         <Label>SVG ID</Label>
         <Input
           type="text"
@@ -74,7 +74,7 @@ class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
             </Button>
           </Tooltip>
         )}
-      </HorizontalGroup>
+      </Stack>
     );
   }
 }
@@ -102,8 +102,8 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
   public render(): React.JSX.Element {
     const svgMappings = this.props.value;
     return (
-      <VerticalGroup>
-        <HorizontalGroup>
+      <Stack direction={'column'}>
+        <Stack>
           <Tooltip content="Clear all SVG Element ID to svgmap property mappings" theme="info">
             <Button
               variant="destructive"
@@ -117,7 +117,7 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
             </Button>
           </Tooltip>
           <SvgMapping value={{ svgId: '', mappedName: '' }} onAdd={this.onAdd} />
-        </HorizontalGroup>
+        </Stack>
         {svgMappings.map((currentMapping: SVGIDMapping, index: number) => {
           return (
             <SvgMapping
@@ -129,7 +129,7 @@ class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMappi
             />
           );
         })}
-      </VerticalGroup>
+      </Stack>
     );
   }
 }
