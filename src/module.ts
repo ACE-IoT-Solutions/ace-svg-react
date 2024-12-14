@@ -1,20 +1,14 @@
 import { PanelPlugin } from '@grafana/data';
-import { ACESVGOptions } from './types';
-import { SimplePanel } from './components/Panel';
-import { CodeEditor } from '@grafana/ui';
+import { SimpleOptions } from './types';
+import { SimplePanel } from './components/SimplePanel';
 
-export const plugin = new PanelPlugin<ACESVGOptions>(SimplePanel).setPanelOptions((builder) => {
+export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
   return builder
-    .addCustomEditor({
-      category: ['SVG Document'],
-      path: 'svgSource',
-      name: 'SVG Source',
-      description: 'Editor for SVG Document, while small tweaks can be made here, we recommend using a dedicated graphical SVG Editor and simply pasting the resulting XML here.',
-      id: 'svgSource',
-      defaultValue: '',
-      editor(props) {
-        return <CodeEditor/>;
-      },
+    .addTextInput({
+      path: 'text',
+      name: 'Simple text option',
+      description: 'Description of panel option',
+      defaultValue: 'Default value of text input option',
     })
     .addBooleanSwitch({
       path: 'showSeriesCount',
