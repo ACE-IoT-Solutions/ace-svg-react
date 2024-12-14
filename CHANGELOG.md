@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.1.5
+## Unreleased
 
-- Fix dependabot issues with `ws` and `braces` dependencies
+- Fix dependabot issues with dependencies
+    - `ws`, `braces`, `fast-loops`, `webpack`, `path-to-regexp`
 
 ## 0.1.4
 
