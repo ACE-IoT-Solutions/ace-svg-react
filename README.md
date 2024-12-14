@@ -53,6 +53,9 @@ be present.  This _may_ be useful for some initial rendering purposes, but cauti
 query may be updated (for example while the user is updating the query) so anything done here should
 likely be done in the update function as well.
 
+### Important Notes
+- An object's `style` property takes precedence over [`fill()`](https://svgjs.dev/docs/3.2/manipulating/#fill). This could be an issue when creating graphics in Inkscape, which uses the `style` property to assign the fill color. To fix this, you must remove the `fill:#FFFFFF;` part under that element's `style`.
+
 ## Getting started (development)
 1. Install dependencies
 ```BASH
@@ -66,9 +69,12 @@ npm run dev
 ```BASH
 npm run build
 ```
+4. Spin up a Grafana image in Docker
+```BASH
+npm run server
+```
 
 ## Learn more
 - [SVG.js](https://svgjs.dev) The Core SVG library made available for SVG DOM manipulations.
-- [Monaco Editor](https://microsoft.github.io/monaco-editor/) The editor used for user code.
 - [Grafana Docs](https://grafana.com/docs/) Documentation for users and developers.
 - [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Web/SVG) Documentation on the SVG standard itself.
