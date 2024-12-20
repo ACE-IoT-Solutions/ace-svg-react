@@ -747,6 +747,7 @@ export const props_defaults: ACESVGDefaults = {
 >
     `,
   initSource: `// example of creating a function in the init script
+console.log('initializing');
 options.animateLogo = (svgmap, data) => {
     // extract the data series values and store the min/max
     let values = data.series[0].fields[1].values,

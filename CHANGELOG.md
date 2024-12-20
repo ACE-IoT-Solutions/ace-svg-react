@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 - Update broken badges on main README page
 - Add important note about CSS precedence
 - Add additional developer instructions
+- Move `console.log` into **User JS Init Code**
+- Split README into two files: "Grafana marketplace" and "for developers"
 - Remove deprecated `<HorizontalGroup>` and `<VerticalGroup>` classes, use `<Stack>` instead
 - Remove unused media files
 
