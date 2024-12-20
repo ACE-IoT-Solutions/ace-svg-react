@@ -191,7 +191,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
         });
       }
       if (!this.state.initialized) {
-        console.log('initializing');
         const svgNode = SVG(element);
         svgNode.clear();
         svgNode.svg(this.props.options.svgSource);
