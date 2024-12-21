@@ -6,10 +6,10 @@ import { CodeEditor } from '@grafana/ui';
  * Settings for the source code editor.
  */
 export interface SourceCodeSettings {
-    /**
-     * The language for syntax highlighting.
-     */
-    readonly language: string;
+  /**
+   * The language for syntax highlighting.
+   */
+  readonly language: string;
 };
 
 /**
