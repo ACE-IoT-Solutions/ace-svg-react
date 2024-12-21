@@ -20,4 +20,4 @@ type SourceCodeProps = StandardEditorProps<string, SourceCodeSettings>;
 /**
  * Defines the source code editor as a React functional component.
  */
-export const SourceCode: React.FC<SourceCodeProps> = (props) => <CodeEditor value={props.value} language={props.item.settings?.language ?? ''} onBlur={props.onChange} height={'10rem'} showLineNumbers={true} />;
+export const SourceCode: React.FC<SourceCodeProps> = (props) => <CodeEditor value={props.value} language={props.item.settings?.language ?? ''} onBlur={props.onChange} height={'20rem'} showLineNumbers={true} showMiniMap={true} monacoOptions={{ scrollbar: { alwaysConsumeMouseWheel: true } }} />;
