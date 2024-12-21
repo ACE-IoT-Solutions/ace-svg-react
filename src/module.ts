@@ -3,7 +3,7 @@ import { SimpleOptions } from './types';
 import { SimplePanel } from './components/SimplePanel';
 import { SourceCode, SourceCodeSettings } from 'components/CodeEditor';
 
-export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).setPanelOptions((builder) => {
+export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).useFieldConfig().setPanelOptions((builder) => {
   return builder
     .addCustomEditor<SourceCodeSettings, string>({
       id: 'svgSource',
