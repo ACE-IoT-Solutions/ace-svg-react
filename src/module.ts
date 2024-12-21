@@ -2,6 +2,7 @@ import { PanelPlugin } from '@grafana/data';
 import { ACESVGOptions } from './types';
 import { ACESVGPanel } from './components/ACESVGPanel';
 import { SourceCode, SourceCodeSettings } from './components/CodeEditor';
+import { SvgMappings } from './components/SVGMappings';
 import { defaults } from './defaults';
 
 export const plugin = new PanelPlugin<ACESVGOptions>(ACESVGPanel).useFieldConfig().setPanelOptions((builder) => {
@@ -55,5 +56,14 @@ export const plugin = new PanelPlugin<ACESVGOptions>(ACESVGPanel).useFieldConfig
       description: 'When activated, clicking an element in the panel will attempt to map the clicked element or its nearest parent element with an ID assigned.',
       category: ['SVG Mapping'],
       defaultValue: defaults.captureMappings,
+    })
+    .addCustomEditor({
+      id: 'svgMappings',
+      path: 'svgMappings',
+      name: 'SVG Mappings',
+      description: '',
+      category: ['SVG Mapping'],
+      defaultValue: defaults.svgMappings,
+      editor: SvgMappings,
     });
 });
