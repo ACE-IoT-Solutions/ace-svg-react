@@ -60,6 +60,7 @@ likely be done in the update function as well.
 - [SVG.js](https://svgjs.dev) The Core SVG library made available for SVG DOM manipulations.
 - [Grafana Docs](https://grafana.com/docs/) Documentation for users and developers.
 - [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Web/SVG) Documentation on the SVG standard itself.
+- [ACE IoT Solutions](https://aceiotsolutions.com/) About the developers.
 
 ## Plugin metadata
 
