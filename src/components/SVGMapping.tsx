@@ -10,62 +10,54 @@ interface SVGIDMappingProps {
   readonly onDelete?: (a: number) => void;
 }
 
-export class SvgMapping extends React.PureComponent<SVGIDMappingProps> {
-  constructor(props: SVGIDMappingProps) {
-    super(props);
-    this.state = { ...props.value };
-  }
-
+export class SvgMapping extends React.PureComponent<SVGIDMappingProps, SVGIDMapping> {
   public render(): React.JSX.Element {
-    const { value, index, onChangeItem, onAdd, onDelete } = this.props;
     return (
       <Stack>
         <Label>SVG ID</Label>
         <Input
           type="text"
           name="svgId"
-          defaultValue={value.svgId}
-          // css={config.theme}
+          defaultValue={this.props.value.svgId}
           onBlur={(e) => {
-            const svgId = e.currentTarget.value;
+            const svgId = e.target.value;
             this.setState({ svgId: svgId });
-            onChangeItem && index && onChangeItem({ ...value, svgId: svgId }, index);
+            this.props.onChangeItem && this.props.index && this.props.onChangeItem({ ...this.props.value, svgId: svgId }, this.props.index);
           }}
         />
         <Label>Mapped Name</Label>
         <Input
           type="text"
           name="mappedName"
-          defaultValue={value.mappedName}
-          // css={config.theme}
+          defaultValue={this.props.value.mappedName}
           onBlur={(e) => {
             const mappedName = e.currentTarget.value;
             this.setState({ mappedName: mappedName });
-            onChangeItem && index && onChangeItem({ ...value, mappedName: mappedName }, index);
+            this.props.onChangeItem && this.props.index && this.props.onChangeItem({ ...this.props.value, mappedName: mappedName }, this.props.index);
           }}
         />
-        {value.svgId && onDelete && index !== undefined && (
+        {this.props.value.svgId && this.props.onDelete && this.props.index !== undefined && (
           <Tooltip content="Delete this mapping" theme={'info'}>
             <Button
               variant="destructive"
               icon="trash-alt"
               size="sm"
               onClick={() => {
-                onDelete(index);
+                this.props.onDelete!(this.props.index!);
               }}
             >
               Remove
             </Button>
           </Tooltip>
         )}
-        {!value.svgId && onAdd && (
+        {!this.props.value.svgId && this.props.onAdd && (
           <Tooltip content="Add a new SVG Element ID to svgmap property mapping manually" theme={'info'}>
             <Button
               variant="secondary"
               size="sm"
               icon="plus-circle"
               onClick={() => {
-                onAdd(this.state as SVGIDMapping);
+                this.props.onAdd!(this.state as SVGIDMapping);
               }}
             >
               Add
