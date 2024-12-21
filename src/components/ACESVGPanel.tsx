@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { PanelProps } from '@grafana/data';
-import { ACESVGOptions, SVGIDMapping } from 'types';
 import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
+import { ACESVGOptions, SVGIDMapping } from 'types';
 
 interface MappedElements {
   [key: string]: SVGElement | SVGDom;
