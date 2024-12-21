@@ -1,9 +1,9 @@
 import { PanelPlugin } from '@grafana/data';
-import { SimpleOptions } from './types';
-import { SimplePanel } from './components/SimplePanel';
+import { ACESVGOptions } from './types';
+import { ACESVGPanel } from './components/ACESVGPanel';
 import { SourceCode, SourceCodeSettings } from 'components/CodeEditor';
 
-export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).useFieldConfig().setPanelOptions((builder) => {
+export const plugin = new PanelPlugin<ACESVGOptions>(ACESVGPanel).useFieldConfig().setPanelOptions((builder) => {
   return builder
     .addCustomEditor<SourceCodeSettings, string>({
       id: 'svgSource',
@@ -37,5 +37,19 @@ export const plugin = new PanelPlugin<SimpleOptions>(SimplePanel).useFieldConfig
         language: 'javascript',
       },
       editor: SourceCode,
+    })
+    .addBooleanSwitch({
+      path: 'addAllIDs',
+      name: 'Add all SVG element IDs',
+      description: 'Parse the SVG Document for Elements with IDs assigned and automatically add them to the mapping list.',
+      category: ['SVG Mapping'],
+      defaultValue: false,
+    })
+    .addBooleanSwitch({
+      path: 'captureMappings',
+      name: 'Enable SVG Mapping on Click',
+      description: 'When activated, clicking an element in the panel will attempt to map the clicked element or its nearest parent element with an ID assigned.',
+      category: ['SVG Mapping'],
+      defaultValue: false,
     });
 });
