@@ -2,7 +2,7 @@ import { PanelPlugin } from '@grafana/data';
 import { ACESVGOptions } from 'types';
 import { defaults } from 'defaults';
 import { ACESVGPanel } from 'components/ACESVGPanel';
-import { SourceCode, SourceCodeSettings } from 'components/CodeEditor';
+import { SourceCode, SourceCodeSettings } from 'components/SourceCode';
 import { SvgMappings } from 'components/SVGMappings';
 
 export const plugin = new PanelPlugin<ACESVGOptions>(ACESVGPanel).useFieldConfig().setPanelOptions((builder) => {
