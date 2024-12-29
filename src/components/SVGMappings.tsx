@@ -14,13 +14,11 @@ export class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVG
   }
 
   private onChange(index: number, mapping: SVGIDMapping): void {
-    console.log('Changing index ' + index + ' to ' + JSON.stringify(mapping));
     this.mappings[index] = mapping;
     this.props.onChange(this.mappings);
   }
 
   private onDelete(index: number): void {
-    console.log('Deleting index ' + index + ' was ' + JSON.stringify(this.mappings[index]));
     this.mappings.splice(index, 1);
     this.props.onChange(this.mappings);
   }
