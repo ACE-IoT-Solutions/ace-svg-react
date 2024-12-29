@@ -418,7 +418,7 @@ options.animateLogo = (svgmap, data) => {
         min = Math.min(...values),
         max = Math.max(...values),
         iconHeight = svgmap.iconbg.height();
-    // use SVG.js for animation: https://svgjs.dev/docs/3.0/
+    // use SVG.js for animation: https://svgjs.dev/docs/3.2/
     [svgmap.barOne, svgmap.barTwo, svgmap.barThree, svgmap.barFour].forEach(elem => {
         let x = elem.x(),
             y = iconHeight * (values[0] - min) / (max - min) - elem.height() / 2;
