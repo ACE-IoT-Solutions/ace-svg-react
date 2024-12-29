@@ -8,6 +8,9 @@ interface SVGMappingAddProps {
   readonly onClear: () => void;
 }
 
+/**
+ * The React Component for adding new or clearing all SVG mappings.
+ */
 export class SVGMappingAdd extends React.PureComponent<SVGMappingAddProps, SVGIDMapping> {
   public render(): React.JSX.Element {
     return (

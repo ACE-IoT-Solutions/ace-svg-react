@@ -7,6 +7,9 @@ interface SVGMappingProps {
   readonly onChange: (mapping: SVGIDMapping) => void;
 }
 
+/**
+ * The React Component containing two text boxes for the SVG ID and mapped name.
+ */
 export class SvgMapping extends React.PureComponent<SVGMappingProps, SVGIDMapping> {
   public render(): React.JSX.Element {
     return (

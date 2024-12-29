@@ -5,6 +5,9 @@ import { SVGIDMapping } from 'types';
 import { SVGMappingAdd } from './SVGMappingAdd';
 import { SVGMappingItem } from './SVGMappingItem';
 
+/**
+ * The React Component for the entire list of SVG mappings.
+ */
 export class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
   private readonly mappings: SVGIDMapping[] = this.props.value;
 

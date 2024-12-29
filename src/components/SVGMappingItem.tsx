@@ -9,6 +9,9 @@ interface SVGMappingItemProps {
   readonly onDelete: () => void;
 }
 
+/**
+ * The React Component for a single SVG mapping.
+ */
 export class SVGMappingItem extends React.PureComponent<SVGMappingItemProps> {
   public render(): React.JSX.Element {
     return (
