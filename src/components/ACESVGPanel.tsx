@@ -29,13 +29,12 @@ interface TextMappedElement extends SVGElement {
 
 SVGExtend(SVGElement, {
   openOnClick: function (this: SVGElement, url: string) {
-    return window.open(url);
+    this.click(() => window.open(url));
   },
   animateContRotate: function (this: SVGElement, speed: number) {
     return (
       this.animate(speed)
         .ease('-')
-        //@ts-ignore
         .rotate(360)
         .loop()
     );
