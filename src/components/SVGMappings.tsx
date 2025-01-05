@@ -35,7 +35,7 @@ export class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVG
     return (
       <Stack direction={'column'}>
         <SVGMappingAdd onAdd={(mapping) => this.onAdd(mapping)} onClear={() => this.onClear()} />
-        {this.mappings.map((mapping, i) => <SVGMappingItem key={JSON.stringify(mapping)} value={mapping} onChange={(mapping) => this.onChange(i, mapping)} onDelete={() => this.onDelete(i)} />)}
+        {this.props.value.map((mapping, i) => <SVGMappingItem key={JSON.stringify(mapping)} value={mapping} onChange={(mapping) => this.onChange(i, mapping)} onDelete={() => this.onDelete(i)} />)}
       </Stack>
     );
   }
