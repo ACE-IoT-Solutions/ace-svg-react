@@ -12,6 +12,15 @@ interface SVGMappingAddProps {
  * The React Component for adding new or clearing all SVG mappings.
  */
 export class SVGMappingAdd extends React.PureComponent<SVGMappingAddProps, SVGIDMapping> {
+  /**
+   * Check to see if the new mapping is valid.
+   */
+  private canAdd(): boolean {
+    return !!this.state && !!this.state.svgId && !!this.state.mappedName;
+  }
+  /**
+   * Render this component.
+   */
   public render(): React.JSX.Element {
     return (
       <Stack>
@@ -20,7 +29,7 @@ export class SVGMappingAdd extends React.PureComponent<SVGMappingAddProps, SVGID
         </Tooltip>
         <SvgMapping value={{ svgId: '', mappedName: '' }} onChange={(mapping) => this.setState(mapping)} />
         <Tooltip content={'Add this new SVG mapping to the list.'}>
-          <Button icon={'plus-circle'} onClick={() => this.props.onAdd(this.state)} />
+          <Button icon={'plus-circle'} onClick={() => this.canAdd() && this.props.onAdd(this.state)} />
         </Tooltip>
       </Stack>
     );

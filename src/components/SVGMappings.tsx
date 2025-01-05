@@ -16,12 +16,16 @@ export class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVG
     this.props.onChange([...this.props.value, mapping]);
   }
   /**
-   * Updates an existing SVG mapping.
+   * Updates an existing SVG mapping, or delete it if empty.
    */
   private onChange(index: number, mapping: SVGIDMapping): void {
     const mappings: SVGIDMapping[] = [...this.props.value];
-    mappings[index] = mapping;
-    this.props.onChange(mappings);
+    if (!!mapping.svgId || !!mapping.mappedName) {
+      mappings[index] = mapping;
+      this.props.onChange(mappings);
+    } else {
+      this.onDelete(index);
+    }
   }
   /**
    * Deletes an existing SVG mapping.
