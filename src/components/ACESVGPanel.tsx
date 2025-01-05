@@ -91,6 +91,7 @@ SVGExtend(SVGDom, {
 });
 
 export class ACESVGPanel extends PureComponent<Props, PanelState> {
+  private readonly STOP_MAPPING_ID_TAG: string = 'mapping-stop';
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -149,30 +150,29 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   }
 
   private mappingClickHandler(event: React.MouseEvent<HTMLElement, MouseEvent>): void {
-    if (event.target) {
-      let clicked = event.target as Element;
-      let loopCount = 0;
-      const svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
-      if (clicked.id) {
-        while (clicked.id === '') {
-          loopCount++;
-          if (loopCount > 20) {
-            return;
-          }
-          clicked = clicked.parentNode as Element;
-        }
-        for (let i = 0; i < svgMappings.length; i++) {
-          if (svgMappings[i].svgId === clicked.id) {
-            return;
-          }
-        }
-        svgMappings.push({ svgId: clicked.id, mappedName: '' });
-        this.setState({ svgMappings: [...svgMappings], initialized: false });
-        this.props.options.svgMappings = [...svgMappings];
-        this.props.onOptionsChange(this.props.options);
-        this.forceUpdate();
+    let clicked: Element = event.target as Element,
+      loopCount = 0;
+    const svgMappings: SVGIDMapping[] = [...this.props.options.svgMappings];
+    while (!clicked.id) {
+      loopCount++;
+      if (loopCount > 20 || !clicked.parentElement) {
+        return; // Could not find element
+      }
+      clicked = clicked.parentNode as Element;
+      if (clicked.id === this.STOP_MAPPING_ID_TAG) {
+        return; // Reached the base <div> element
       }
     }
+    for (const mapping of svgMappings) {
+      if (mapping.svgId === clicked.id) {
+        return; // Mapping already exists
+      }
+    }
+    svgMappings.push({ svgId: clicked.id, mappedName: '' });
+    this.setState({ svgMappings: [...svgMappings], initialized: false });
+    this.props.options.svgMappings = [...svgMappings];
+    this.props.onOptionsChange(this.props.options);
+    this.forceUpdate();
   }
 
   private renderSVG(element: SVGSVGElement | SVGDom | null): string | null {
@@ -254,6 +254,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   public render(): React.JSX.Element {
     return (
       <div
+        id={this.STOP_MAPPING_ID_TAG}
         onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
       >
         <svg
