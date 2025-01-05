@@ -61,7 +61,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(ACESVGPanel).useFieldConfig
       id: 'svgMappings',
       path: 'svgMappings',
       name: 'SVG Mappings',
-      description: '',
+      description: 'The SVG ID should match an ID attribute value of an element in the SVG document, the element will be attached to the "svgmap" object in the user code execution contexts as a property using the mapped name provided below.',
       category: ['SVG Mapping'],
       defaultValue: defaults.svgMappings,
       editor: SvgMappings,
