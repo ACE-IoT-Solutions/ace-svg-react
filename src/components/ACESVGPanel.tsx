@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { PanelProps } from '@grafana/data';
 import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
 import { ACESVGOptions, SVGIDMapping } from 'types';
@@ -90,7 +90,7 @@ SVGExtend(SVGDom, {
   },
 });
 
-export class ACESVGPanel extends PureComponent<Props, PanelState> {
+export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   private readonly STOP_MAPPING_ID_TAG: string = 'mapping-stop';
   constructor(props: Props) {
     super(props);
@@ -109,16 +109,18 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
   }
 
   private initializeMappings(svgNode: SVGElement | SVGDom): void {
-    const svgMappings = this.props.options.svgMappings,
-      currentElements: MappedElements = {};
-    for (let i = 0; i < svgMappings.length; i++) {
-      if (svgMappings[i].mappedName !== '') {
-        currentElements[this.props.options.svgMappings[i].mappedName] = svgNode.findOne(
-          `#${this.props.options.svgMappings[i].svgId}`
-        )!;
+    const mappedElements: MappedElements = {};
+    for (const mapping of this.props.options.svgMappings) {
+      if (mapping.svgId) {
+        const found: SVGDom | null = svgNode.findOne('#' + mapping.svgId);
+        if (found) {
+          mappedElements[mapping.mappedName || mapping.svgId] = found;
+        } else {
+          console.error('No SVG element found with ID: ' + mapping.svgId);
+        }
       }
     }
-    this.setState({ mappedElements: currentElements });
+    this.setState({ mappedElements: mappedElements });
   }
 
   private mapAllIDs(svgNode: SVGDom): void {
@@ -255,7 +257,7 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
     return (
       <div
         id={this.STOP_MAPPING_ID_TAG}
-        onClick={this.props.options.captureMappings ? this.mappingClickHandler.bind(this) : undefined}
+        onClick={this.props.options.captureMappings ? (e) => this.mappingClickHandler(e) : undefined}
       >
         <svg
           style={{
