@@ -20,7 +20,6 @@ interface PanelState {
   readonly eventFunctionSource: string;
   readonly eventFunction: Function | null;
   readonly initialized: boolean;
-  readonly context: any;
 }
 
 interface TextMappedElement extends SVGElement {
@@ -105,7 +104,6 @@ export class ACESVGPanel extends PureComponent<Props, PanelState> {
       eventFunctionSource: '',
       eventFunction: null,
       initialized: false,
-      context: {},
     };
   }
 
