@@ -9,26 +9,25 @@ import { SVGMappingItem } from './SVGMappingItem';
  * The React Component for the entire list of SVG mappings.
  */
 export class SvgMappings extends React.PureComponent<PanelOptionsEditorProps<SVGIDMapping[]>> {
-  private readonly mappings: SVGIDMapping[] = this.props.value;
 
   private onAdd(mapping: SVGIDMapping): void {
-    this.mappings.push(mapping);
-    this.props.onChange(this.mappings);
+    this.props.onChange([...this.props.value, mapping]);
   }
 
   private onChange(index: number, mapping: SVGIDMapping): void {
-    this.mappings[index] = mapping;
-    this.props.onChange(this.mappings);
+    const mappings: SVGIDMapping[] = [...this.props.value];
+    mappings[index] = mapping;
+    this.props.onChange(mappings);
   }
 
   private onDelete(index: number): void {
-    this.mappings.splice(index, 1);
-    this.props.onChange(this.mappings);
+    const mappings: SVGIDMapping[] = [...this.props.value];
+    mappings.splice(index, 1);
+    this.props.onChange(mappings);
   }
 
   private onClear(): void {
-    this.mappings.length = 0;
-    this.props.onChange(this.mappings);
+    this.props.onChange([]);
   }
 
   public render(): React.JSX.Element {
