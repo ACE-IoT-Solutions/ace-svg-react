@@ -128,20 +128,16 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
     const nodeFilterID: NodeFilter = {
       acceptNode(node: Element) {
         if (node.id) {
-          if (node.id !== '') {
-            return NodeFilter.FILTER_ACCEPT;
-          }
+          return NodeFilter.FILTER_ACCEPT;
         }
-        return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_SKIP;
       },
     };
-    const svgWalker = document.createTreeWalker(svgNode.node, NodeFilter.SHOW_ALL, nodeFilterID);
+    const svgWalker: TreeWalker = document.createTreeWalker(svgNode.node, NodeFilter.SHOW_ELEMENT, nodeFilterID);
     let currentNode: Element | null = svgWalker.currentNode as Element;
     while (currentNode) {
-      if (currentNode && currentNode.id) {
-        if (svgMappings.filter((mapping) => (currentNode ? mapping.svgId === currentNode.id : false)).length === 0) {
-          svgMappings.push({ svgId: currentNode.id, mappedName: '' });
-        }
+      if (currentNode.id && !svgMappings.map(mapping => mapping.svgId).includes(currentNode.id)) {
+        svgMappings.push({ svgId: currentNode.id, mappedName: '' });
       }
       currentNode = svgWalker.nextNode() as Element;
     }
