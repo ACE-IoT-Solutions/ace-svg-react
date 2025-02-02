@@ -4,22 +4,15 @@ import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SV
 import { ACESVGOptions, SVGIDMapping } from 'types';
 
 interface MappedElements {
-  [key: string]: SVGElement | SVGDom;
+  [key: string]: SVGDom;
 }
 
 interface Props extends PanelProps<ACESVGOptions> { }
 
 interface PanelState {
-  readonly addAllIDs: boolean;
-  readonly svgNode: SVGElement | SVGDom | null;
-  readonly svgSource: string | null;
-  readonly mappedElements: MappedElements | null;
-  readonly svgMappings: SVGIDMapping[];
-  readonly initFunctionSource: string;
-  readonly initFunction: Function | null;
-  readonly eventFunctionSource: string;
-  readonly eventFunction: Function | null;
-  readonly initialized: boolean;
+  readonly svgNode: SVGElement | SVGDom | null; // Passed into user JS functions as `svgnode`
+  readonly mappedElements: MappedElements | null; // Passed into user JS functions as `svgmap`
+  readonly initialized: boolean; // Determines whether or not this panel has been initialized
 }
 
 interface TextMappedElement extends SVGElement {
@@ -95,15 +88,8 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      addAllIDs: false,
       svgNode: null,
-      svgSource: null,
-      svgMappings: [],
       mappedElements: null,
-      initFunctionSource: '',
-      initFunction: null,
-      eventFunctionSource: '',
-      eventFunction: null,
       initialized: false,
     };
   }
@@ -141,7 +127,7 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       }
       currentNode = svgWalker.nextNode() as Element;
     }
-    this.setState({ svgMappings: [...svgMappings], initialized: false });
+    this.setState({ initialized: false });
     this.props.options.svgMappings = [...svgMappings];
     this.props.onOptionsChange(this.props.options);
     this.forceUpdate();
@@ -167,86 +153,74 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       }
     }
     svgMappings.push({ svgId: clicked.id, mappedName: '' });
-    this.setState({ svgMappings: [...svgMappings], initialized: false });
+    this.setState({ initialized: false });
     this.props.options.svgMappings = [...svgMappings];
     this.props.onOptionsChange(this.props.options);
     this.forceUpdate();
   }
 
-  private renderSVG(element: SVGSVGElement | SVGDom | null): string | null {
-    if (element) {
-      if (
-        this.props.options.initSource !== this.state.initFunctionSource ||
-        this.state.addAllIDs !== this.props.options.addAllIDs
-      ) {
-        this.setState({
-          initFunctionSource: this.props.options.initSource,
-          addAllIDs: this.props.options.addAllIDs,
-          initialized: false,
-        });
+  private renderSVG(element: SVGSVGElement | null): string | null {
+    if (!this.state.initialized && element) {
+      const svgNode = SVG(element);
+      svgNode.clear();
+      svgNode.svg(this.props.options.svgSource);
+      svgNode.size(this.props.width, this.props.height);
+      if (this.props.options.addAllIDs) {
+        this.mapAllIDs(svgNode);
       }
-      if (!this.state.initialized) {
-        const svgNode = SVG(element);
-        svgNode.clear();
-        svgNode.svg(this.props.options.svgSource);
-        svgNode.size(this.props.width, this.props.height);
-        if (this.props.options.addAllIDs) {
-          this.mapAllIDs(svgNode);
-        }
-        this.initializeMappings(svgNode);
-        this.setState({ svgNode: svgNode });
+      this.initializeMappings(svgNode);
+      this.setState({ svgNode: svgNode });
 
-        try {
-          const initFunction = Function(
+      try {
+        if (this.state.mappedElements) {
+          Function(
+            'props',
             'data',
             'options',
             'svgnode',
             'svgmap',
             'context',
             this.props.replaceVariables(this.props.options.initSource)
-          );
-          this.setState({ initFunction });
-          if (this.state.mappedElements && initFunction) {
-            initFunction(this.props.data, this.props.options, this.state.svgNode, this.state.mappedElements);
-            this.setState({ initialized: true });
-          }
-        } catch (e) {
-          this.setState({ initialized: true });
-          console.error('User init code failed:', e);
-        }
-      }
-
-      try {
-        let eventFunction = this.state.eventFunction;
-        if (this.props.options.eventSource !== this.state.eventFunctionSource) {
-          const eventFunctionSource = this.props.options.eventSource;
-          eventFunction = Function(
-            'data',
-            'options',
-            'svgnode',
-            'svgmap',
-            'context',
-            this.props.replaceVariables(eventFunctionSource)
-          );
-          this.setState({ eventFunctionSource: eventFunctionSource, eventFunction: eventFunction, initialized: false });
-        }
-        if (this.state.mappedElements && eventFunction) {
-          eventFunction(
+          )(
+            this.props,
             this.props.data,
             this.props.options,
             this.state.svgNode,
             this.state.mappedElements,
             this.context
           );
+          this.setState({ initialized: true });
         }
+      } catch (e) {
+        this.setState({ initialized: true });
+        console.error('User init code failed:', e);
+      }
+    }
+
+    if (this.state.initialized && element && this.state.mappedElements) {
+      try {
+        Function(
+          'props',
+          'data',
+          'options',
+          'svgnode',
+          'svgmap',
+          'context',
+          this.props.replaceVariables(this.props.options.eventSource)
+        )(
+          this.props,
+          this.props.data,
+          this.props.options,
+          this.state.svgNode,
+          this.state.mappedElements,
+          this.context
+        );
       } catch (e) {
         console.error('User event code failed:', e);
       }
-
-      return this.state.svgNode ? this.state.svgNode.svg() : null;
-    } else {
-      return null;
     }
+
+    return this.state.svgNode ? this.state.svgNode.svg() : null;
   }
 
   public render(): React.JSX.Element {
