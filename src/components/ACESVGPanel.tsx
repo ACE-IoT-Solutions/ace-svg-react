@@ -1,13 +1,16 @@
 import React from 'react';
-import { PanelProps } from '@grafana/data';
+import { GrafanaTheme2, PanelProps } from '@grafana/data';
 import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
 import { ACESVGOptions, SVGIDMapping } from 'types';
+import { useTheme2 } from '@grafana/ui';
 
 interface MappedElements {
   [key: string]: SVGDom;
 }
 
-interface Props extends PanelProps<ACESVGOptions> { }
+interface Props extends PanelProps<ACESVGOptions> {
+  readonly theme?: GrafanaTheme2;
+}
 
 interface PanelState {
   readonly svgNode: SVGElement | SVGDom | null; // Passed into user JS functions as `svgnode`
@@ -83,7 +86,7 @@ SVGExtend(SVGDom, {
   },
 });
 
-export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
+class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   private readonly STOP_MAPPING_ID_TAG: string = 'mapping-stop';
   constructor(props: Props) {
     super(props);
@@ -175,6 +178,7 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
         if (this.state.mappedElements) {
           Function(
             'props',
+            'theme',
             'data',
             'options',
             'svgnode',
@@ -183,6 +187,7 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
             this.props.replaceVariables(this.props.options.initSource)
           )(
             this.props,
+            this.props.theme,
             this.props.data,
             this.props.options,
             this.state.svgNode,
@@ -201,6 +206,7 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       try {
         Function(
           'props',
+          'theme',
           'data',
           'options',
           'svgnode',
@@ -209,6 +215,7 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
           this.props.replaceVariables(this.props.options.eventSource)
         )(
           this.props,
+          this.props.theme,
           this.props.data,
           this.props.options,
           this.state.svgNode,
@@ -241,3 +248,9 @@ export class ACESVGPanel extends React.PureComponent<Props, PanelState> {
     );
   }
 }
+
+/**
+ * Functional component wrapper for `ACESVGPanel`, allowing the use of
+ * the `useTheme2()` React hook, which is not allowed in class components.
+ */
+export const Panel: React.FC<Props> = (props) => <ACESVGPanel {...props} theme={useTheme2()} />;
