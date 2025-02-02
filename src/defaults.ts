@@ -4,6 +4,7 @@ import { ACESVGOptions } from 'types';
  * Default panel editor options.
  */
 export const defaults: ACESVGOptions = {
+  forceReinit: false,
   captureMappings: false,
   addAllIDs: false,
   svgSource: `<?xml version="1.0" encoding="UTF-8" standalone="no"?>

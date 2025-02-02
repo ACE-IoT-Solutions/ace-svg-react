@@ -31,6 +31,13 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       },
       editor: SourceCode,
     })
+    .addBooleanSwitch({
+      path: 'forceReinit',
+      name: 'Force Reinitialization',
+      description: 'Run the init script before the render code, on every render. This should be only used during debugging.',
+      category: ['User JS Initialization'],
+      defaultValue: defaults.forceReinit,
+    })
     .addCustomEditor<SourceCodeSettings, string>({
       id: 'eventSource',
       path: 'eventSource',

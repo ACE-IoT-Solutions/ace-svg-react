@@ -16,6 +16,10 @@ export interface SVGIDMapping {
  */
 export interface ACESVGOptions {
   /**
+   * Force reinitialization?
+   */
+  readonly forceReinit: boolean;
+  /**
    * Enable capture on click?
    */
   readonly captureMappings: boolean;
