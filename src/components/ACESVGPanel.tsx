@@ -15,7 +15,7 @@ interface Props extends PanelProps<ACESVGOptions> {
 interface PanelState {
   readonly svgNode: SVGElement | SVGDom | null; // Passed into user JS functions as `svgnode`
   readonly mappedElements: MappedElements | null; // Passed into user JS functions as `svgmap`
-  readonly initialized: boolean; // Determines whether or not this panel has been initialized
+  readonly initialized: boolean; // Determines whether or not the initialize function has been called
 }
 
 interface TextMappedElement extends SVGElement {
@@ -163,7 +163,17 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   }
 
   private renderSVG(element: SVGSVGElement | null): string | null {
-    if (!this.state.initialized && element) {
+    // Parent element must not be null.
+    if (!element) {
+      return null;
+    }
+
+    // if (this.props.options.addAllIDs || this.props.options.forceReinit) {
+    //   this.setState({ initialized: false });
+    // }
+
+    // Render SVG from source and initialize mappings.
+    if (!this.state.initialized) {
       const svgNode = SVG(element);
       svgNode.clear();
       svgNode.svg(this.props.options.svgSource);
@@ -173,36 +183,42 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       }
       this.initializeMappings(svgNode);
       this.setState({ svgNode: svgNode });
-
-      try {
-        if (this.state.mappedElements) {
-          Function(
-            'props',
-            'theme',
-            'data',
-            'options',
-            'svgnode',
-            'svgmap',
-            'context',
-            this.props.replaceVariables(this.props.options.initSource)
-          )(
-            this.props,
-            this.props.theme,
-            this.props.data,
-            this.props.options,
-            this.state.svgNode,
-            this.state.mappedElements,
-            this.context
-          );
-          this.setState({ initialized: true });
-        }
-      } catch (e) {
-        this.setState({ initialized: true });
-        console.error('User init code failed:', e);
-      }
     }
 
-    if (this.state.initialized && element && this.state.mappedElements) {
+    // Element mapping must be completed to proceed.
+    if (this.state.mappedElements === null) {
+      return null;
+    }
+
+    // Call the user-defined init function.
+    if (!this.state.initialized) {
+      try {
+        Function(
+          'props',
+          'theme',
+          'data',
+          'options',
+          'svgnode',
+          'svgmap',
+          'context',
+          this.props.replaceVariables(this.props.options.initSource)
+        )(
+          this.props,
+          this.props.theme,
+          this.props.data,
+          this.props.options,
+          this.state.svgNode,
+          this.state.mappedElements,
+          this.context
+        );
+      } catch (e) {
+        console.error('User init code failed:', e);
+      }
+      this.setState({ initialized: true });
+    }
+
+    // Call the user-defined render function.
+    if (this.state.initialized) {
       try {
         Function(
           'props',
