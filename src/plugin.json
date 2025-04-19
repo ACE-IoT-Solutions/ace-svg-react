@@ -21,6 +21,10 @@
     "links": [
       {
         "name": "Website",
+        "url": "https://aceiotsolutions.com/"
+      },
+      {
+        "name": "GitHub",
         "url": "https://github.com/ACE-IoT-Solutions/ace-svg-react"
       },
       {

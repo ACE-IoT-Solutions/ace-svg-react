@@ -1,18 +1,46 @@
+/**
+ * An SVG ID mapping.
+ */
 export interface SVGIDMapping {
+  /**
+   * The ID property of the SVG element.
+   */
   readonly svgId: string;
+  /**
+   * The mapped name of the SVG element.
+   */
   readonly mappedName: string;
 }
+/**
+ * Options for this panel.
+ */
 export interface ACESVGOptions {
+  /**
+   * Force reinitialization?
+   */
+  readonly forceReinit: boolean;
+  /**
+   * Enable capture on click?
+   */
   readonly captureMappings: boolean;
+  /**
+   * Add all SVG element IDs?
+   */
   readonly addAllIDs: boolean;
+  /**
+   * The SVG source code.
+   */
   readonly svgSource: string;
-  readonly eventSource: string;
+  /**
+   * The user JS initialization source code.
+   */
   readonly initSource: string;
+  /**
+   * The user JS render source code.
+   */
+  readonly eventSource: string;
+  /**
+   * The list of SVG mappings.
+   */
   svgMappings: SVGIDMapping[];
-}
-export interface ACESVGDefaults {
-  readonly svgNode: string;
-  readonly initSource: string;
-  readonly eventSource: string;
-  readonly svgMappings: SVGIDMapping[];
 }
