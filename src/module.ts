@@ -4,6 +4,7 @@ import { defaults } from 'defaults';
 import { Panel } from 'components/ACESVGPanel';
 import { SourceCode, SourceCodeSettings } from 'components/SourceCode';
 import { SvgMappings } from 'components/SVGMappings';
+import { ActionButton, ActionButtonSettings } from 'components/ActionButton';
 
 export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().setPanelOptions((builder) => {
   return builder
@@ -31,12 +32,20 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       },
       editor: SourceCode,
     })
-    .addBooleanSwitch({
+    .addCustomEditor<ActionButtonSettings, void>({
+      id: 'forceReinit',
       path: 'forceReinit',
       name: 'Force Reinitialization',
       description: 'Run the init script before the render code, on every render. This should be only used during debugging.',
       category: ['User JS Initialization'],
-      defaultValue: defaults.forceReinit,
+      defaultValue: undefined,
+      settings: {
+        text: '',
+        tooltip: 'Click here to reinitialize.',
+        icon: 'repeat',
+        callback: () => console.log('hello!'),
+      },
+      editor: ActionButton,
     })
     .addCustomEditor<SourceCodeSettings, string>({
       id: 'eventSource',
