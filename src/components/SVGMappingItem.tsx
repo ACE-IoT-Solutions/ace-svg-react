@@ -18,7 +18,7 @@ export class SVGMappingItem extends React.PureComponent<SVGMappingItemProps> {
       <Stack>
         <SvgMapping value={this.props.value} onChange={(mapping) => this.props.onChange(mapping)} />
         <Tooltip content={'Remove this existing SVG mapping from the list.'}>
-          <Button icon={'minus-circle'} variant={'destructive'} onClick={() => this.props.onDelete()} />
+          <Button aria-label={'Remove'} icon={'minus-circle'} variant={'destructive'} onClick={() => this.props.onDelete()} />
         </Tooltip>
       </Stack>
     );
