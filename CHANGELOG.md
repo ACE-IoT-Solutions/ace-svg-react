@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Add more comments in source code
 - Add plugin metadata to README
 - Add links to [ACEIoT](https://aceiotsolutions.com/) website
+- Attest builds in workflow
 
 ## 0.1.5 [2024-12-20]
 
