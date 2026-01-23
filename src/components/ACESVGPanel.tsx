@@ -115,6 +115,8 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
         if (event.name === 'forceReinit') {
           this.reinit = true;
           this.forceUpdate();
+        } else if (event.name === 'addAllIDs' && this.state.svgNode !== null) {
+          this.mapAllIDs(this.state.svgNode);
         }
       });
   }
@@ -190,19 +192,12 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       return null;
     }
 
-    // if (this.props.options.addAllIDs || this.props.options.forceReinit) {
-    //   this.setState({ initialized: false });
-    // }
-
     // Render SVG from source and initialize mappings.
     if (!this.state.initialized || this.reinit) {
       const svgNode = SVG(element);
       svgNode.clear();
       svgNode.svg(this.props.options.svgSource);
       svgNode.size(this.props.width, this.props.height);
-      if (this.props.options.addAllIDs) {
-        this.mapAllIDs(svgNode);
-      }
       this.initializeMappings(svgNode);
       this.setState({ svgNode: svgNode });
 
