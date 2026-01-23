@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Add plugin metadata to README
 - Add links to [ACEIoT](https://aceiotsolutions.com/) website
 - Attest builds in workflow
+- Get currently loaded Grafana theme [#33](https://github.com/ACE-IoT-Solutions/ace-svg-react/issues/33)
 
 ## 0.1.5 [2024-12-20]
 
