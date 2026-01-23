@@ -6,14 +6,19 @@ import { useTheme2 } from '@grafana/ui';
 import { ActionButtonEvent } from './ActionButton';
 import { getAppEvents } from '@grafana/runtime';
 
-interface MappedElements {
-  [key: string]: SVGDom;
-}
-
+/**
+ * Maps element names to their corresponding SVG elements.
+ */
+type MappedElements = Record<string, SVGDom>;
+/**
+ * Contains additional panel properties not covered by the options.
+ */
 interface Props extends PanelProps<ACESVGOptions> {
   readonly theme?: GrafanaTheme2;
 }
-
+/**
+ * Represents the current state of the panel.
+ */
 interface PanelState {
   readonly svgNode: SVGElement | SVGDom | null; // Passed into user JS functions as `svgnode`
   readonly mappedElements: MappedElements | null; // Passed into user JS functions as `svgmap`
@@ -88,6 +93,9 @@ SVGExtend(SVGDom, {
   },
 });
 
+/**
+ * The React component that handles all SVG rendering, mapping, and animation.
+ */
 class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   private readonly STOP_MAPPING_ID_TAG: string = 'mapping-stop';
   constructor(props: Props) {
