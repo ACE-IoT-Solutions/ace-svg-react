@@ -98,7 +98,6 @@ SVGExtend(SVGDom, {
  */
 class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   private readonly STOP_MAPPING_ID_TAG: string = 'mapping-stop';
-  private reinit = false;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -113,8 +112,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       .getStream(ActionButtonEvent)
       .subscribe(event => {
         if (event.name === 'forceReinit') {
-          this.reinit = true;
-          this.forceUpdate();
+          this.setState({ initialized: false });
         } else if (event.name === 'addAllIDs' && this.state.svgNode !== null) {
           this.mapAllIDs(this.state.svgNode);
         }
@@ -193,7 +191,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
     }
 
     // Render SVG from source and initialize mappings.
-    if (!this.state.initialized || this.reinit) {
+    if (!this.state.initialized) {
       const svgNode = SVG(element);
       svgNode.clear();
       svgNode.svg(this.props.options.svgSource);
@@ -230,7 +228,6 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
         console.error('User init code failed:', e);
       }
       this.setState({ initialized: true });
-      this.reinit = false;
     } else {
       // Call the user-defined render function.
       try {
