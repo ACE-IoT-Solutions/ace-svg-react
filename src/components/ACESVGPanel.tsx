@@ -98,6 +98,7 @@ SVGExtend(SVGDom, {
  */
 class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   private readonly STOP_MAPPING_ID_TAG: string = 'mapping-stop';
+  private reinit = false;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -108,16 +109,14 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   }
 
   componentDidMount(): void {
-    console.log('mounting...');
     getAppEvents()
       .getStream(ActionButtonEvent)
       .subscribe(event => {
-        console.log(`Read event: ${event.name}`);
+        if (event.name === 'forceReinit') {
+          this.reinit = true;
+          this.forceUpdate();
+        }
       });
-  }
-
-  componentWillUnmount(): void {
-    console.log('unmounting...');
   }
 
   private initializeMappings(svgNode: SVGElement | SVGDom): void {
@@ -196,7 +195,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
     // }
 
     // Render SVG from source and initialize mappings.
-    if (!this.state.initialized) {
+    if (!this.state.initialized || this.reinit) {
       const svgNode = SVG(element);
       svgNode.clear();
       svgNode.svg(this.props.options.svgSource);
@@ -206,15 +205,13 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       }
       this.initializeMappings(svgNode);
       this.setState({ svgNode: svgNode });
-    }
 
-    // Element mapping must be completed to proceed.
-    if (this.state.mappedElements === null) {
-      return null;
-    }
+      // Element mapping must be completed to proceed.
+      if (this.state.mappedElements === null) {
+        return null;
+      }
 
-    // Call the user-defined init function.
-    if (!this.state.initialized) {
+      // Call the user-defined init function.
       try {
         Function(
           'props',
@@ -238,10 +235,9 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
         console.error('User init code failed:', e);
       }
       this.setState({ initialized: true });
-    }
-
-    // Call the user-defined render function.
-    if (this.state.initialized) {
+      this.reinit = false;
+    } else {
+      // Call the user-defined render function.
       try {
         Function(
           'props',
