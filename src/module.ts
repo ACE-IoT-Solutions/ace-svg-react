@@ -59,12 +59,20 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       },
       editor: SourceCode,
     })
-    .addBooleanSwitch({
+    .addCustomEditor<ActionButtonSettings, void>({
+      id: 'addAllIDs',
       path: 'addAllIDs',
       name: 'Add all SVG element IDs',
       description: 'Parse the SVG Document for Elements with IDs assigned and automatically add them to the mapping list.',
       category: ['SVG Mapping'],
-      defaultValue: defaults.addAllIDs,
+      defaultValue: undefined,
+      settings: {
+        text: '',
+        icon: 'search-plus',
+        tooltip: 'Click here to all all SVG element IDs to the mapping list.',
+        event: 'addAllIDs',
+      },
+      editor: ActionButton,
     })
     .addBooleanSwitch({
       path: 'captureMappings',
