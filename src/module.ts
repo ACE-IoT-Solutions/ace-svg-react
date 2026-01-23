@@ -43,7 +43,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
         text: '',
         tooltip: 'Click here to reinitialize.',
         icon: 'repeat',
-        callback: () => console.log('hello!'),
+        event: 'forceReinit',
       },
       editor: ActionButton,
     })
