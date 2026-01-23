@@ -3,6 +3,8 @@ import { GrafanaTheme2, PanelProps } from '@grafana/data';
 import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SVGRunner, SVG } from '@svgdotjs/svg.js';
 import { ACESVGOptions, SVGIDMapping } from 'types';
 import { useTheme2 } from '@grafana/ui';
+import { ActionButtonEvent } from './ActionButton';
+import { getAppEvents } from '@grafana/runtime';
 
 interface MappedElements {
   [key: string]: SVGDom;
@@ -95,6 +97,19 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       mappedElements: null,
       initialized: false,
     };
+  }
+
+  componentDidMount(): void {
+    console.log('mounting...');
+    getAppEvents()
+      .getStream(ActionButtonEvent)
+      .subscribe(event => {
+        console.log(`Read event: ${event.name}`);
+      });
+  }
+
+  componentWillUnmount(): void {
+    console.log('unmounting...');
   }
 
   private initializeMappings(svgNode: SVGElement | SVGDom): void {
