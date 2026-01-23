@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Stack, Tooltip } from '@grafana/ui';
+import { Button, Stack } from '@grafana/ui';
 import { SVGIDMapping } from 'types';
 import { SvgMapping } from './SVGMapping';
 
@@ -24,13 +24,9 @@ export class SVGMappingAdd extends React.PureComponent<SVGMappingAddProps, SVGID
   public render(): React.JSX.Element {
     return (
       <Stack>
-        <Tooltip content={'Clear the list of all SVG element ID to svgmap property mappings.'}>
-          <Button aria-label={'Clear'} icon={'trash-alt'} variant={'destructive'} onClick={this.props.onClear} />
-        </Tooltip>
+        <Button aria-label={'Clear'} icon={'trash-alt'} variant={'destructive'} onClick={this.props.onClear} tooltip={'Clear the list of all SVG element ID to svgmap property mappings.'} />
         <SvgMapping value={{ svgId: '', mappedName: '' }} onChange={(mapping) => this.setState(mapping)} />
-        <Tooltip content={'Add this new SVG mapping to the list.'}>
-          <Button aria-label={'Add'} icon={'plus-circle'} onClick={() => this.canAdd() && this.props.onAdd(this.state)} />
-        </Tooltip>
+        <Button aria-label={'Add'} icon={'plus-circle'} onClick={() => this.canAdd() && this.props.onAdd(this.state)} tooltip={'Add this new SVG mapping to the list.'} />
       </Stack>
     );
   }

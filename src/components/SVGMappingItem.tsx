@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Stack, Tooltip } from '@grafana/ui';
+import { Button, Stack } from '@grafana/ui';
 import { SVGIDMapping } from 'types';
 import { SvgMapping } from './SVGMapping';
 
@@ -17,9 +17,7 @@ export class SVGMappingItem extends React.PureComponent<SVGMappingItemProps> {
     return (
       <Stack>
         <SvgMapping value={this.props.value} onChange={(mapping) => this.props.onChange(mapping)} />
-        <Tooltip content={'Remove this existing SVG mapping from the list.'}>
-          <Button aria-label={'Remove'} icon={'minus-circle'} variant={'destructive'} onClick={() => this.props.onDelete()} />
-        </Tooltip>
+        <Button aria-label={'Remove'} icon={'minus-circle'} variant={'destructive'} onClick={() => this.props.onDelete()} tooltip={'Remove this existing SVG mapping from the list.'} />
       </Stack>
     );
   }
