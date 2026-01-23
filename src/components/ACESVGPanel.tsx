@@ -124,11 +124,11 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
     const mappedElements: MappedElements = {};
     for (const mapping of this.props.options.svgMappings) {
       if (mapping.svgId) {
-        const found: SVGDom | null = svgNode.findOne('#' + mapping.svgId);
+        const found: SVGDom | null = svgNode.findOne(`#${mapping.svgId}`);
         if (found) {
           mappedElements[mapping.mappedName || mapping.svgId] = found;
         } else {
-          console.error('No SVG element found with ID: ' + mapping.svgId);
+          console.error(`No SVG element found with ID: ${mapping.svgId}`);
         }
       }
     }
