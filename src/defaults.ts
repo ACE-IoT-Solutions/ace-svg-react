@@ -4,9 +4,7 @@ import { ACESVGOptions } from 'types';
  * Default panel editor options.
  */
 export const defaults: ACESVGOptions = {
-  forceReinit: false,
   captureMappings: false,
-  addAllIDs: false,
   svgSource: `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg"
