@@ -36,7 +36,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       id: 'forceReinit',
       path: 'forceReinit',
       name: 'Force Reinitialization',
-      description: 'Run the init script before the render code, on every render. This should be only used during debugging.',
+      description: 'Run the init script manually.',
       category: ['User JS Initialization'],
       defaultValue: undefined,
       settings: {
