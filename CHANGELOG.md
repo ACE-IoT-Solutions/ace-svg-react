@@ -2,7 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.1.5
+## 0.2.0 [2026-01-23]
+
+- Add dates to versions in changelog
+- Add more comments in source code
+- Add plugin metadata to README
+- Add links to [ACEIoT](https://aceiotsolutions.com/) website
+- Add option to get currently loaded Grafana theme [#33](https://github.com/ACE-IoT-Solutions/ace-svg-react/issues/33)
+- Fix bug where SVG mapping clears [#77](https://github.com/ACE-IoT-Solutions/ace-svg-react/issues/77)
+- Add panel editor option to force reinitialization
+- Change panel editor option to add all SVG mappings from a boolean switch to a button
+- Use updated `monaco` code editor for SVG source, init source, and event source
+- Use modern Grafana styles for SVG mapping React components
+- Add provisioning dashboard
+- Build with Grafana v12 framework
+- Attest builds in workflow
+
+## 0.1.5 [2024-12-20]
 
 - Fix dependabot issues with dependencies
     - `ws`, `braces`, `fast-loops`, `webpack`, `path-to-regexp`
@@ -17,19 +33,19 @@ All notable changes to this project will be documented in this file.
 - Remove deprecated `<HorizontalGroup>` and `<VerticalGroup>` classes, use `<Stack>` instead
 - Remove unused media files
 
-## 0.1.4
+## 0.1.4 [2024-05-01]
 
 - Resolve `SvgMappings` event error (thanks, [@hyunki85](https://github.com/hyunki85)!)
 - Update dependencies and workflows
 
-## 0.1.3
+## 0.1.3 [2024-04-23]
 
 - Add some additional useful links to the readme
 - Improve code quality by adding `readonly`/`const` modifiers, access modifiers, and function return types
 - Replace Monaco code editor with builtin Grafana `CodeEditor`
 - Simplify and add comments in the init source in the example
 
-## 0.1.2
+## 0.1.2 [2024-04-14]
 
 - Fix the builtin example
 - Update dependency versions
@@ -37,12 +53,12 @@ All notable changes to this project will be documented in this file.
 - Remove provisioning folder
 - Remove devDependency on `emotion`
 
-## 0.1.1
+## 0.1.1 [2024-03-28]
 
 - Fix bad link in readme
 - Update dependency versions
 - Clean out some old config files
 
-## 0.1.0
+## 0.1.0 [2024-03-21]
 
 - Update framework for Grafana v10 compatibility
