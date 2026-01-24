@@ -227,13 +227,13 @@
     "list": [
       {
         "current": {
-          "text": "green",
-          "value": "green"
+          "text": "red",
+          "value": "red"
         },
         "name": "light_color",
         "options": [
           {
-            "selected": false,
+            "selected": true,
             "text": "red",
             "value": "red"
           },
@@ -243,9 +243,14 @@
             "value": "yellow"
           },
           {
-            "selected": true,
+            "selected": false,
             "text": "green",
             "value": "green"
+          },
+          {
+            "selected": false,
+            "text": "off",
+            "value": "off"
           }
         ],
         "query": "red,yellow,green,off",
