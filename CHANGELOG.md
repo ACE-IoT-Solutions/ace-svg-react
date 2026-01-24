@@ -10,6 +10,12 @@ All notable changes to this project will be documented in this file.
 - Add links to [ACEIoT](https://aceiotsolutions.com/) website
 - Attest builds in workflow
 - Get currently loaded Grafana theme [#33](https://github.com/ACE-IoT-Solutions/ace-svg-react/issues/33)
+- Fix bug where SVG mapping clears [#77](https://github.com/ACE-IoT-Solutions/ace-svg-react/issues/77)
+- Add panel editor option to force reinitialization
+- Change panel editor option to add all SVG mappings from a boolean switch to a button
+- Use updated `monaco` code editor for SVG source, init source, and event source
+- Use modern Grafana styles for SVG mapping React components
+- Add provisioning dashboard
 
 ## 0.1.5 [2024-12-20]
 
