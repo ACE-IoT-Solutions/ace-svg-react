@@ -1,6 +1,6 @@
 {
   "name": "aceiot-acesvg-panel",
-  "version": "0.2.0",
+  "version": "0.1.5",
   "description": "SVG Visualization Panel",
   "scripts": {
     "clean": "rm -rf node_modules package-lock.json .eslintcache dist",
