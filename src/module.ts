@@ -51,7 +51,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       id: 'eventSource',
       path: 'eventSource',
       name: 'User JS Render Code',
-      description: 'The User JS Render code is executed whenever new data is available, the root svg document is available as `svgnode`, and elements you\'ve mapped using the SVG Mapping tools below are available as properties on the `svgmap` object. The Grafana DataFrame is provided as `data` and the `options` object can be used to pass values and references between the Render context and the Init context.',
+      description: 'The User JS Render code is executed whenever new data is available, the root svg document is available as `svgnode`, and elements you\'ve mapped using the SVG Mapping tools below are available as properties on the `svgmap` object. The Grafana DataFrame is provided as `data` and the `context` object can be used to pass values and references between the Render context and the Init context.',
       category: ['User JS Render'],
       defaultValue: defaults.eventSource,
       settings: {

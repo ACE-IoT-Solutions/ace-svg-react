@@ -411,7 +411,7 @@ export const defaults: ACESVGOptions = {
 </svg>`,
   initSource: `// example of creating a function in the init script
 console.log('initializing');
-options.animateLogo = (svgmap, data) => {
+context.animateLogo = (svgmap, data) => {
     // extract the data series values and store the min/max
     let values = data.series[0].fields[1].values,
         min = Math.min(...values),
@@ -428,7 +428,7 @@ options.animateLogo = (svgmap, data) => {
     });
 }`,
   eventSource: `// example of calling a function defined in the init script
-options.animateLogo(svgmap, data);
+context.animateLogo(svgmap, data);
 // Here we're going to initialized some variables just to make things less verbose
 // This is the raw data buffer from the values field of the DataFrame
 let values = data.series[0].fields[1].values;
