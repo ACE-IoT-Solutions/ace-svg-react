@@ -22,6 +22,31 @@
   "links": [],
   "panels": [
     {
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "# Instructions\n\n- Press \"refresh\" on the dashboard to generate a new random data stream\n- Observe different animations for different data values\n- Change the dashboard variables to change the traffic light color in the custom example\n- Enable SVG mapping on click, and click on parts of the SVG drawing in the panel preview\n- Click to add all SVG element IDs and make sure that there are no duplicates\n- Click to force reinitialization and make sure that the init code is executed",
+        "mode": "markdown"
+      },
+      "pluginVersion": "12.3.1",
+      "title": "",
+      "type": "text"
+    },
+    {
       "datasource": {
         "type": "datasource",
         "uid": "grafana"
@@ -51,10 +76,10 @@
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 0,
+        "x": 12,
         "y": 0
       },
-      "id": 1,
+      "id": 4,
       "options": {
         "captureMappings": false,
         "eventSource": "// example of calling a function defined in the init script\ncontext.animateLogo(svgmap, data);\n// Here we're going to initialized some variables just to make things less verbose\n// This is the raw data buffer from the values field of the DataFrame\nlet values = data.series[0].fields[1].values;\n// here we collect the most recent value from the Data Frame\nlet lastValue = values[values.length - 1];\n// We need to collect the center of the fan as a static value here, otherwise it will cause a feedback loop in the animation.\n// The rotate animation will use the center of the bounding box by default, but of irregular shaped items, like these fan blades\n// the center is not the center axis of rotation\nconst fanX = svgmap.fanBlades.cx();\nconst fanY = svgmap.fanBlades.cy();\n// Here we're defining a state condition to use later in our pipe animation\nlet leakCond = lastValue > 10 && lastValue < 45;\n\n// Here we're simply making the visibility of the alert icon on top of tbe bell dependent on the last value being greater than 50\nsvgmap.alarmIcon.showOn(lastValue > 50);\n// Now we use the same logic to apply an animation to the sound waves around the bell\nsvgmap.alarmRings.animateOn(1500, (lastValue > 50), (elem) => {\n    // this callback is passed the resulting SVG.js runner object which you then chain your animation actions on.\n    // Here, we're simply scaling the dark sound wave lines by 10%, with bidirectional easing and looping with swing\n    elem.ease('<>').transform({scale: 1.1, relative: true}).loop(0, true);\n})\n// Here we animate the fan, using the static variables we create earlier to get closer to the center of the blades\n// if the item we were rotating was centered in the bounding box, we could just call rotate(360) with no axis specificied\nsvgmap.fanBlades.animateOn(1000, (lastValue > 40), (elem) => {\n    elem.ease('-').rotate(360, fanX - 1, fanY +3).loop();\n});\n// these simply hide the elements of the lamp when below the threshold\nsvgmap.lampLens.showOn(lastValue>10);\nsvgmap.lampRays.showOn(lastValue>10);\n// Here we hide the water drop when leakCond is false\nsvgmap.waterDrop.showOn(leakCond);\n// and here we animate the water drop when leakCond is true\nsvgmap.waterDrop.animateOn(2000 - lastValue *20, leakCond, (elem) => {\n    // we're using single direction easing to give a gravity affect, and scaling the drop down as it falls off the screen\n    elem.ease('<').transform({translateY: 1000, scale: 0.00001}).loop();\n});",
@@ -122,7 +147,75 @@
           "refId": "A"
         }
       ],
-      "title": "New panel",
+      "title": "Default Panel",
+      "type": "aceiot-svg-panel"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 3,
+      "options": {
+        "captureMappings": false,
+        "eventSource": "// We'll use the dashboard variable as the light color\ncontext.changeLight(svgmap, '${light_color}');\n",
+        "initSource": "// Let's create a simple function to change the light color\ncontext.changeLight = (svgmap, lightColor) => {\n  console.log(`Changing light to ${lightColor}...`);\n  // Start by \"turning off\" all the lights\n  svgmap.red.hide();\n  svgmap.yellow.hide();\n  svgmap.green.hide();\n  // \"Turn on\" the correct light\n  switch(lightColor) {\n    case('red'): {\n      svgmap.red.show();\n      break;\n    }\n    case('yellow'): {\n      svgmap.yellow.show();\n      break;\n    }\n    case('green'): {\n      svgmap.green.show();\n      break;\n    }\n  }\n}",
+        "svgMappings": [
+          {
+            "mappedName": "red",
+            "svgId": "rect412"
+          },
+          {
+            "mappedName": "yellow",
+            "svgId": "path358"
+          },
+          {
+            "mappedName": "green",
+            "svgId": "path351"
+          }
+        ],
+        "svgSource": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<svg\n   viewBox=\"0 0 1000 1000\"\n   version=\"1.1\"\n   id=\"svg5\"\n   xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:svg=\"http://www.w3.org/2000/svg\">\n  <path\n     id=\"path362\"\n     style=\"fill:#1a1a1a;stroke:#000000;stroke-width:10;stroke-linejoin:round\"\n     d=\"M 321.14648,66.142578 V 933.85742 H 678.85352 V 66.142578 Z\" />\n  <path\n     id=\"rect412\"\n     style=\"fill:#ff0000;stroke:#000000;stroke-width:10;stroke-linejoin:round\"\n     d=\"M 500 119.29688 A 113.27399 113.27399 0 0 0 474.79492 122.13672 A 113.27399 113.27399 0 0 0 450.85156 130.51562 A 113.27399 113.27399 0 0 0 429.375 144.00977 A 113.27399 113.27399 0 0 0 411.43945 161.94531 A 113.27399 113.27399 0 0 0 397.94336 183.42383 A 113.27399 113.27399 0 0 0 389.56641 207.36523 A 113.27399 113.27399 0 0 0 386.72656 232.57031 A 113.27399 113.27399 0 0 0 389.56641 257.77734 A 113.27399 113.27399 0 0 0 397.94336 281.71875 A 113.27399 113.27399 0 0 0 411.43945 303.19727 A 113.27399 113.27399 0 0 0 429.375 321.13281 A 113.27399 113.27399 0 0 0 450.85156 334.62695 A 113.27399 113.27399 0 0 0 474.79492 343.00586 A 113.27399 113.27399 0 0 0 500 345.8457 A 113.27399 113.27399 0 0 0 525.20508 343.00586 A 113.27399 113.27399 0 0 0 549.14844 334.62695 A 113.27399 113.27399 0 0 0 570.625 321.13281 A 113.27399 113.27399 0 0 0 588.56055 303.19727 A 113.27399 113.27399 0 0 0 602.05664 281.71875 A 113.27399 113.27399 0 0 0 610.43359 257.77734 A 113.27399 113.27399 0 0 0 613.27344 232.57031 A 113.27399 113.27399 0 0 0 612.88672 223.2168 A 113.27399 113.27399 0 0 0 611.72852 213.92773 A 113.27399 113.27399 0 0 0 609.80859 204.76367 A 113.27399 113.27399 0 0 0 607.13672 195.79102 A 113.27399 113.27399 0 0 0 603.73242 187.07031 A 113.27399 113.27399 0 0 0 599.62109 178.6582 A 113.27399 113.27399 0 0 0 594.83008 170.61523 A 113.27399 113.27399 0 0 0 589.38867 162.99609 A 113.27399 113.27399 0 0 0 583.33789 155.85352 A 113.27399 113.27399 0 0 0 576.71875 149.23242 A 113.27399 113.27399 0 0 0 569.57422 143.18164 A 113.27399 113.27399 0 0 0 561.95508 137.74219 A 113.27399 113.27399 0 0 0 553.91211 132.94922 A 113.27399 113.27399 0 0 0 545.50195 128.83789 A 113.27399 113.27399 0 0 0 536.7793 125.43555 A 113.27399 113.27399 0 0 0 527.80664 122.76367 A 113.27399 113.27399 0 0 0 518.64453 120.8418 A 113.27399 113.27399 0 0 0 509.35352 119.68359 A 113.27399 113.27399 0 0 0 500 119.29688 z \" />\n  <path\n     id=\"path351\"\n     style=\"fill:#00ff00;stroke:#000000;stroke-width:10;stroke-linejoin:round\"\n     d=\"M 500 654.1543 A 113.27399 113.27399 0 0 0 474.79492 656.99414 A 113.27399 113.27399 0 0 0 450.85156 665.37305 A 113.27399 113.27399 0 0 0 429.375 678.86719 A 113.27399 113.27399 0 0 0 411.43945 696.80273 A 113.27399 113.27399 0 0 0 397.94336 718.28125 A 113.27399 113.27399 0 0 0 389.56641 742.22266 A 113.27399 113.27399 0 0 0 386.72656 767.42969 A 113.27399 113.27399 0 0 0 389.56641 792.63477 A 113.27399 113.27399 0 0 0 397.94336 816.57617 A 113.27399 113.27399 0 0 0 411.43945 838.05469 A 113.27399 113.27399 0 0 0 429.375 855.99023 A 113.27399 113.27399 0 0 0 450.85156 869.48438 A 113.27399 113.27399 0 0 0 474.79492 877.86328 A 113.27399 113.27399 0 0 0 500 880.70312 A 113.27399 113.27399 0 0 0 525.20508 877.86328 A 113.27399 113.27399 0 0 0 549.14844 869.48438 A 113.27399 113.27399 0 0 0 570.625 855.99023 A 113.27399 113.27399 0 0 0 588.56055 838.05469 A 113.27399 113.27399 0 0 0 602.05664 816.57617 A 113.27399 113.27399 0 0 0 610.43359 792.63477 A 113.27399 113.27399 0 0 0 613.27344 767.42969 A 113.27399 113.27399 0 0 0 612.88672 758.07422 A 113.27399 113.27399 0 0 0 611.72852 748.78516 A 113.27399 113.27399 0 0 0 609.80859 739.62109 A 113.27399 113.27399 0 0 0 607.13672 730.64844 A 113.27399 113.27399 0 0 0 603.73242 721.92773 A 113.27399 113.27399 0 0 0 599.62109 713.51562 A 113.27399 113.27399 0 0 0 594.83008 705.47461 A 113.27399 113.27399 0 0 0 589.38867 697.85547 A 113.27399 113.27399 0 0 0 583.33789 690.71094 A 113.27399 113.27399 0 0 0 576.71875 684.08984 A 113.27399 113.27399 0 0 0 569.57422 678.03906 A 113.27399 113.27399 0 0 0 561.95508 672.59961 A 113.27399 113.27399 0 0 0 553.91211 667.80664 A 113.27399 113.27399 0 0 0 545.50195 663.69531 A 113.27399 113.27399 0 0 0 536.7793 660.29297 A 113.27399 113.27399 0 0 0 527.80664 657.62109 A 113.27399 113.27399 0 0 0 518.64453 655.69922 A 113.27399 113.27399 0 0 0 509.35352 654.54102 A 113.27399 113.27399 0 0 0 500 654.1543 z \" />\n  <path\n     id=\"path359\"\n     style=\"fill:#333333;stroke:#000000;stroke-width:10;stroke-linejoin:round\"\n     d=\"M 321.14648 66.142578 L 321.14648 933.85742 L 678.85352 933.85742 L 678.85352 66.142578 L 321.14648 66.142578 z M 500 119.29688 A 113.27399 113.27399 0 0 1 509.35352 119.68359 A 113.27399 113.27399 0 0 1 518.64453 120.8418 A 113.27399 113.27399 0 0 1 527.80664 122.76367 A 113.27399 113.27399 0 0 1 536.7793 125.43555 A 113.27399 113.27399 0 0 1 545.50195 128.83789 A 113.27399 113.27399 0 0 1 553.91211 132.94922 A 113.27399 113.27399 0 0 1 561.95508 137.74219 A 113.27399 113.27399 0 0 1 569.57422 143.18164 A 113.27399 113.27399 0 0 1 576.71875 149.23242 A 113.27399 113.27399 0 0 1 583.33789 155.85352 A 113.27399 113.27399 0 0 1 589.38867 162.99609 A 113.27399 113.27399 0 0 1 594.83008 170.61523 A 113.27399 113.27399 0 0 1 599.62109 178.6582 A 113.27399 113.27399 0 0 1 603.73242 187.07031 A 113.27399 113.27399 0 0 1 607.13672 195.79102 A 113.27399 113.27399 0 0 1 609.80859 204.76367 A 113.27399 113.27399 0 0 1 611.72852 213.92773 A 113.27399 113.27399 0 0 1 612.88672 223.2168 A 113.27399 113.27399 0 0 1 613.27344 232.57031 A 113.27399 113.27399 0 0 1 610.43359 257.77734 A 113.27399 113.27399 0 0 1 602.05664 281.71875 A 113.27399 113.27399 0 0 1 588.56055 303.19727 A 113.27399 113.27399 0 0 1 570.625 321.13281 A 113.27399 113.27399 0 0 1 549.14844 334.62695 A 113.27399 113.27399 0 0 1 525.20508 343.00586 A 113.27399 113.27399 0 0 1 500 345.8457 A 113.27399 113.27399 0 0 1 474.79492 343.00586 A 113.27399 113.27399 0 0 1 450.85156 334.62695 A 113.27399 113.27399 0 0 1 429.375 321.13281 A 113.27399 113.27399 0 0 1 411.43945 303.19727 A 113.27399 113.27399 0 0 1 397.94336 281.71875 A 113.27399 113.27399 0 0 1 389.56641 257.77734 A 113.27399 113.27399 0 0 1 386.72656 232.57031 A 113.27399 113.27399 0 0 1 389.56641 207.36523 A 113.27399 113.27399 0 0 1 397.94336 183.42383 A 113.27399 113.27399 0 0 1 411.43945 161.94531 A 113.27399 113.27399 0 0 1 429.375 144.00977 A 113.27399 113.27399 0 0 1 450.85156 130.51562 A 113.27399 113.27399 0 0 1 474.79492 122.13672 A 113.27399 113.27399 0 0 1 500 119.29688 z M 500 386.72656 A 113.27399 113.27399 0 0 1 509.35352 387.11328 A 113.27399 113.27399 0 0 1 518.64453 388.27148 A 113.27399 113.27399 0 0 1 527.80664 390.19141 A 113.27399 113.27399 0 0 1 536.7793 392.86328 A 113.27399 113.27399 0 0 1 545.50195 396.26758 A 113.27399 113.27399 0 0 1 553.91211 400.37891 A 113.27399 113.27399 0 0 1 561.95508 405.16992 A 113.27399 113.27399 0 0 1 569.57422 410.61133 A 113.27399 113.27399 0 0 1 576.71875 416.66211 A 113.27399 113.27399 0 0 1 583.33789 423.28125 A 113.27399 113.27399 0 0 1 589.38867 430.42578 A 113.27399 113.27399 0 0 1 594.83008 438.04492 A 113.27399 113.27399 0 0 1 599.62109 446.08789 A 113.27399 113.27399 0 0 1 603.73242 454.49805 A 113.27399 113.27399 0 0 1 607.13672 463.2207 A 113.27399 113.27399 0 0 1 609.80859 472.19336 A 113.27399 113.27399 0 0 1 611.72852 481.35547 A 113.27399 113.27399 0 0 1 612.88672 490.64648 A 113.27399 113.27399 0 0 1 613.27344 500 A 113.27399 113.27399 0 0 1 610.43359 525.20508 A 113.27399 113.27399 0 0 1 602.05664 549.14844 A 113.27399 113.27399 0 0 1 588.56055 570.625 A 113.27399 113.27399 0 0 1 570.625 588.56055 A 113.27399 113.27399 0 0 1 549.14844 602.05664 A 113.27399 113.27399 0 0 1 525.20508 610.43359 A 113.27399 113.27399 0 0 1 500 613.27344 A 113.27399 113.27399 0 0 1 474.79492 610.43359 A 113.27399 113.27399 0 0 1 450.85156 602.05664 A 113.27399 113.27399 0 0 1 429.375 588.56055 A 113.27399 113.27399 0 0 1 411.43945 570.625 A 113.27399 113.27399 0 0 1 397.94336 549.14844 A 113.27399 113.27399 0 0 1 389.56641 525.20508 A 113.27399 113.27399 0 0 1 386.72656 500 A 113.27399 113.27399 0 0 1 389.56641 474.79492 A 113.27399 113.27399 0 0 1 397.94336 450.85156 A 113.27399 113.27399 0 0 1 411.43945 429.375 A 113.27399 113.27399 0 0 1 429.375 411.43945 A 113.27399 113.27399 0 0 1 450.85156 397.94336 A 113.27399 113.27399 0 0 1 474.79492 389.56641 A 113.27399 113.27399 0 0 1 500 386.72656 z M 500 654.1543 A 113.27399 113.27399 0 0 1 509.35352 654.54102 A 113.27399 113.27399 0 0 1 518.64453 655.69922 A 113.27399 113.27399 0 0 1 527.80664 657.62109 A 113.27399 113.27399 0 0 1 536.7793 660.29297 A 113.27399 113.27399 0 0 1 545.50195 663.69531 A 113.27399 113.27399 0 0 1 553.91211 667.80664 A 113.27399 113.27399 0 0 1 561.95508 672.59961 A 113.27399 113.27399 0 0 1 569.57422 678.03906 A 113.27399 113.27399 0 0 1 576.71875 684.08984 A 113.27399 113.27399 0 0 1 583.33789 690.71094 A 113.27399 113.27399 0 0 1 589.38867 697.85547 A 113.27399 113.27399 0 0 1 594.83008 705.47461 A 113.27399 113.27399 0 0 1 599.62109 713.51562 A 113.27399 113.27399 0 0 1 603.73242 721.92773 A 113.27399 113.27399 0 0 1 607.13672 730.64844 A 113.27399 113.27399 0 0 1 609.80859 739.62109 A 113.27399 113.27399 0 0 1 611.72852 748.78516 A 113.27399 113.27399 0 0 1 612.88672 758.07422 A 113.27399 113.27399 0 0 1 613.27344 767.42969 A 113.27399 113.27399 0 0 1 610.43359 792.63477 A 113.27399 113.27399 0 0 1 602.05664 816.57617 A 113.27399 113.27399 0 0 1 588.56055 838.05469 A 113.27399 113.27399 0 0 1 570.625 855.99023 A 113.27399 113.27399 0 0 1 549.14844 869.48438 A 113.27399 113.27399 0 0 1 525.20508 877.86328 A 113.27399 113.27399 0 0 1 500 880.70312 A 113.27399 113.27399 0 0 1 474.79492 877.86328 A 113.27399 113.27399 0 0 1 450.85156 869.48438 A 113.27399 113.27399 0 0 1 429.375 855.99023 A 113.27399 113.27399 0 0 1 411.43945 838.05469 A 113.27399 113.27399 0 0 1 397.94336 816.57617 A 113.27399 113.27399 0 0 1 389.56641 792.63477 A 113.27399 113.27399 0 0 1 386.72656 767.42969 A 113.27399 113.27399 0 0 1 389.56641 742.22266 A 113.27399 113.27399 0 0 1 397.94336 718.28125 A 113.27399 113.27399 0 0 1 411.43945 696.80273 A 113.27399 113.27399 0 0 1 429.375 678.86719 A 113.27399 113.27399 0 0 1 450.85156 665.37305 A 113.27399 113.27399 0 0 1 474.79492 656.99414 A 113.27399 113.27399 0 0 1 500 654.1543 z \" />\n  <circle\n     style=\"fill:#ffff00;stroke:#000000;stroke-width:10;stroke-linejoin:round\"\n     id=\"path358\"\n     cx=\"500\"\n     cy=\"500\"\n     r=\"113.27399\" />\n</svg>\n"
+      },
+      "pluginVersion": "0.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "queryType": "randomWalk",
+          "refId": "A"
+        }
+      ],
+      "title": "Custom Example",
       "type": "aceiot-svg-panel"
     }
   ],
@@ -131,7 +224,34 @@
   "schemaVersion": 42,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "text": "green",
+          "value": "green"
+        },
+        "name": "light_color",
+        "options": [
+          {
+            "selected": false,
+            "text": "red",
+            "value": "red"
+          },
+          {
+            "selected": false,
+            "text": "yellow",
+            "value": "yellow"
+          },
+          {
+            "selected": true,
+            "text": "green",
+            "value": "green"
+          }
+        ],
+        "query": "red,yellow,green,off",
+        "type": "custom"
+      }
+    ]
   },
   "time": {
     "from": "now-6h",
@@ -141,5 +261,5 @@
   "timezone": "",
   "title": "Provisioned AceIoT SVG dashboard",
   "uid": "a538aeff-5a8a-42a5-901c-938d896fdd6f",
-  "version": 1
+  "version": 6
 }
