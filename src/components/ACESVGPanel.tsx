@@ -4,7 +4,6 @@ import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SV
 import { ACESVGOptions, SVGIDMapping } from 'types';
 import { useTheme2 } from '@grafana/ui';
 import { ActionButtonEvent } from './ActionButton';
-import { getAppEvents } from '@grafana/runtime';
 
 /**
  * Maps element names to their corresponding SVG elements.
@@ -108,7 +107,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   }
 
   componentDidMount(): void {
-    getAppEvents()
+    this.props.eventBus
       .getStream(ActionButtonEvent)
       .subscribe(event => {
         if (event.name === 'forceReinit') {
