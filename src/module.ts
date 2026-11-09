@@ -69,7 +69,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       settings: {
         text: '',
         icon: 'search-plus',
-        tooltip: 'Click here to all all SVG element IDs to the mapping list.',
+        tooltip: 'Click here to add all SVG element IDs to the mapping list.',
         event: 'addAllIDs',
       },
       editor: ActionButton,
