@@ -268,7 +268,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
             height: `${this.props.height}px`,
           }}
           className={'svg-object'}
-          ref={(ref) => this.renderSVG(ref)}
+          ref={(ref) => { this.renderSVG(ref) }}
         ></svg>
       </div>
     );
