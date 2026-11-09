@@ -12,6 +12,9 @@ interface SVGMappingAddProps {
  * The React Component for adding new or clearing all SVG mappings.
  */
 export class SVGMappingAdd extends React.PureComponent<SVGMappingAddProps, SVGIDMapping> {
+  /**
+   * Changing this key remounts the mapping form and clears its inputs.
+   */
   private resetKey = 0;
   /**
    * Check to see if the new mapping is valid.
