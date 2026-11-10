@@ -118,7 +118,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       });
   }
 
-  private initializeMappings(svgNode: SVGElement | SVGDom): void {
+  private initializeMappings(svgNode: SVGElement | SVGDom): MappedElements {
     const mappedElements: MappedElements = {};
     for (const mapping of this.props.options.svgMappings) {
       if (mapping.svgId) {
@@ -130,7 +130,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
         }
       }
     }
-    this.setState({ mappedElements: mappedElements });
+    return mappedElements;
   }
 
   private mapAllIDs(svgNode: SVGDom): void {
@@ -195,11 +195,12 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       svgNode.clear();
       svgNode.svg(this.props.options.svgSource);
       svgNode.size(this.props.width, this.props.height);
-      this.initializeMappings(svgNode);
-      this.setState({ svgNode: svgNode });
+
+      const mappedElements = this.initializeMappings(svgNode);
+      this.setState({ svgNode, mappedElements });
 
       // Element mapping must be completed to proceed.
-      if (this.state.mappedElements === null) {
+      if (Object.keys(mappedElements).length === 0 && this.props.options.svgMappings.length > 0) {
         return null;
       }
 
@@ -268,7 +269,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
             height: `${this.props.height}px`,
           }}
           className={'svg-object'}
-          ref={(ref) => this.renderSVG(ref)}
+          ref={(ref) => { this.renderSVG(ref) }}
         ></svg>
       </div>
     );
