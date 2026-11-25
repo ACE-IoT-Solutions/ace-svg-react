@@ -4,6 +4,7 @@ import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SV
 import { ACESVGOptions, SVGIDMapping } from 'types';
 import { useTheme2 } from '@grafana/ui';
 import { ActionButtonEvent } from './ActionButton';
+import type { Unsubscribable } from 'rxjs';
 
 /**
  * Maps element names to their corresponding SVG elements.
@@ -97,6 +98,8 @@ SVGExtend(SVGDom, {
  */
 class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   private readonly STOP_MAPPING_ID_TAG: string = 'mapping-stop';
+  private subscription: Unsubscribable | null = null;
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -107,15 +110,23 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   }
 
   componentDidMount(): void {
-    this.props.eventBus
+    this.subscription = this.props.eventBus
       .getStream(ActionButtonEvent)
       .subscribe(event => {
+        if (event.origin !== this.props.eventBus) {
+          return; // Event originated from a different panel
+        }
+
         if (event.name === 'forceReinit') {
           this.setState({ initialized: false });
         } else if (event.name === 'addAllIDs' && this.state.svgNode !== null) {
           this.mapAllIDs(this.state.svgNode);
         }
       });
+  }
+
+  componentWillUnmount(): void {
+    this.subscription?.unsubscribe();
   }
 
   private initializeMappings(svgNode: SVGElement | SVGDom): MappedElements {
