@@ -25,10 +25,6 @@ interface PanelState {
   readonly initialized: boolean; // Determines whether or not the initialize function has been called
 }
 
-interface TextMappedElement extends SVGElement {
-  readonly textElement: Element;
-}
-
 SVGExtend(SVGElement, {
   openOnClick: function (this: SVGElement, url: string) {
     this.click(() => window.open(url));
@@ -79,7 +75,7 @@ SVGExtend(SVGElement, {
 });
 SVGExtend(SVGDom, {
   updateXHTMLFontText: function (this: SVGDom, newText: string) {
-    let currentElement: Element | TextMappedElement = this.node;
+    let currentElement: Element = this.node;
     let i = 0;
     while (currentElement.localName !== 'xhtml:font') {
       if (currentElement.firstElementChild && i < 10) {
