@@ -44,7 +44,7 @@ Below are details for each one. Remember that you can always use the browser JS 
 - `options` is the raw panel options object managed by the dashboard to store panel state. It includes the SVG source code and functions, as well as mappings and other configuration data. While you can manually access everything about the panel through this interface, the most common use case is to add properties from the Init function for the Render function to use later. For instance, if you have a common animation in a panel, you might create a function that sets it up in Init and attach it to the options object as a property, allowing you to use it in Render and keep the logic flow clear.
 - `svgnode` is a reference to the SVG.js object.
 - `theme` is a reference to the currently-selected Grafana dashboard theme.
-- `props` contains all other panel properties that may not be explicitly stated in the rest of these parameters (such as width, height, title...)
+- `props` is a [`PanelProps`](https://grafana.com/developers/plugin-tools/tutorials/build-a-panel-plugin#panel-properties) interface that contains all other panel properties that may not be explicitly stated in the rest of these parameters (such as width, height, title...)
 - `context` is an initially empty object passed into the Init function. The Init function may store any context or state that you want to preserve between Init and render invocations. This is not required, but for some advanced use cases—for example, SVG generators in the Init function—being able to pass data from Init to Render (and between Render invocations) can be useful.
 
 ### Important Notes
