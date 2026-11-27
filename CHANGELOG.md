@@ -2,10 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.3.0 [Unreleased]
+## 0.3.0 [2026-11-27]
 
 - Update Grafana framework to 13+
 - Update svg.js to `3.2.8`
+- Add missing documentation for panel properties
 - Events are only listened from the panel that originated them [#95](https://github.com/ACE-IoT-Solutions/ace-svg-react/issues/95)
 - Unsubscribe to events when component is unmounted
 - Clear new mapping textboxes mapping has been added
