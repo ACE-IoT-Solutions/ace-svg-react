@@ -40,18 +40,12 @@ Below are details for each one. Remember that you can always use the browser JS 
 
 - `svgmap` is a JavaScript object where each mapped SVG.js element is available as a property. For example, if you have an SVG ID such as `rect4524` and you provide the mapped name `bigSquare`, you would access the SVG.js methods on that element under `svgmap.bigSquare`. The svgmap is also available as `options.svgMappings`.
 - `data` is the raw object passed to the panel for rendering by Grafana. It contains the DataFrames with all time-series data selected by the active queries and time range. This interface is a bit complex and verbose, so we will add helper methods to simplify common use cases. [Grafana DataFrame Docs](https://grafana.com/developers/plugin-tools/introduction/data-frames)
+    - The `data` object contains both the query definition and the query results. In the case of the user initialization function, there likely will not be any results yet, but the query definition should be present. This _may_ be useful for some initial rendering purposes, but caution is advised because the query may be updated (for example, while the user is updating the query) so anything done here should likely be done in the update function as well.
 - `options` is the raw panel options object managed by the dashboard to store panel state. It includes the SVG source code and functions, as well as mappings and other configuration data. While you can manually access everything about the panel through this interface, the most common use case is to add properties from the Init function for the Render function to use later. For instance, if you have a common animation in a panel, you might create a function that sets it up in Init and attach it to the options object as a property, allowing you to use it in Render and keep the logic flow clear.
 - `svgnode` is a reference to the SVG.js object.
-- `context` is an initially empty object passed into the Init function. The Init function may store
-    any context or state that you want to preserve between Init and render invocations. This is not required, but
-    for some advanced use cases—for example, SVG generators in the Init function—being able
-    to pass data from Init to Render (and between Render invocations) can be useful.
-
-The `data` object contains both the query definition and the query results. In the case of the
-user initialization function, there likely will not be any results yet, but the query definition should
-be present. This _may_ be useful for some initial rendering purposes, but caution is advised because the
-query may be updated (for example, while the user is updating the query) so anything done here should
-likely be done in the update function as well.
+- `theme` is a reference to the currently-selected Grafana dashboard theme.
+- `props` contains all other panel properties that may not be explicitly stated in the rest of these parameters (such as width, height, title...)
+- `context` is an initially empty object passed into the Init function. The Init function may store any context or state that you want to preserve between Init and render invocations. This is not required, but for some advanced use cases—for example, SVG generators in the Init function—being able to pass data from Init to Render (and between Render invocations) can be useful.
 
 ### Important Notes
 - An object's `style` property takes precedence over [`fill()`](https://svgjs.dev/docs/3.2/manipulating/#fill). This could be an issue when creating graphics in Inkscape, which uses the `style` property to assign the fill color. To fix this, you must remove the `fill:#FFFFFF;` part under that element's `style`.
