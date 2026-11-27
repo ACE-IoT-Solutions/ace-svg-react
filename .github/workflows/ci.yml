@@ -10,25 +10,26 @@ on:
       - master
       - main
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build, lint and unit tests
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     outputs:
       plugin-id: ${{ steps.metadata.outputs.plugin-id }}
       plugin-version: ${{ steps.metadata.outputs.plugin-version }}
       has-e2e: ${{ steps.check-for-e2e.outputs.has-e2e }}
       has-backend: ${{ steps.check-for-backend.outputs.has-backend }}
     env:
-      GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_PLUGIN_SIGNING_TOKEN }}
+      GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
       - name: Setup Node.js environment
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'
@@ -55,23 +56,30 @@ jobs:
 
       - name: Setup Go environment
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         with:
-          go-version: '1.22'
+          go-version-file: go.mod
 
-      - name: Test backend
+      - name: Lint backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
         with:
           version: latest
-          args: coverage
+          args: ./...
 
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@6f50bbb8ea47d56e62dee92392788acbc8192d0b # v3.1.0
+        uses: magefile/mage-action@a662bd8c29d8106879588cfff83b2faf6e6f59db # v4.0.0
         with:
           version: latest
           args: buildAll
+
+      - name: Test backend
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        uses: magefile/mage-action@a662bd8c29d8106879588cfff83b2faf6e6f59db # v4.0.0
+        with:
+          version: latest
+          args: test
 
       - name: Check for E2E
         id: check-for-e2e
@@ -116,7 +124,7 @@ jobs:
           ARCHIVE: ${{ steps.metadata.outputs.archive }}
 
       - name: Archive Build
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.metadata.outputs.plugin-id }}-${{ steps.metadata.outputs.plugin-version }}
           path: ${{ steps.metadata.outputs.plugin-id }}
@@ -125,8 +133,6 @@ jobs:
   resolve-versions:
     name: Resolve e2e images
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     timeout-minutes: 3
     needs: build
     if: ${{ needs.build.outputs.has-e2e == 'true' }}
@@ -134,21 +140,17 @@ jobs:
       matrix: ${{ steps.resolve-versions.outputs.matrix }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Resolve Grafana E2E versions
         id: resolve-versions
-        uses: grafana/plugin-actions/e2e-version@e2e-version/v1.1.2
+        uses: grafana/plugin-actions/e2e-version@e2e-version/v3.0.1
 
   playwright-tests:
     needs: [resolve-versions, build]
     timeout-minutes: 15
-    permissions:
-      contents: read
-      id-token: write
-      pull-requests: write
     strategy:
       fail-fast: false
       matrix:
@@ -156,12 +158,12 @@ jobs:
     name: e2e test ${{ matrix.GRAFANA_IMAGE.name }}@${{ matrix.GRAFANA_IMAGE.VERSION }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           persist-credentials: false
 
       - name: Download plugin
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           path: dist
           name: ${{ needs.build.outputs.plugin-id }}-${{ needs.build.outputs.plugin-version }}
@@ -172,7 +174,7 @@ jobs:
           chmod +x ./dist/gpx_*
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
           cache: 'npm'
@@ -186,7 +188,7 @@ jobs:
           ANONYMOUS_AUTH_ENABLED=false DEVELOPMENT=false GRAFANA_VERSION=${{ matrix.GRAFANA_IMAGE.VERSION }} GRAFANA_IMAGE=${{ matrix.GRAFANA_IMAGE.NAME }} docker compose up -d
 
       - name: Wait for grafana server
-        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.2
+        uses: grafana/plugin-actions/wait-for-grafana@wait-for-grafana/v1.0.4
         with:
           url: http://localhost:3000/login
 
@@ -196,14 +198,6 @@ jobs:
       - name: Run Playwright tests
         id: run-tests
         run: npm run e2e
-
-      - name: Upload e2e test summary
-        uses: grafana/plugin-actions/playwright-gh-pages/upload-report-artifacts@upload-report-artifacts/v1.0.1
-        if: ${{ always() && !cancelled() }}
-        with:
-          upload-report: false
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          test-outcome: ${{ steps.run-tests.outcome }}
 
       - name: Docker logs
         if: ${{ always() && steps.run-tests.outcome == 'failure' }}
@@ -221,21 +215,3 @@ jobs:
       #     name: ${{ matrix.GRAFANA_IMAGE.NAME }}-v${{ matrix.GRAFANA_IMAGE.VERSION }}-${{github.run_id}}-server-log
       #     path: grafana-server.log
       #     retention-days: 5
-
-  publish-report:
-    if: ${{ always() && !cancelled() }}
-    permissions:
-      contents: write
-      id-token: write
-      pull-requests: write
-    needs: [playwright-tests]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          # required for playwright-gh-pages
-          persist-credentials: true
-      - name: Publish report
-        uses: grafana/plugin-actions/playwright-gh-pages/deploy-report-pages@deploy-report-pages/v1.1.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -24,7 +24,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       id: 'initSource',
       path: 'initSource',
       name: 'User JS Initialization Code',
-      description: 'The User JS Init code is executed once when the panel loads, you can use this to define helper functions that you later reference in the User JS Render code section. The sections have identical execution contexts, and any JS objects you want to reference between them will need to be attached to the options object as properties.',
+      description: 'The User JS Init code is executed once when the panel loads, you can use this to define helper functions that you later reference in the User JS Render code section. The sections have identical execution contexts, so any JS objects you want to reference between them will need to be attached to the `context` object as properties.',
       category: ['User JS Initialization'],
       defaultValue: defaults.initSource,
       settings: {
@@ -51,7 +51,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       id: 'eventSource',
       path: 'eventSource',
       name: 'User JS Render Code',
-      description: 'The User JS Render code is executed whenever new data is available, the root svg document is available as `svgnode`, and elements you\'ve mapped using the SVG Mapping tools below are available as properties on the `svgmap` object. The Grafana DataFrame is provided as `data` and the `context` object can be used to pass values and references between the Render context and the Init context.',
+      description: 'The User JS Render code is executed whenever new data is available. The root SVG document is available as `svgnode`, and elements you\'ve mapped using the SVG Mapping tools below are available as properties on the `svgmap` object. The Grafana DataFrame is provided as `data`, and the `context` object can be used to pass values and references between the Render context and the Init context. The `theme` object contains the currently selected theme for Grafana, and `options` contains all currently-selected panel options. The `props` object covers all other panel properties.',
       category: ['User JS Render'],
       defaultValue: defaults.eventSource,
       settings: {
@@ -69,7 +69,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       settings: {
         text: '',
         icon: 'search-plus',
-        tooltip: 'Click here to all all SVG element IDs to the mapping list.',
+        tooltip: 'Click here to add all SVG element IDs to the mapping list.',
         event: 'addAllIDs',
       },
       editor: ActionButton,
@@ -85,7 +85,7 @@ export const plugin = new PanelPlugin<ACESVGOptions>(Panel).useFieldConfig().set
       id: 'svgMappings',
       path: 'svgMappings',
       name: 'SVG Mappings',
-      description: 'The SVG ID should match an ID attribute value of an element in the SVG document, the element will be attached to the "svgmap" object in the user code execution contexts as a property using the mapped name provided below.',
+      description: 'The SVG ID should match an ID attribute value of an element in the SVG document, the element will be attached to the `svgmap` object in the user code execution contexts as a property using the mapped name provided below.',
       category: ['SVG Mapping'],
       defaultValue: defaults.svgMappings,
       editor: SvgMappings,

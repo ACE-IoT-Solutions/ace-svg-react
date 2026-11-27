@@ -1,6 +1,6 @@
 import { test, expect } from '@grafana/plugin-e2e';
 
-test('should display "No data" in case panel data is empty', async ({
+test('no tests, should pass', async ({
 }) => {
   expect(true).toBeTruthy();
 });

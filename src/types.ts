@@ -3,11 +3,11 @@
  */
 export interface SVGIDMapping {
   /**
-   * The ID property of the SVG element.
+   * The value of the SVG element's `id` attribute.
    */
   readonly svgId: string;
   /**
-   * The mapped name of the SVG element.
+   * The property name used to expose the element on `svgmap`.
    */
   readonly mappedName: string;
 }

@@ -4,6 +4,7 @@ import { Dom as SVGDom, Element as SVGElement, extend as SVGExtend, Runner as SV
 import { ACESVGOptions, SVGIDMapping } from 'types';
 import { useTheme2 } from '@grafana/ui';
 import { ActionButtonEvent } from './ActionButton';
+import type { Unsubscribable } from 'rxjs';
 
 /**
  * Maps element names to their corresponding SVG elements.
@@ -22,10 +23,6 @@ interface PanelState {
   readonly svgNode: SVGElement | SVGDom | null; // Passed into user JS functions as `svgnode`
   readonly mappedElements: MappedElements | null; // Passed into user JS functions as `svgmap`
   readonly initialized: boolean; // Determines whether or not the initialize function has been called
-}
-
-interface TextMappedElement extends SVGElement {
-  readonly textElement: Element;
 }
 
 SVGExtend(SVGElement, {
@@ -78,7 +75,7 @@ SVGExtend(SVGElement, {
 });
 SVGExtend(SVGDom, {
   updateXHTMLFontText: function (this: SVGDom, newText: string) {
-    let currentElement: Element | TextMappedElement = this.node;
+    let currentElement: Element = this.node;
     let i = 0;
     while (currentElement.localName !== 'xhtml:font') {
       if (currentElement.firstElementChild && i < 10) {
@@ -97,6 +94,8 @@ SVGExtend(SVGDom, {
  */
 class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   private readonly STOP_MAPPING_ID_TAG: string = 'mapping-stop';
+  private subscription: Unsubscribable | null = null;
+
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -107,9 +106,13 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
   }
 
   componentDidMount(): void {
-    this.props.eventBus
+    this.subscription = this.props.eventBus
       .getStream(ActionButtonEvent)
       .subscribe(event => {
+        if (event.origin !== this.props.eventBus) {
+          return; // Event originated from a different panel
+        }
+
         if (event.name === 'forceReinit') {
           this.setState({ initialized: false });
         } else if (event.name === 'addAllIDs' && this.state.svgNode !== null) {
@@ -118,7 +121,11 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       });
   }
 
-  private initializeMappings(svgNode: SVGElement | SVGDom): void {
+  componentWillUnmount(): void {
+    this.subscription?.unsubscribe();
+  }
+
+  private initializeMappings(svgNode: SVGElement | SVGDom): MappedElements {
     const mappedElements: MappedElements = {};
     for (const mapping of this.props.options.svgMappings) {
       if (mapping.svgId) {
@@ -130,7 +137,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
         }
       }
     }
-    this.setState({ mappedElements: mappedElements });
+    return mappedElements;
   }
 
   private mapAllIDs(svgNode: SVGDom): void {
@@ -195,11 +202,12 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
       svgNode.clear();
       svgNode.svg(this.props.options.svgSource);
       svgNode.size(this.props.width, this.props.height);
-      this.initializeMappings(svgNode);
-      this.setState({ svgNode: svgNode });
+
+      const mappedElements = this.initializeMappings(svgNode);
+      this.setState({ svgNode, mappedElements });
 
       // Element mapping must be completed to proceed.
-      if (this.state.mappedElements === null) {
+      if (Object.keys(mappedElements).length === 0 && this.props.options.svgMappings.length > 0) {
         return null;
       }
 
@@ -268,7 +276,7 @@ class ACESVGPanel extends React.PureComponent<Props, PanelState> {
             height: `${this.props.height}px`,
           }}
           className={'svg-object'}
-          ref={(ref) => this.renderSVG(ref)}
+          ref={(ref) => { this.renderSVG(ref) }}
         ></svg>
       </div>
     );
